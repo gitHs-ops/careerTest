@@ -248,6 +248,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--txt)
   cursor:pointer;box-shadow:0 4px 16px rgba(124,111,224,.35);transition:all .2s;}
 .btn-retry:hover{transform:translateY(-2px);filter:brightness(1.1);}
 
+.result-actions{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:8px;}
+.btn-advisor{display:inline-block;padding:14px 36px;
+  background:linear-gradient(135deg,#0da870,#0890b8);color:#fff;
+  border:none;border-radius:var(--rsm);font-size:15px;font-weight:700;font-family:inherit;
+  text-decoration:none;text-align:center;cursor:pointer;
+  box-shadow:0 4px 16px rgba(13,168,112,.35);transition:all .2s;}
+.btn-advisor:hover{transform:translateY(-2px);filter:brightness(1.1);}
+.btn-action-plan{display:inline-block;padding:14px 36px;
+  background:linear-gradient(135deg,#d88020,#e06090);color:#fff;
+  border:none;border-radius:var(--rsm);font-size:15px;font-weight:700;font-family:inherit;
+  text-decoration:none;text-align:center;cursor:pointer;
+  box-shadow:0 4px 16px rgba(216,128,32,.35);transition:all .2s;}
+.btn-action-plan:hover{transform:translateY(-2px);filter:brightness(1.1);}
+
 @media(max-width:600px){
   .intro-cards{grid-template-columns:1fr;}
   .name-row{flex-direction:column;}
@@ -791,23 +805,56 @@ const PAGE_SIZE=6;
 
 // ── 헬퍼 ──
 
-// ── 검사 건너뛰기 (미응답 문항 중간값 처리) ──
+// ── 검사 건너뛰기 확인 모달 ──
+function showSkipModal(examName, onConfirm){
+  const existing=document.getElementById('skipModal');
+  if(existing) existing.remove();
+  const modal=document.createElement('div');
+  modal.id='skipModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  modal.innerHTML=`<div style="background:#fff;border-radius:16px;padding:32px 28px;max-width:360px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.18);">
+    <div style="font-size:28px;margin-bottom:12px;">⏭️</div>
+    <div style="font-size:16px;font-weight:800;color:#1a1d2e;margin-bottom:8px;">${examName} 건너뛰기</div>
+    <div style="font-size:13px;color:#5a607a;line-height:1.7;margin-bottom:24px;">미응답 문항은 중간값(3점)으로 처리되며<br>다음 검사로 넘어갑니다.</div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button id="skipCancel" style="padding:10px 22px;background:#f0f3fa;border:1px solid rgba(0,0,0,0.12);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;color:#5a607a;">취소</button>
+      <button id="skipConfirm" style="padding:10px 22px;background:linear-gradient(135deg,#5048d4,#b06af0);border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;color:#fff;">건너뛰기</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+  document.getElementById('skipCancel').onclick=()=>modal.remove();
+  document.getElementById('skipConfirm').onclick=()=>{modal.remove();onConfirm();};
+}
+
 function hSkip(){
-  if(!confirm('홀랜드 흥미검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
-  hQs.forEach(q=>{ if(hAns[q.id]===undefined) hAns[q.id]=3; });
-  showScreen('aptScreen');
-  aGoPage(0);
+  showSkipModal('흥미검사', ()=>{
+    H_QS.forEach(q=>{ if(hAnswers[q.id]===undefined) hAnswers[q.id]=3; });
+    aPages=[]; aAnswers={};
+    A_IDS.forEach(id=>aPages.push(A_QS.filter(q=>q.a===id)));
+    aCurPage=0;
+    setStep(2);
+    showScreen('aptScreen');
+    aRenderPage();
+  });
 }
 function aSkip(){
-  if(!confirm('적성검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
-  aQs.forEach(q=>{ if(aAns[q.id]===undefined) aAns[q.id]=3; });
-  showScreen('valScreen');
-  vGoPage(0);
+  showSkipModal('적성검사', ()=>{
+    A_QS.forEach(q=>{ if(aAnswers[q.id]===undefined) aAnswers[q.id]=3; });
+    vPages=[]; vAnswers={};
+    const shuffled=[];
+    for(let i=0;i<5;i++) V_IDS.forEach(id=>{const qs=V_QS.filter(q=>q.v===id);if(qs[i])shuffled.push(qs[i]);});
+    for(let i=0;i<shuffled.length;i+=PAGE_SIZE) vPages.push(shuffled.slice(i,i+PAGE_SIZE));
+    vCurPage=0;
+    setStep(3);
+    showScreen('valScreen');
+    vRenderPage();
+  });
 }
 function vSkip(){
-  if(!confirm('가치관검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
-  vQs.forEach(q=>{ if(vAns[q.id]===undefined) vAns[q.id]=3; });
-  showResult();
+  showSkipModal('가치관검사', ()=>{
+    V_QS.forEach(q=>{ if(vAnswers[q.id]===undefined) vAnswers[q.id]=3; });
+    showFinalResult();
+  });
 }
 
 function showScreen(id){
@@ -1171,11 +1218,53 @@ function showFinalResult(){
       </div>
     </div>
 
-    <button class="btn-retry" onclick="retryAll()">🔄 처음부터 다시 검사하기</button>
+    <div class="result-actions">
+      <a class="btn-advisor" id="btnAdvisor" href="career_advisor.html" target="_blank">
+        🧭 직업군 진로 어드바이저로 이동 →
+      </a>
+      <a class="btn-action-plan" id="btnActionPlan" href="career_action_plan.html" target="_blank">
+        📋 진로 실행계획 만들기 →
+      </a>
+      <button class="btn-retry" onclick="retryAll()">🔄 처음부터 다시 검사하기</button>
+    </div>
   `;
 
   document.getElementById('resultScreen').innerHTML=html;
   showScreen('resultScreen');
+
+  // ── 직업군 ID → 실행계획 jobs 파라미터 매핑 ──
+  const JOB_ID_TO_PLAN={
+    IT_DEV:'IT·소프트웨어', SCIENCE:'IT·소프트웨어',
+    MEDICAL:'의료·보건',
+    EDUCATION:'교육·연구',
+    ARTS_DESIGN:'디자인·미디어', MEDIA_CONTENT:'디자인·미디어',
+    ENGINEERING:'공학·제조',
+    BUSINESS:'경영·사무',
+    LAW_PUBLIC:'법률·공무',
+    MUSIC_PERF:'예술·공연',
+    FINANCE:'금융·경제',
+    SPORTS_HEALTH:'스포츠·건강',
+    NATURE_ENV:'자연·환경',
+    CRAFT_FOOD:'음식·요리',
+  };
+
+  // 어드바이저 버튼 — 1위 직업군 ID
+  const btnAdvisor = document.getElementById('btnAdvisor');
+  if(btnAdvisor && topJobs.length > 0){
+    btnAdvisor.href = `career_advisor.html?job=${topJobs[0].id}`;
+  }
+
+  // 실행계획 버튼 — 이름 + 상위 직업군(최대 3개) + 홀랜드 코드
+  const btnPlan = document.getElementById('btnActionPlan');
+  if(btnPlan && topJobs.length > 0){
+    const jobsParam = topJobs.slice(0,3)
+      .map(j=>JOB_ID_TO_PLAN[j.id]||j.name)
+      .filter((v,i,a)=>a.indexOf(v)===i)
+      .map(v=>encodeURIComponent(v)).join(',');
+    const hollandParam = hTop2.map(t=>encodeURIComponent(`${t}(${H_INFO[t].name})`)).join(',');
+    const nameParam = encodeURIComponent(uName);
+    btnPlan.href = `career_action_plan.html?name=${nameParam}&jobs=${jobsParam}&holland=${hollandParam}`;
+  }
 }
 
 function retryAll(){

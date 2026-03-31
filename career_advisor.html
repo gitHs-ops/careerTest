@@ -155,6 +155,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--txt)
 .btn-regenerate{padding:10px 18px;background:var(--sur2);border:1px solid var(--bord2);border-radius:var(--rsm);color:var(--sub);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .btn-regenerate:hover{background:var(--sur3);color:var(--txt);}
 
+.adv-plan-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin:24px 0 8px;padding:18px 24px;
+  background:linear-gradient(135deg,rgba(216,128,32,.10),rgba(224,96,144,.10));
+  border:1px solid rgba(216,128,32,.25);border-radius:var(--rsm);}
+.adv-plan-txt{font-size:13px;font-weight:700;color:#b06010;}
+.btn-adv-plan{padding:10px 22px;background:linear-gradient(135deg,#d88020,#e06090);
+  color:#fff;border:none;border-radius:var(--rxs);font-size:13px;font-weight:700;
+  font-family:inherit;text-decoration:none;white-space:nowrap;
+  box-shadow:0 3px 10px rgba(216,128,32,.35);transition:all .2s;cursor:pointer;}
+.btn-adv-plan:hover{transform:translateY(-2px);filter:brightness(1.1);}
+@media(max-width:500px){.adv-plan-bar{flex-direction:column;text-align:center;}}
+
 /* 탭 */
 .tabs{display:flex;gap:4px;background:var(--sur);border:1px solid var(--bord);border-radius:var(--radius);padding:6px;margin-bottom:20px;}
 .tab-btn{flex:1;padding:10px;border:none;border-radius:var(--rsm);background:transparent;color:var(--sub);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -596,6 +608,13 @@ canvas { background: transparent !important; }
     <div class="tab-pane" id="tab-dept"></div>
     <div class="tab-pane" id="tab-roadmap"></div>
     <div class="tab-pane" id="tab-salary"></div>
+
+    <div class="adv-plan-bar">
+      <div class="adv-plan-txt">📋 이 직업군으로 AI 진로 실행계획을 세워보세요</div>
+      <a class="btn-adv-plan" id="btnAdvPlan" href="career_action_plan.html" target="_blank">
+        진로 실행계획 만들기 →
+      </a>
+    </div>
   </div>
 
 </div><!-- /wrap -->
@@ -634,6 +653,10 @@ let tabCache = {};
 (function init(){
   renderJobGrid();
   updateApiStatus();
+  // URL 파라미터 ?job=ID 로 직업군 자동 선택
+  const params = new URLSearchParams(location.search);
+  const jobId = params.get('job');
+  if(jobId) setTimeout(()=>selectJob(jobId), 100);
 })();
 
 function renderJobGrid(){
@@ -710,6 +733,13 @@ function showAdvicePanel(job){
   panel.classList.add('show');
   panel.style.display='block';
   panel.scrollIntoView({behavior:'smooth', block:'start'});
+
+  // 실행계획 버튼 URL 주입
+  const btnPlan = document.getElementById('btnAdvPlan');
+  if(btnPlan){
+    const jobsParam = encodeURIComponent(job.name);
+    btnPlan.href = `career_action_plan.html?jobs=${jobsParam}`;
+  }
 
   // 탭 초기화
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
