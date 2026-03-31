@@ -178,6 +178,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--b2);border-radius:var(--rsm);padding:10px 20px;font-size:13px;font-weight:600;z-index:200;white-space:nowrap;}
 
 @media print{.bg-fx,.hd,.btn-analyze,.bottom-btns,.api-btn{display:none!important;}.wrap{padding:0 10px;}}
+
+/* ── 토큰 사용량 표시 ── */
+.token-tracker{margin-top:14px;padding:12px 16px;
+  background:#f8f7ff;border:1px solid rgba(124,58,237,.2);
+  border-radius:12px;font-size:.78rem;color:#4a3f6e;display:none;}
+.token-tracker.show{display:block;}
+.token-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+.token-label{font-weight:600;color:#6b5f8a;}
+.token-val{font-weight:700;color:#1a1d2e;}
+.token-bar-wrap{height:5px;background:rgba(124,58,237,.12);border-radius:3px;margin-top:8px;overflow:hidden;}
+.token-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,#7c3aed,#4a9eff);transition:width .4s;}
+.token-warn{margin-top:8px;padding:6px 10px;border-radius:5px;font-size:.76rem;font-weight:600;display:none;}
+.token-warn.yellow{background:rgba(240,160,48,.12);color:#b87800;border:1px solid rgba(240,160,48,.3);display:block;}
+.token-warn.red{background:rgba(220,38,38,.1);color:#b91c1c;border:1px solid rgba(220,38,38,.25);display:block;}
 </style>
 </head>
 <body>
@@ -213,7 +227,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
     <div class="form-card">
       <div class="form-title"><span>👤</span> 기본 정보</div>
       <div class="form-row">
-        <div class="form-group" id="fg_name">
+        <div class="form-group">
           <div class="flabel">이름</div>
           <input type="text" class="finput" id="f_name" placeholder="이름을 입력하세요">
         </div>
@@ -348,6 +362,24 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
     <button class="btn-analyze" id="btnAnalyze" onclick="startAnalysis()">
       <span>✨</span> AI 액션플랜 생성하기
     </button>
+    <div class="token-tracker" id="token-tracker">
+      <div class="token-row">
+        <span class="token-label">이번 요청 토큰</span>
+        <span class="token-val" id="tk-req">-</span>
+      </div>
+      <div class="token-row" style="margin-top:5px;">
+        <span class="token-label">오늘 누적 토큰</span>
+        <span class="token-val" id="tk-total">-</span>
+        <span style="color:#9b8fb8;font-size:.72rem;cursor:pointer;" onclick="resetTokenCount()" title="오늘 기록 초기화">↺ 오늘 초기화</span>
+      </div>
+      <div class="token-row" style="margin-top:5px;">
+        <span class="token-label">📊 전체 누적 토큰</span>
+        <span class="token-val" id="tk-grand">-</span>
+        <span style="color:#9b8fb8;font-size:.72rem;cursor:pointer;" onclick="resetAllTokenCount()" title="전체 기록 초기화">↺ 전체 초기화</span>
+      </div>
+      <div class="token-bar-wrap"><div class="token-bar" id="tk-bar" style="width:0%"></div></div>
+      <div class="token-warn" id="tk-warn"></div>
+    </div>
     <div id="validMsg" style="display:none;margin-top:12px;padding:12px 16px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.25);border-radius:10px;color:#dc2626;font-size:13px;font-weight:600;text-align:center;"></div>
   </div><!-- /step1 -->
 
@@ -360,12 +392,30 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
       <button class="btn-back" onclick="goStep1()">← 다시 입력하기</button>
       <button class="btn-print" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
     </div>
+    <div class="token-tracker" id="token-tracker2">
+      <div class="token-row">
+        <span class="token-label">이번 요청 토큰</span>
+        <span class="token-val" id="tk-req2">-</span>
+      </div>
+      <div class="token-row" style="margin-top:5px;">
+        <span class="token-label">오늘 누적 토큰</span>
+        <span class="token-val" id="tk-total2">-</span>
+        <span style="color:#9b8fb8;font-size:.72rem;cursor:pointer;" onclick="resetTokenCount()">↺ 오늘 초기화</span>
+      </div>
+      <div class="token-row" style="margin-top:5px;">
+        <span class="token-label">📊 전체 누적 토큰</span>
+        <span class="token-val" id="tk-grand2">-</span>
+        <span style="color:#9b8fb8;font-size:.72rem;cursor:pointer;" onclick="resetAllTokenCount()">↺ 전체 초기화</span>
+      </div>
+      <div class="token-bar-wrap"><div class="token-bar" id="tk-bar2" style="width:0%"></div></div>
+      <div class="token-warn" id="tk-warn2"></div>
+    </div>
   </div>
 </div><!-- /wrap -->
 
 <script>
 // ─── 상태 ───
-const DEFAULT_PROXY_URL = 'https://script.google.com/macros/s/AKfycby05EdBfRysWf5pKgsHFvPM4Bof2xnJ3-y0bTRELPbGAok2uIG6F_3vfAjjjOsZZVe9AQ/exec';
+const DEFAULT_PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNRgaE-O9wiS0amF1F1AEJBlqDJhEdDlIS0fNnfmSIbelvdmCDHc4q7pRgc4Xp_AuHag/exec';
 let proxyUrl = sessionStorage.getItem('proxyUrl') || DEFAULT_PROXY_URL;
 
 // ─── 카드 정의 ───
@@ -520,6 +570,7 @@ async function loadCard(cardDef, profile) {
     const data = await res.json();
 
     if (data.error) throw new Error(data.error);
+    if (data.usage) updateTokenTracker(data.usage);
 
     const cleanText = (data.text || '')
       .replace(/^```html\s*/i, '')
@@ -590,6 +641,7 @@ async function sendChat(cardId, profile) {
     const res  = await fetch(proxyUrl + '?prompt=' + encodeURIComponent(prompt), { method: 'GET' });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
+    if (data.usage) updateTokenTracker(data.usage);
     const clean = (data.text || '').replace(/^```html\s*/i,'').replace(/```\s*$/i,'').trim();
     aiMsg.className = 'chat-msg ai';
     aiMsg.innerHTML = clean || '답변을 가져오지 못했습니다.';
@@ -643,12 +695,7 @@ function showToast(msg, type = '') {
 // URL 파라미터 자동 채우기 (career_combined.html 연동)
 (function autoFill() {
   const params = new URLSearchParams(location.search);
-  if (params.get('name')) {
-    document.getElementById('f_name').value = params.get('name');
-    // 이름이 파라미터로 넘어왔으면 입력 필드 숨김 (이미 검사에서 입력함)
-    const fg = document.getElementById('fg_name');
-    if (fg) fg.style.display = 'none';
-  }
+  if (params.get('name')) document.getElementById('f_name').value = params.get('name');
   if (params.get('grade')) document.getElementById('f_grade').value = params.get('grade');
   if (params.get('region')) document.getElementById('f_region').value = params.get('region');
   if (params.get('strength')) document.getElementById('f_strength').value = params.get('strength');
@@ -667,6 +714,74 @@ function showToast(msg, type = '') {
     });
   }
 })();
+
+// ── 토큰 사용량 추적 ──
+const TOKEN_WARN_YELLOW = 50000;
+const TOKEN_WARN_RED    = 100000;
+
+function getTodayKey(){ return 'tokenUsage_' + new Date().toISOString().slice(0,10); }
+
+function getGrandTotal(){
+  let total = 0;
+  for(let i = 0; i < localStorage.length; i++){
+    const key = localStorage.key(i);
+    if(key && key.startsWith('tokenUsage_'))
+      total += parseInt(localStorage.getItem(key) || '0');
+  }
+  return total;
+}
+
+function updateGrandTotal(){
+  const g = getGrandTotal();
+  const txt = g > 0 ? g.toLocaleString()+' 토큰' : '-';
+  ['tk-grand','tk-grand2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=txt; });
+}
+
+function updateTokenTracker(usage){
+  if(!usage) return;
+  const inp = usage.input_tokens || 0;
+  const out = usage.output_tokens || 0;
+  const req = inp + out;
+  const key = getTodayKey();
+  const total = parseInt(localStorage.getItem(key)||'0') + req;
+  localStorage.setItem(key, total);
+  const tracker = document.getElementById('token-tracker');
+  if(tracker) tracker.classList.add('show');
+  const tracker2 = document.getElementById('token-tracker2');
+  if(tracker2) tracker2.classList.add('show');
+  const reqTxt = `입력 ${inp.toLocaleString()} + 출력 ${out.toLocaleString()} = ${req.toLocaleString()} 토큰`;
+  const totalTxt = total.toLocaleString() + ' 토큰';
+  ['tk-req','tk-req2'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=reqTxt; });
+  ['tk-total','tk-total2'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=totalTxt; });
+  updateGrandTotal();
+  const pct = Math.min(total / TOKEN_WARN_RED * 100, 100);
+  ['tk-bar','tk-bar2'].forEach(id=>{ const b=document.getElementById(id); if(b){ b.style.width=pct+'%'; if(pct>=70) b.style.background='linear-gradient(90deg,#f0a030,#ef4444)'; }});
+  ['tk-warn','tk-warn2'].forEach(id=>{
+    const warn=document.getElementById(id); if(!warn) return;
+    warn.className='token-warn';
+    if(total>=TOKEN_WARN_RED){ warn.className='token-warn red'; warn.textContent='⚠️ 오늘 사용량이 10만 토큰을 넘었습니다.'; }
+    else if(total>=TOKEN_WARN_YELLOW){ warn.className='token-warn yellow'; warn.textContent='⚡ 오늘 사용량이 5만 토큰을 넘었습니다.'; }
+  });
+}
+
+function resetTokenCount(){
+  localStorage.removeItem(getTodayKey());
+  const els = ['tk-req','tk-total'];
+  els.forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent='-'; });
+  const tkBar=document.getElementById('tk-bar');
+  if(tkBar){ tkBar.style.width='0%'; tkBar.style.background='linear-gradient(90deg,#7c3aed,#4a9eff)'; }
+  const tkWarn=document.getElementById('tk-warn');
+  if(tkWarn) tkWarn.className='token-warn';
+  updateGrandTotal();
+  if(getGrandTotal()===0){ const t=document.getElementById('token-tracker'); if(t) t.classList.remove('show'); }
+}
+
+function resetAllTokenCount(){
+  const keys=[];
+  for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('tokenUsage_')) keys.push(k); }
+  keys.forEach(k=>localStorage.removeItem(k));
+  resetTokenCount();
+}
 </script>
 </body>
 </html>
