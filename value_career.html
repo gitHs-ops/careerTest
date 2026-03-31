@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>직업가치관검사 (청소년용)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+:root {
+  /* ── Light Theme Variables ── */
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface2: #f0f3fa;
+  --surface3: #e8ecf6;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --border3: rgba(0,0,0,0.20);
+  --text: #1a1d2e;
+  --text-sub: #5a607a;
+  --text-muted: #9299b8;
+  --txt: #1a1d2e;
+  --sub: #5a607a;
+  --muted: #9299b8;
+  --t1: #1a1d2e;
+  --t2: #5a607a;
+  --t3: #9299b8;
+  /* sur / s 계열 */
+  --sur: #ffffff;
+  --sur2: #f0f3fa;
+  --sur3: #e8ecf6;
+  --s1: #ffffff;
+  --s2: #f0f3fa;
+  --s3: #e8ecf6;
+  /* bord 계열 */
+  --bord: rgba(0,0,0,0.07);
+  --bord2: rgba(0,0,0,0.13);
+  --bord3: rgba(0,0,0,0.20);
+  --b1: rgba(0,0,0,0.07);
+  --b2: rgba(0,0,0,0.13);
+  --b3: rgba(0,0,0,0.20);
+  /* 검사별 테마 - 라이트에 맞게 채도 유지 */
+  --c-h: #6253c8; --c-h2: #4c3db8; --c-h-glow: rgba(98,83,200,0.18);
+  --c-a: #1fa888; --c-a2: #158a6e; --c-a-glow: rgba(31,168,136,0.18);
+  --c-v: #d04880; --c-v2: #b83268; --c-v-glow: rgba(208,72,128,0.18);
+  --c-all:#d88020; --c-all2:#c06010; --c-all-glow:rgba(216,128,32,0.18);
+  /* 강조색 계열 */
+  --acc: #5048d4; --acc2: #6e64e8; --ag: rgba(80,72,212,0.15);
+  --primary: #5048d4; --primary-light: #edeaff;
+  --grn: #0da870; --grn2: #0c9060; --gg: rgba(13,168,112,0.15);
+  --ylw: #d98a00; --ylw2: #b87200;
+  --red: #d63030; --red2: #b82020;
+  --pnk: #c83870; --pnk2: #b02860;
+  --cyn: #0890b8; --cyn2: #0678a0;
+  /* 흥미 유형 색상 */
+  --R: #c83020; --I: #1860a8; --A: #7030a0;
+  --S: #1a9050; --E: #c06020; --C: #0f7868;
+  --H: #5048d4; --apt: #1a9a78; --val: #c83870;
+  --gold: #c88020; --gold2: #a86010;
+
+  /* 가치지향 4가지 색상 */
+  --safe:#2196f3;   --safe-bg:#e3f2fd;   --safe-dark:#1565c0;
+  --achv:#f44336;   --achv-bg:#ffebee;   --achv-dark:#b71c1c;
+  --rel: #4caf50;   --rel-bg: #e8f5e9;   --rel-dark: #1b5e20;
+  --expr:#9c27b0;   --expr-bg:#f3e5f5;   --expr-dark:#4a148c;
+
+  /* 가치 12가지 색상 */
+  --v1:#1e88e5; --v2:#0288d1; --v3:#00897b;
+  --v4:#ef6c00; --v5:#e53935; --v6:#8e24aa;
+  --v7:#43a047; --v8:#fb8c00; --v9:#d81b60;
+  --v10:#6d4c41; --v11:#546e7a; --v12:#00acc1;
+
+  --primary:#5c35c5; --primary-light:#ede7ff;
+  --gray-50:#f8fafc; --gray-100:#f1f5f9; --gray-200:#e2e8f0;
+  --gray-300:#cbd5e1; --gray-400:#94a3b8; --gray-500:#64748b;
+  --gray-600:#475569; --gray-700:#334155; --gray-800:#1e293b; --gray-900:#0f172a;
+  --radius:16px; --radius-sm:10px; --radius-xs:6px;
+  --shadow:0 2px 12px rgba(0,0,0,0.07);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background: var(--bg);color:var(--gray-800);min-height:100vh;}
+
+/* ══ INTRO ══ */
+#introScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:linear-gradient(135deg,#5c35c5 0%,#c2185b 100%);}
+.intro-card{background:#fff;border-radius:24px;padding:48px 40px;max-width:600px;width:100%;box-shadow: 0 4px 24px rgba(0,0,0,0.10);}
+.intro-head{text-align:center;margin-bottom:28px;}
+.intro-icon{font-size:52px;margin-bottom:12px;}
+.intro-title{font-size:26px;font-weight:900;margin-bottom:8px;}
+.intro-sub{font-size:14px;color:var(--gray-500);line-height:1.8;}
+
+.orient-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+.orient-chip{border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.orient-em{font-size:24px;flex-shrink:0;}
+.orient-title{font-size:13px;font-weight:800;}
+.orient-sub{font-size:11px;opacity:.75;margin-top:2px;}
+
+.value-pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px;justify-content:center;}
+.value-pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;background:var(--gray-100);color:var(--gray-600);}
+
+.intro-stats{display:flex;justify-content:space-around;background:var(--gray-50);border-radius:var(--radius-sm);padding:14px;margin-bottom:22px;}
+.stat-item{text-align:center;}
+.stat-num{font-size:20px;font-weight:900;color:var(--primary);}
+.stat-label{font-size:11px;color:var(--gray-500);margin-top:2px;}
+
+.name-input{width:100%;padding:14px 18px;border:2px solid var(--gray-200);border-radius:var(--radius-sm);
+  font-size:16px;font-family:inherit;outline:none;transition:border-color .2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--primary);}
+.btn-start{width:100%;padding:16px;background: linear-gradient(135deg, #5048d4, #c0286a);color:#fff;border:none;
+  border-radius:var(--radius-sm);font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 15px rgba(92,53,197,.35);}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(92,53,197,.45);}
+
+/* ══ EXAM ══ */
+#examScreen{display:none;min-height:100vh;padding:24px;}
+.exam-top{max-width:720px;margin:0 auto 16px;background:#fff;border-radius:var(--radius);
+  padding:16px 24px;box-shadow: 0 2px 10px rgba(0,0,0,0.07);display:flex;align-items:center;gap:16px;}
+.exam-top-title{flex:1;}
+.exam-top-title h2{font-size:15px;font-weight:700;}
+.exam-top-title p{font-size:12px;color:var(--gray-500);margin-top:2px;}
+.prog-wrap{min-width:180px;}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500);margin-bottom:5px;}
+.prog-bg{height:8px;background:var(--gray-200);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#5c35c5,#c2185b);border-radius:4px;transition:width .4s;}
+
+.dots-row{max-width:720px;margin:0 auto 14px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--gray-300);transition:all .2s;}
+.dot.done{background:var(--primary);}
+.dot.cur{background:var(--primary);width:22px;border-radius:4px;}
+
+/* 문항 카드 */
+.q-card{max-width:720px;margin:0 auto 12px;background:#fff;border-radius:var(--radius);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);overflow:hidden;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.q-head{padding:16px 22px 12px;border-bottom:1px solid var(--gray-100);display:flex;align-items:flex-start;gap:12px;}
+.q-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;flex-shrink:0;margin-top:2px;background:var(--primary);}
+.q-text{font-size:14px;font-weight:600;line-height:1.6;flex:1;color:var(--gray-800);}
+.q-val-tag{padding:3px 9px;border-radius:12px;font-size:10px;font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+
+.likert-wrap{padding:14px 22px;display:flex;align-items:center;gap:8px;}
+.likert-lbl{font-size:11px;color:var(--gray-400);white-space:nowrap;}
+.likert-opts{display:flex;gap:8px;flex:1;justify-content:center;}
+.likert-opt{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.likert-radio{display:none;}
+.likert-ball{width:36px;height:36px;border-radius:50%;border:2px solid var(--gray-300);display:flex;
+  align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gray-500);
+  transition:all .15s;cursor:pointer;background:#fff;}
+.likert-radio:checked+.likert-ball{border-color:var(--primary);background:var(--primary);color:#fff;
+  transform:scale(1.12);box-shadow:0 2px 8px rgba(92,53,197,.35);}
+.likert-scale{font-size:9px;color:var(--gray-400);text-align:center;}
+
+.nav-row{max-width:720px;margin:16px auto 0;display:flex;justify-content:space-between;align-items:center;}
+.btn-prev{padding:11px 22px;border-radius:var(--radius-sm);background:var(--gray-100);color:var(--gray-700);
+  border:none;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:background .15s;}
+.btn-prev:hover{background:var(--gray-200);}
+.ans-status{font-size:12px;color:var(--gray-400);}
+.btn-next{padding:11px 28px;border-radius:var(--radius-sm);background: linear-gradient(135deg, #5048d4, #c0286a);
+  color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;
+  box-shadow:0 3px 10px rgba(92,53,197,.28);transition:all .2s;}
+.btn-next:hover{transform:translateY(-1px);}
+.btn-next:disabled{background:var(--gray-300);cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* ══ RESULT ══ */
+#resultScreen{display:none;min-height:100vh;padding:24px;background: #f4f6fb;}
+.result-wrap{max-width:860px;margin:0 auto;}
+
+.result-hero{background: linear-gradient(135deg, #5048d4, #c0286a);border-radius:24px;padding:40px;
+  color:#fff;text-align:center;margin-bottom:20px;box-shadow: 0 4px 24px rgba(0,0,0,0.10);}
+.rh-label{font-size:13px;opacity:.8;margin-bottom:4px;}
+.rh-name{font-size:22px;font-weight:900;margin-bottom:6px;}
+.rh-type-badge{display:inline-block;padding:8px 22px;border-radius:30px;font-size:16px;font-weight:800;
+  background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.6);margin-bottom:12px;}
+.rh-type-desc{font-size:13px;opacity:.85;line-height:1.7;}
+
+/* 가치지향 4개 카드 */
+.orient-result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;}
+.orient-result-card{border-radius:var(--radius);padding:24px;box-shadow: 0 2px 10px rgba(0,0,0,0.07);border:2px solid transparent;}
+.orient-result-card.top{border-color:currentColor;}
+.orc-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.orc-em{font-size:30px;}
+.orc-title{font-size:16px;font-weight:800;}
+.orc-score-wrap{display:flex;align-items:center;gap:8px;margin-top:2px;}
+.orc-score-bar{flex:1;height:8px;background:rgba(0,0,0,0.08);border-radius:4px;overflow:hidden;}
+.orc-score-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.orc-score-pct{font-size:12px;font-weight:700;}
+.orc-desc{font-size:12px;line-height:1.7;opacity:.85;margin-bottom:12px;}
+.orc-values{display:flex;flex-wrap:wrap;gap:6px;}
+.orc-val-tag{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;background:rgba(255,255,255,.5);}
+
+/* 12가지 가치 프로파일 */
+.value-profile-card{background:#fff;border-radius:var(--radius);padding:28px;box-shadow: 0 2px 10px rgba(0,0,0,0.07);margin-bottom:20px;}
+.card-title{font-size:15px;font-weight:800;color:var(--gray-800);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.value-bar-list{display:flex;flex-direction:column;gap:9px;}
+.vbl-row{display:flex;align-items:center;gap:10px;}
+.vbl-label{width:80px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.vbl-track{flex:1;height:16px;background:var(--gray-100);border-radius:8px;overflow:hidden;}
+.vbl-fill{height:100%;border-radius:8px;transition:width 1.2s ease;}
+.vbl-num{width:36px;font-size:12px;font-weight:700;text-align:right;}
+.rank-badge{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;color:#fff;flex-shrink:0;}
+
+/* 추천직업 */
+.jobs-rec-card{background:#fff;border-radius:var(--radius);padding:28px;box-shadow: 0 2px 10px rgba(0,0,0,0.07);margin-bottom:20px;}
+.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px;}
+.job-chip{padding:9px 12px;border-radius:var(--radius-xs);font-size:12px;font-weight:600;
+  text-align:center;background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-700);}
+
+/* 진로 조언 */
+.advice-card{background:#fff;border-radius:var(--radius);padding:28px;box-shadow: 0 2px 10px rgba(0,0,0,0.07);margin-bottom:20px;}
+.advice-box{border-radius:var(--radius-sm);padding:18px;margin-bottom:12px;}
+.advice-title{font-size:14px;font-weight:800;margin-bottom:8px;}
+.advice-text{font-size:13px;line-height:1.8;}
+
+.result-actions{display:flex;gap:12px;justify-content:center;padding-bottom:40px;}
+.btn-retry{padding:13px 28px;background:#fff;border:2px solid var(--primary);color:var(--primary);
+  border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--primary-light);}
+.btn-print{padding:13px 28px;background: linear-gradient(135deg, #5048d4, #c0286a);color:#fff;border:none;
+  border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;
+  box-shadow:0 4px 12px rgba(92,53,197,.3);transition:all .2s;}
+.btn-print:hover{transform:translateY(-1px);}
+
+@media(max-width:600px){
+  .orient-grid{grid-template-columns:1fr;}
+  .orient-result-grid{grid-template-columns:1fr;}
+  .intro-card{padding:32px 22px;}
+}
+@media print{
+  #introScreen,#examScreen{display:none!important;}
+  #resultScreen{display:block!important;background:#fff!important;}
+  .result-actions{display:none;}
+}
+
+/* ════ LIGHT THEME OVERRIDE ════ */
+body { background: var(--bg) !important; color: var(--t1) !important; }
+
+/* 배경 오브 / 그리드 투명도 조절 */
+.orb, .glow, .mesh-orb { opacity: 0.07 !important; }
+.bg-grid, .grid-pat {
+  background-image: linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px) !important;
+}
+
+/* 카드 / 서피스 */
+.exam-card, .q-card, .q-card, .plan-card, .adv-card,
+.form-card, .result-hero, .res-hero, .rh-top,
+.sum-card, .algo-card, .jobs-rec-card, .advice-card,
+.job-rec-card, .compare-table, .faq-item, .all-banner,
+.type-card, .apt-detail-card, .orient-result-card,
+.value-profile-card, .radar-card, .profile-card,
+.adv-header, .job-sel-card, .i-card, .modal {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.10) !important;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.07) !important;
+}
+.exam-card:hover, .plan-card:hover, .job-sel-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12) !important;
+}
+
+/* 서피스2 요소 */
+.meta-chip, .type-tag, .card-types .type-tag,
+.sum-tag, .adv-tag, .modal-info-chip,
+.jrc-job, .all-tag, .td-file,
+.all-tag, .nav-chip, .hd-btn, .api-status,
+.sms-preview, .question-card,
+.score-bar-track, .vbl-track, .prog-bg,
+.prog-bar-bg, .profile-track, .salary-bg,
+.likert-wrap, .q-hd, .q-head,
+.faq-a, .adc-tag, .orc-val-tag, .adv-tag,
+.gauge-item, .action-item, .chk-item,
+.priority-box, .info-box, .tl-step,
+.intro-stats, .hero-stats, .modal-info-row,
+.sender-info, .selected-bar,
+.lk-ball, .likert-ball, .likert-dot {
+  background: #f0f3fa !important;
+  border-color: rgba(0,0,0,0.10) !important;
+}
+
+/* 입력 필드 */
+input, select, textarea,
+.finput, .fselect, .ftextarea,
+.modal-name-input, .modal-select-input,
+.minput, .m-input,
+.name-inp, .name-input,
+.search-input, .custom-inp,
+.form-input, .form-select, .form-textarea {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #1a1d2e !important;
+}
+input::placeholder, textarea::placeholder { color: #9299b8 !important; }
+select option { background: #ffffff !important; color: #1a1d2e !important; }
+
+/* 텍스트 */
+.text-sub, .card-sub, .hero-sub, .intro-sub,
+p, .t2, .sub, .text-muted, .muted,
+.q-text, .q-txt, .lk-sc, .likert-scale,
+.exam-hd-sub, .pc-sub, .adv-hd-sub,
+.jrc-desc, .jrc-eng, .adc-desc,
+.orc-desc, .adv-card-title, .faq-a,
+.algo-step, .ai-out p, .ai-out li,
+.loading-msg, .ans-st, .ans-status {
+  color: #5a607a !important;
+}
+
+/* 헤더 / 탭 */
+.site-header, .site-hd, .hd, .exam-hd, .exam-top, .tabs,
+.header-nav, .stepper {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.09) !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06) !important;
+}
+.tab-btn { color: #5a607a !important; }
+.tab-btn.active { background: #e8ecf6 !important; color: #1a1d2e !important; }
+.tab-btn:hover { background: #f0f3fa !important; }
+
+/* 모달 오버레이 */
+.modal-overlay.active, .moverlay.open { background: rgba(0,0,0,0.35) !important; }
+.modal, .modal-overlay .modal { background: #ffffff !important; }
+.modal-header, .mhd { border-color: rgba(0,0,0,0.08) !important; }
+
+/* 비교표 */
+.compare-table th { background: #f0f3fa !important; color: #5a607a !important; }
+.compare-table td { color: #5a607a !important; }
+.compare-table tr:hover td { background: #f8faff !important; }
+
+/* 섹션 레이블 */
+.section-label, .sec-label, .sec-lbl, .sec-div {
+  color: #9299b8 !important;
+}
+.section-label::after, .sec-label::after, .sec-lbl::after { background: rgba(0,0,0,0.08) !important; }
+
+/* 구분선 */
+.divider { background: rgba(0,0,0,0.07) !important; }
+
+/* 진행 도트 */
+.dot { background: rgba(0,0,0,0.15) !important; }
+.dot.done { background: var(--acc) !important; }
+
+/* 적성/가치 프로파일 트랙 */
+.profile-track, .vbl-track, .prog-bg, .prog-bar-bg,
+.orc-score-bar, .salary-bg {
+  background: #e8ecf6 !important;
+}
+
+/* 결과 히어로 - 라이트 그라디언트 */
+.result-hero, .res-hero, .rh-top, .result-hero-wrap {
+  background: linear-gradient(135deg, #ede9ff 0%, #fce4f4 100%) !important;
+  border-color: rgba(80,72,212,0.15) !important;
+}
+.result-hero::before, .res-hero::before { opacity: 0.4 !important; }
+
+/* 인트로/히어로 배경 그라디언트 (어두운 섹션) */
+#introScreen, .intro-card {
+  background: #ffffff !important;
+}
+
+/* 어드바이스 패널 header */
+.adv-header { background: #f8f9ff !important; }
+
+/* 토스트 */
+.toast { background: #1a1d2e !important; color: #ffffff !important; }
+
+/* 링크 */
+.footer-link, .nav-chip { color: #5a607a !important; }
+.footer-link:hover, .nav-chip:hover { color: #1a1d2e !important; }
+
+/* 라디오 버튼 체크 상태 */
+.lk-radio:checked + .lk-ball,
+.likert-radio:checked + .likert-dot,
+.likert-radio:checked + .likert-ball {
+  color: #ffffff !important;
+}
+
+/* 스텝 완료 상태 */
+.step.done .step-circle { color: #ffffff !important; }
+
+/* 스크롤바 */
+::-webkit-scrollbar-track { background: #e8ecf6 !important; }
+::-webkit-scrollbar-thumb { background: #c0c8e0 !important; }
+
+
+/* ── 인트로/히어로 섹션 라이트 배경 ── */
+#introScreen {
+  background: linear-gradient(135deg, #f0eeff 0%, #fff0f8 100%) !important;
+  min-height: 100vh;
+}
+.intro-card {
+  background: #ffffff !important;
+  box-shadow: 0 8px 40px rgba(80,72,212,0.12) !important;
+  border: 1px solid rgba(80,72,212,0.10) !important;
+}
+/* 히어로 배경 (검사 화면 아닌 포털) */
+.hero { background: transparent !important; }
+
+/* 통합검사 인트로 */
+#introScreen .name-inp {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #1a1d2e !important;
+}
+
+/* 어두운 내용 카드들 */
+.apt-section-header {
+  background: rgba(255,255,255,0.9) !important;
+}
+.sec-div {
+  background: rgba(255,255,255,0.9) !important;
+}
+
+/* 검사 헤더 */
+.exam-hd, .exam-top {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.10) !important;
+}
+
+/* 결과 히어로 텍스트 */
+.result-hero, .res-hero {
+  color: #1a1d2e !important;
+}
+.result-hero .rh-name, .res-hero .rh-name { color: #1a1d2e !important; }
+.result-hero .rh-sub, .res-hero .rh-sub { color: #5a607a !important; }
+.result-code-sub, .result-code-title { color: #1a1d2e !important; }
+
+/* 배지 텍스트 */
+.rh-badge { color: inherit !important; }
+
+/* 히어로 타이틀 그라디언트 유지 (텍스트는 그라디언트로) */
+.hero-title, .intro-title {
+  background: linear-gradient(135deg, #3028c0 0%, #6040e0 45%, #c02878 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* 버튼들 텍스트 가시성 */
+.btn-start, .btn-go, .btn-analyze, .btn-all,
+.btn-next, .btn-retry, .btn-print, .btn-all,
+.btn-modal-go, .mbtn-s, .btn-custom {
+  color: #ffffff !important;
+}
+
+/* 통합검사 배너 버튼 */
+.btn-all { color: #ffffff !important; }
+
+/* 배경 오브 색상 - 라이트에서 파스텔 */
+.orb1, .g1 { background: #a090e8 !important; }
+.orb2, .g2 { background: #e080b0 !important; }
+.orb3, .g3 { background: #70d0b8 !important; }
+
+/* 사이트 푸터 */
+.site-footer {
+  border-color: rgba(0,0,0,0.08) !important;
+  color: #9299b8 !important;
+}
+
+/* 결과 코드 배지 (흰 배경용) */
+.result-code-badge {
+  background: rgba(80,72,212,0.10) !important;
+  border-color: rgba(80,72,212,0.20) !important;
+  color: #3028c0 !important;
+}
+.result-code-badge.rank1 {
+  background: rgba(80,72,212,0.18) !important;
+  border-color: rgba(80,72,212,0.35) !important;
+}
+
+/* 점수 막대 트랙 */
+.score-bar-track { background: #e8ecf6 !important; }
+
+/* Holland 레이더 캔버스 배경 투명 유지 */
+canvas { background: transparent !important; }
+
+/* 가치관 intro-orient chip */
+.orient-chip {
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* 검사 타입 카드 */
+.apt-detail-card, .type-card, .orient-result-card {
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+.apt-detail-card .adc-tag { background: rgba(255,255,255,0.6) !important; }
+
+/* 모달 배경 input */
+.modal-body input, .modal-body select {
+  background: #f0f3fa !important;
+  color: #1a1d2e !important;
+}
+
+/* 어드바이저 직업 카드 active */
+.job-sel-card.active {
+  background: #f0eeff !important;
+}
+
+/* AI 출력 텍스트 */
+.ai-output, .ai-out {
+  color: #1a1d2e !important;
+}
+.ai-output h3, .ai-out h4 { color: #3028c0 !important; }
+.ai-output strong, .ai-out strong { color: #1a1d2e !important; }
+.info-box, .priority-box { color: #1a1d2e !important; }
+.ib-title, .pb-lbl { color: #5048d4 !important; }
+.pb-high .pb-lbl { color: #c83030 !important; }
+.pb-mid .pb-lbl { color: #c88020 !important; }
+.pb-low .pb-lbl { color: #0da870 !important; }
+
+/* cert/dept/job 태그 라이트 */
+.cert-tag, .etag.cert-t { color: #3028c0 !important; }
+.dept-tag, .etag.dept-t { color: #0a8060 !important; }
+.job-tag, .etag.act-t  { color: #b02868 !important; }
+.salary-tag, .etag.skill-t { color: #b07010 !important; }
+
+/* 로딩 텍스트 */
+.loading-text, .loading-msg { color: #5a607a !important; }
+
+/* 체크리스트 박스 */
+.chk-box { border-color: rgba(0,0,0,0.20) !important; }
+
+/* 태그 선택 */
+.tag-sel { background: #f0f3fa !important; border-color: rgba(0,0,0,0.12) !important; color: #5a607a !important; }
+.tag-sel:hover { border-color: rgba(0,0,0,0.20) !important; color: #1a1d2e !important; }
+.tag-sel.on { border-color: var(--acc) !important; background: #edeaff !important; color: #3028c0 !important; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════ INTRO ══════════════ -->
+<div id="introScreen">
+  <div class="intro-card">
+    <div class="intro-head">
+      <div class="intro-icon">💎</div>
+      <h1 class="intro-title">직업가치관검사</h1>
+      <p class="intro-sub">직업을 통해 무엇을 얻고 싶은지 알아보세요.<br>
+        나에게 중요한 가치를 발견하고, 그 가치가 충족되는 직업을 탐색합니다.</p>
+    </div>
+
+    <div class="orient-grid">
+      <div class="orient-chip" style="background:var(--safe-bg);color:var(--safe-dark)">
+        <span class="orient-em">🛡️</span>
+        <div><div class="orient-title">안전지향</div><div class="orient-sub">안정·보수·균형</div></div>
+      </div>
+      <div class="orient-chip" style="background:var(--achv-bg);color:var(--achv-dark)">
+        <span class="orient-em">🏆</span>
+        <div><div class="orient-title">성취지향</div><div class="orient-sub">능력·인정·성공</div></div>
+      </div>
+      <div class="orient-chip" style="background:var(--rel-bg);color:var(--rel-dark)">
+        <span class="orient-em">🤝</span>
+        <div><div class="orient-title">관계지향</div><div class="orient-sub">봉사·협력·소통</div></div>
+      </div>
+      <div class="orient-chip" style="background:var(--expr-bg);color:var(--expr-dark)">
+        <span class="orient-em">🌈</span>
+        <div><div class="orient-title">자기표현지향</div><div class="orient-sub">창의·자율·성장</div></div>
+      </div>
+    </div>
+
+    <div class="value-pills" id="valuePills"></div>
+
+    <div class="intro-stats">
+      <div class="stat-item"><div class="stat-num">60</div><div class="stat-label">총 문항수</div></div>
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">가치 영역</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">가치지향 유형</div></div>
+      <div class="stat-item"><div class="stat-num">15분</div><div class="stat-label">예상시간</div></div>
+    </div>
+
+    <input type="text" class="name-input" id="userName" placeholder="이름을 입력하세요" maxlength="10">
+    <button class="btn-start" onclick="startExam()">검사 시작하기 →</button>
+  </div>
+</div>
+
+<!-- ══════════════ EXAM ══════════════ -->
+<div id="examScreen">
+  <div class="exam-top">
+    <div class="exam-top-title">
+      <h2 id="examTopTitle">직업가치관검사</h2>
+      <p id="examTopSub"></p>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-row"><span id="progLabel">1/10 페이지</span><span id="progPct">0%</span></div>
+      <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="dots-row" id="dotsRow"></div>
+  <div id="questionArea"></div>
+  <div class="nav-row">
+    <button class="btn-prev" id="btnPrev" onclick="goPage(-1)">← 이전</button>
+    <span class="ans-status" id="ansStatus"></span>
+    <button class="btn-next" id="btnNext" onclick="goPage(1)">다음 →</button>
+  </div>
+</div>
+
+<!-- ══════════════ RESULT ══════════════ -->
+<div id="resultScreen">
+  <div class="result-wrap">
+    <div class="result-hero" id="resultHero"></div>
+    <div class="orient-result-grid" id="orientResultGrid"></div>
+    <div class="value-profile-card">
+      <div class="card-title">📊 12가지 직업가치관 프로파일</div>
+      <div class="value-bar-list" id="valueBarList"></div>
+    </div>
+    <div class="jobs-rec-card" id="jobsRecCard"></div>
+    <div class="advice-card" id="adviceCard"></div>
+    <div class="result-actions">
+      <button class="btn-retry" onclick="retryExam()">🔄 다시 검사</button>
+      <button class="btn-print" onclick="window.print()">🖨️ 결과 인쇄</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// 12가지 직업가치 정의
+// ══════════════════════════════════════════
+const VALUES = [
+  {
+    id:'안정성', emoji:'🛡️', color:'#1e88e5', orient:'안전',
+    desc:'예측 가능하고 안정적인 직업 환경을 원합니다. 고용 보장과 꾸준한 수입이 중요합니다.',
+    jobs:'공무원, 교사, 의사, 약사, 군인, 경찰관, 은행원, 국영기업 직원, 회계사, 법원 직원'
+  },
+  {
+    id:'보수', emoji:'💰', color:'#0288d1', orient:'안전',
+    desc:'충분한 급여와 금전적 보상을 통해 경제적 여유를 얻고 싶습니다.',
+    jobs:'금융분석가, 투자은행가, 의사, 변호사, IT 개발자, 항공기 조종사, 경영컨설턴트, 약사, 치과의사'
+  },
+  {
+    id:'일과삶의균형', emoji:'⚖️', color:'#00897b', orient:'안전',
+    desc:'직업과 개인 생활 사이의 균형을 유지하며 여유로운 삶을 추구합니다.',
+    jobs:'교사, 도서관 사서, 공무원, 재택근무 직종, 프리랜서, 번역가, 작가, 연구원, 복지사'
+  },
+  {
+    id:'능력발휘', emoji:'⚡', color:'#ef6c00', orient:'성취',
+    desc:'내가 가진 능력과 재능을 충분히 발휘하고 전문성을 키울 수 있는 직업을 원합니다.',
+    jobs:'외과의사, 건축가, 소프트웨어 엔지니어, 음악가, 스포츠 선수, 디자이너, 연구원, 교수, 셰프'
+  },
+  {
+    id:'사회적인정', emoji:'🏅', color:'#e53935', orient:'성취',
+    desc:'사회에서 인정받고 존경받는 직업을 통해 명예와 지위를 얻고 싶습니다.',
+    jobs:'정치인, 대기업 임원, 의사, 변호사, 판사, 교수, 방송인, 외교관, 대학교수, CEO'
+  },
+  {
+    id:'성취감', emoji:'🎯', color:'#8e24aa', orient:'성취',
+    desc:'도전적인 목표를 달성하고 성과를 낼 때 큰 보람을 느낍니다.',
+    jobs:'창업가, 영업관리자, 스포츠 선수, 프로젝트 매니저, 마케터, 탐험가, 기업가, 투자자, 연구원'
+  },
+  {
+    id:'사회봉사', emoji:'❤️', color:'#43a047', orient:'관계',
+    desc:'타인과 사회를 위해 기여하며 세상을 더 나은 곳으로 만드는 것이 중요합니다.',
+    jobs:'사회복지사, 의사, 간호사, NGO 활동가, 교사, 상담사, 환경운동가, 봉사단체 직원, 소방관'
+  },
+  {
+    id:'대인관계', emoji:'👥', color:'#fb8c00', orient:'관계',
+    desc:'다양한 사람들과 협력하고 좋은 관계를 맺을 수 있는 환경을 원합니다.',
+    jobs:'상담사, 영업직, 교사, HR 전문가, 이벤트 플래너, 호텔리어, 항공 승무원, 의사, 사회복지사'
+  },
+  {
+    id:'소속감', emoji:'🏘️', color:'#d81b60', orient:'관계',
+    desc:'조직과 팀의 일원으로서 함께 성장하고 공동체 의식을 느끼고 싶습니다.',
+    jobs:'공무원, 대기업 직원, 군인, 경찰관, 교사, 팀스포츠 코치, 협동조합 직원, 의료팀 구성원'
+  },
+  {
+    id:'자율성', emoji:'🕊️', color:'#6d4c41', orient:'자기표현',
+    desc:'스스로 일하는 방식을 결정하고 자유롭게 업무를 수행할 수 있기를 원합니다.',
+    jobs:'프리랜서, 창업가, 작가, 예술가, 컨설턴트, 유튜버, 연구원, 프리랜서 개발자, 사진작가'
+  },
+  {
+    id:'자기계발', emoji:'📈', color:'#546e7a', orient:'자기표현',
+    desc:'끊임없이 새로운 것을 배우고 성장할 수 있는 직업 환경을 원합니다.',
+    jobs:'교수, 연구원, 컨설턴트, IT 전문가, 의사, 작가, 투자분석가, 언어 강사, 코치, 에듀테크 전문가'
+  },
+  {
+    id:'창의성', emoji:'✨', color:'#00acc1', orient:'자기표현',
+    desc:'새로운 아이디어를 내고 독창적으로 문제를 해결할 수 있는 직업을 원합니다.',
+    jobs:'게임 디자이너, 광고 기획자, 작가, 건축가, 패션디자이너, 영화감독, 발명가, UI/UX디자이너, 작곡가'
+  },
+];
+
+// 가치지향 정의
+const ORIENTS = {
+  '안전': {
+    name:'안전지향', emoji:'🛡️', color:'#1565c0', bg:'#e3f2fd',
+    values:['안정성','보수','일과삶의균형'],
+    desc:'직업생활을 통해 경제적 안정과 삶의 균형을 얻고자 합니다. 예측 가능한 환경에서 안정적으로 일하는 것을 선호하며, 가족과 개인 삶의 질을 중시합니다.',
+    advice:'안정성이 높고 복지가 좋은 공공기관, 대기업, 전문직을 중심으로 탐색해 보세요. 자격증 취득이나 전문 기술을 쌓으면 더 안정적인 직업을 선택할 수 있습니다.'
+  },
+  '성취': {
+    name:'성취지향', emoji:'🏆', color:'#b71c1c', bg:'#ffebee',
+    values:['능력발휘','사회적인정','성취감'],
+    desc:'도전과 경쟁을 통해 성과를 이루고 인정받는 것에서 큰 보람을 느낍니다. 전문성을 높이고 커리어 성장에 적극적인 유형입니다.',
+    advice:'전문성을 키울 수 있는 분야에서 지속적으로 성장 기회를 찾으세요. 목표를 세우고 단계적으로 달성하는 경험이 큰 도움이 됩니다.'
+  },
+  '관계': {
+    name:'관계지향', emoji:'🤝', color:'#1b5e20', bg:'#e8f5e9',
+    values:['사회봉사','대인관계','소속감'],
+    desc:'사람들과의 관계 속에서 의미를 찾고, 사회에 기여하는 것을 중요하게 여깁니다. 협력적인 환경과 인간적인 연결을 소중히 합니다.',
+    advice:'사람을 돕고 사회에 기여하는 직업 분야를 탐색하세요. 봉사 활동이나 팀 프로젝트 참여를 통해 적성을 확인해 보는 것도 좋습니다.'
+  },
+  '자기표현': {
+    name:'자기표현지향', emoji:'🌈', color:'#4a148c', bg:'#f3e5f5',
+    values:['자율성','자기계발','창의성'],
+    desc:'자유롭게 자신을 표현하고 창의적으로 성장하는 것을 중요하게 여깁니다. 독립적이고 유연한 환경에서 역량을 발휘하려는 유형입니다.',
+    advice:'창의성과 자율성이 보장되는 분야나 직업을 탐색해 보세요. 포트폴리오를 쌓거나 개인 프로젝트를 진행하면서 자신만의 강점을 개발하세요.'
+  }
+};
+
+// ══════════════════════════════════════════
+// 문항 데이터 (가치당 5문항 × 12 = 60문항)
+// ══════════════════════════════════════════
+const QUESTIONS = [
+  // 안정성
+  {id:'Q01',val:'안정성',text:'직업을 선택할 때 고용이 보장되는지가 가장 중요하다.'},
+  {id:'Q02',val:'안정성',text:'해고나 실직의 걱정 없이 오래 일할 수 있는 직장을 원한다.'},
+  {id:'Q03',val:'안정성',text:'수입이 일정하고 예측 가능한 직업이 좋다.'},
+  {id:'Q04',val:'안정성',text:'경기 변동에 크게 영향받지 않는 안정적인 직종을 선호한다.'},
+  {id:'Q05',val:'안정성',text:'정년이 보장되고 오랫동안 근무할 수 있는 직업이 좋다.'},
+  // 보수
+  {id:'Q06',val:'보수',text:'높은 연봉을 받을 수 있는 직업이 더 매력적이다.'},
+  {id:'Q07',val:'보수',text:'일한 만큼 충분히 보상받는 것이 직업 선택에서 중요하다.'},
+  {id:'Q08',val:'보수',text:'재정적 여유를 통해 원하는 삶을 살 수 있는 것이 중요하다.'},
+  {id:'Q09',val:'보수',text:'성과에 따라 인센티브가 주어지는 직장을 선호한다.'},
+  {id:'Q10',val:'보수',text:'경제적으로 풍족한 생활을 할 수 있는 직업을 갖고 싶다.'},
+  // 일과삶의균형
+  {id:'Q11',val:'일과삶의균형',text:'퇴근 후에는 개인적인 시간을 충분히 누릴 수 있어야 한다.'},
+  {id:'Q12',val:'일과삶의균형',text:'야근이나 주말 근무가 없는 직업을 선호한다.'},
+  {id:'Q13',val:'일과삶의균형',text:'취미 생활과 가족을 위한 시간을 충분히 가질 수 있는 직업이 좋다.'},
+  {id:'Q14',val:'일과삶의균형',text:'충분한 휴가와 자유 시간이 보장되는 직장이 중요하다.'},
+  {id:'Q15',val:'일과삶의균형',text:'일과 삶의 균형을 유지하는 것이 높은 연봉보다 더 중요하다.'},
+  // 능력발휘
+  {id:'Q16',val:'능력발휘',text:'내가 가진 재능과 능력을 최대한 발휘할 수 있는 직업이 좋다.'},
+  {id:'Q17',val:'능력발휘',text:'내 전문 지식과 기술을 활용할 수 있는 일을 하고 싶다.'},
+  {id:'Q18',val:'능력발휘',text:'나의 강점이 잘 드러나는 분야에서 일하는 것이 중요하다.'},
+  {id:'Q19',val:'능력발휘',text:'도전적인 과제를 통해 내 능력을 시험해 보고 싶다.'},
+  {id:'Q20',val:'능력발휘',text:'일을 통해 내 잠재력을 발견하고 발전시키고 싶다.'},
+  // 사회적인정
+  {id:'Q21',val:'사회적인정',text:'사회에서 인정받고 존경받는 직업을 갖고 싶다.'},
+  {id:'Q22',val:'사회적인정',text:'다른 사람들이 부러워할 만한 직업을 갖는 것이 중요하다.'},
+  {id:'Q23',val:'사회적인정',text:'직업을 통해 사회적 지위와 명예를 얻고 싶다.'},
+  {id:'Q24',val:'사회적인정',text:'나의 직업과 성취가 타인에게 인정받기를 바란다.'},
+  {id:'Q25',val:'사회적인정',text:'유명하거나 사회적으로 영향력 있는 직업이 매력적이다.'},
+  // 성취감
+  {id:'Q26',val:'성취감',text:'어려운 목표를 달성했을 때 큰 뿌듯함과 보람을 느낀다.'},
+  {id:'Q27',val:'성취감',text:'도전적인 과제를 스스로 해결하는 것이 즐겁다.'},
+  {id:'Q28',val:'성취감',text:'성과를 이루어나가는 과정 자체에서 만족감을 느낀다.'},
+  {id:'Q29',val:'성취감',text:'목표를 세우고 이를 달성하는 것이 직업 활동의 핵심이라고 생각한다.'},
+  {id:'Q30',val:'성취감',text:'남들이 어렵다고 하는 일을 해냈을 때 특히 보람을 느낀다.'},
+  // 사회봉사
+  {id:'Q31',val:'사회봉사',text:'내 직업이 사회와 타인에게 도움이 되어야 한다.'},
+  {id:'Q32',val:'사회봉사',text:'어려운 사람들을 돕는 일을 직업으로 삼고 싶다.'},
+  {id:'Q33',val:'사회봉사',text:'세상을 더 나은 곳으로 만드는 데 기여하는 것이 중요하다.'},
+  {id:'Q34',val:'사회봉사',text:'봉사 정신과 공공의 이익을 중시하는 직업을 선호한다.'},
+  {id:'Q35',val:'사회봉사',text:'내 일이 사회 문제 해결에 기여할 수 있다면 큰 보람이 될 것 같다.'},
+  // 대인관계
+  {id:'Q36',val:'대인관계',text:'다양한 사람들을 만나고 교류할 수 있는 직업이 좋다.'},
+  {id:'Q37',val:'대인관계',text:'팀원들과 협력하며 함께 일하는 것이 즐겁다.'},
+  {id:'Q38',val:'대인관계',text:'동료나 고객과 좋은 관계를 맺는 것이 일의 큰 즐거움이다.'},
+  {id:'Q39',val:'대인관계',text:'사람들과 소통하며 긍정적인 영향을 주는 일을 하고 싶다.'},
+  {id:'Q40',val:'대인관계',text:'혼자 일하기보다 다양한 사람들과 함께하는 일이 더 맞는다.'},
+  // 소속감
+  {id:'Q41',val:'소속감',text:'좋은 팀이나 조직에 속해 있다는 느낌이 중요하다.'},
+  {id:'Q42',val:'소속감',text:'회사나 조직과 일체감을 느낄 수 있는 직장을 원한다.'},
+  {id:'Q43',val:'소속감',text:'동료들과 끈끈한 유대감을 형성할 수 있는 직장이 좋다.'},
+  {id:'Q44',val:'소속감',text:'조직의 가치와 문화에 공감하고 함께 성장하는 것이 중요하다.'},
+  {id:'Q45',val:'소속감',text:'공동의 목표를 향해 함께 나아가는 팀에 속하고 싶다.'},
+  // 자율성
+  {id:'Q46',val:'자율성',text:'일하는 방식과 순서를 스스로 결정할 수 있어야 한다.'},
+  {id:'Q47',val:'자율성',text:'상사의 지시보다는 내 판단으로 업무를 처리하는 것을 선호한다.'},
+  {id:'Q48',val:'자율성',text:'정해진 규칙보다 자유롭게 일할 수 있는 환경을 원한다.'},
+  {id:'Q49',val:'자율성',text:'근무 시간이나 장소를 자유롭게 선택할 수 있는 직업이 좋다.'},
+  {id:'Q50',val:'자율성',text:'내 방식대로 창의적으로 업무를 수행하는 것이 중요하다.'},
+  // 자기계발
+  {id:'Q51',val:'자기계발',text:'직업을 통해 새로운 지식과 기술을 꾸준히 배울 수 있어야 한다.'},
+  {id:'Q52',val:'자기계발',text:'일을 하면서 내 역량이 성장하는 것을 느끼는 것이 중요하다.'},
+  {id:'Q53',val:'자기계발',text:'교육, 연수, 자격증 취득 등 성장 기회가 많은 직장을 선호한다.'},
+  {id:'Q54',val:'자기계발',text:'스스로를 발전시키고 전문가로 성장하는 것이 삶의 목표 중 하나다.'},
+  {id:'Q55',val:'자기계발',text:'다양한 경험을 쌓고 넓은 시야를 갖출 수 있는 직업이 좋다.'},
+  // 창의성
+  {id:'Q56',val:'창의성',text:'새로운 아이디어를 내고 독창적인 방법으로 문제를 해결하는 것이 즐겁다.'},
+  {id:'Q57',val:'창의성',text:'틀에 박힌 방식보다 창의적이고 혁신적인 일을 하고 싶다.'},
+  {id:'Q58',val:'창의성',text:'직업에서 나만의 개성과 독창성을 발휘하는 것이 중요하다.'},
+  {id:'Q59',val:'창의성',text:'기존과는 다른 새로운 것을 만들어내는 과정이 즐겁다.'},
+  {id:'Q60',val:'창의성',text:'예술, 디자인, 발명 등 창의적인 분야에 관심이 있다.'},
+];
+
+// ══════════════════════════════════════════
+// 상태 변수
+// ══════════════════════════════════════════
+const PAGE_SIZE = 6;
+let pages = [];
+let currentPage = 0;
+let answers = {};
+let userName = '';
+
+// 인트로 pills
+(function(){
+  const c = document.getElementById('valuePills');
+  VALUES.forEach(v => {
+    const p = document.createElement('div');
+    p.className = 'value-pill';
+    p.style.background = v.color+'18';
+    p.style.color = v.color;
+    p.textContent = v.emoji + ' ' + v.id;
+    c.appendChild(p);
+  });
+})();
+
+function startExam() {
+  userName = document.getElementById('userName').value.trim() || '학생';
+  // 가치별 문항을 번갈아 배치
+  const shuffled = [];
+  const perVal = 5;
+  for(let i=0;i<perVal;i++){
+    VALUES.forEach(v=>{
+      const qs = QUESTIONS.filter(q=>q.val===v.id);
+      if(qs[i]) shuffled.push(qs[i]);
+    });
+  }
+  // 페이지 분할
+  pages = [];
+  for(let i=0;i<shuffled.length;i+=PAGE_SIZE){
+    pages.push(shuffled.slice(i,i+PAGE_SIZE));
+  }
+  currentPage = 0;
+  answers = {};
+  document.getElementById('introScreen').style.display = 'none';
+  document.getElementById('examScreen').style.display = 'block';
+  renderPage();
+}
+
+function renderPage(){
+  const page = pages[currentPage];
+  const total = pages.length;
+  const pct = Math.round((currentPage/total)*100);
+
+  document.getElementById('examTopTitle').textContent = `직업가치관검사`;
+  document.getElementById('examTopSub').textContent = `${currentPage+1} / ${total} 페이지 — 직업에서 무엇이 중요한지 응답해 주세요`;
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progLabel').textContent = `${currentPage+1}/${total} 페이지`;
+  document.getElementById('progPct').textContent = pct+'%';
+
+  // dots
+  document.getElementById('dotsRow').innerHTML = pages.map((_,i)=>{
+    let c='dot';
+    if(i<currentPage) c+=' done';
+    else if(i===currentPage) c+=' cur';
+    return `<div class="${c}"></div>`;
+  }).join('');
+
+  // 문항
+  const scaleLbls=['전혀\n아니다','아니다','보통','그렇다','매우\n그렇다'];
+  const startIdx = currentPage * PAGE_SIZE;
+  let html='';
+  page.forEach((q,i)=>{
+    const gIdx = startIdx+i+1;
+    const v = VALUES.find(x=>x.id===q.val);
+    const saved = answers[q.id];
+    let opts='';
+    [1,2,3,4,5].forEach((val,vi)=>{
+      const chk = saved===val?'checked':'';
+      opts+=`<div class="likert-opt">
+        <label>
+          <input type="radio" class="likert-radio" name="q_${q.id}" value="${val}" ${chk} onchange="saveAns('${q.id}',${val})">
+          <div class="likert-ball">${val}</div>
+        </label>
+        <div class="likert-scale">${scaleLbls[vi]}</div>
+      </div>`;
+    });
+    html+=`<div class="q-card">
+      <div class="q-head">
+        <div class="q-num">${gIdx}</div>
+        <div class="q-text">${q.text}</div>
+        <div class="q-val-tag" style="background:${v.color}18;color:${v.color}">${v.emoji} ${v.id}</div>
+      </div>
+      <div class="likert-wrap">
+        <div class="likert-lbl">전혀 아니다</div>
+        <div class="likert-opts">${opts}</div>
+        <div class="likert-lbl">매우 그렇다</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('questionArea').innerHTML = html;
+  updateNav();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function saveAns(qId, val){
+  answers[qId]=val;
+  updateNav();
+}
+
+function updateNav(){
+  const page=pages[currentPage];
+  const done=page.filter(q=>answers[q.id]!==undefined).length;
+  document.getElementById('ansStatus').textContent=`${done} / ${page.length} 응답`;
+  document.getElementById('btnPrev').style.visibility=currentPage===0?'hidden':'visible';
+  const isLast=currentPage===pages.length-1;
+  const btn=document.getElementById('btnNext');
+  btn.textContent=isLast?'결과 보기 ✓':'다음 →';
+  btn.disabled=done<page.length;
+}
+
+function goPage(dir){
+  const np=currentPage+dir;
+  if(np<0) return;
+  if(np>=pages.length){showResult();return;}
+  currentPage=np;
+  renderPage();
+}
+
+// ══════════════════════════════════════════
+// 결과 계산
+// ══════════════════════════════════════════
+function calcScores(){
+  const res={};
+  VALUES.forEach(v=>{
+    const qs=QUESTIONS.filter(q=>q.val===v.id);
+    const sum=qs.reduce((s,q)=>s+(answers[q.id]||0),0);
+    res[v.id]=Math.round((sum/(qs.length*5))*100);
+  });
+  return res;
+}
+
+function calcOrients(scores){
+  const res={};
+  Object.keys(ORIENTS).forEach(ok=>{
+    const o=ORIENTS[ok];
+    const avg=Math.round(o.values.reduce((s,v)=>s+scores[v],0)/o.values.length);
+    res[ok]=avg;
+  });
+  return res;
+}
+
+function showResult(){
+  document.getElementById('examScreen').style.display='none';
+  document.getElementById('resultScreen').style.display='block';
+
+  const scores=calcScores();
+  const orientScores=calcOrients(scores);
+
+  // 정렬
+  const sortedVals=[...VALUES].sort((a,b)=>scores[b.id]-scores[a.id]);
+  const sortedOrients=Object.keys(ORIENTS).sort((a,b)=>orientScores[b]-orientScores[a]);
+  const topOrientKey=sortedOrients[0];
+  const topOrient=ORIENTS[topOrientKey];
+  const top2Vals=sortedVals.slice(0,2);
+
+  // ── 히어로
+  document.getElementById('resultHero').innerHTML=`
+    <div class="rh-label">검사자</div>
+    <div class="rh-name">${userName} 님의 직업가치관 결과</div>
+    <div class="rh-type-badge">${topOrient.emoji} ${topOrient.name}</div>
+    <div class="rh-type-desc">
+      상위 가치: <strong>${top2Vals[0].emoji}${top2Vals[0].id}</strong> · <strong>${top2Vals[1].emoji}${top2Vals[1].id}</strong><br>
+      이 가치들이 충족되는 직업을 탐색해 보세요.
+    </div>`;
+
+  // ── 4가지 가치지향 카드
+  document.getElementById('orientResultGrid').innerHTML=sortedOrients.map((ok,i)=>{
+    const o=ORIENTS[ok];
+    const sc=orientScores[ok];
+    return `<div class="orient-result-card${i===0?' top':''}" style="background:${o.bg};color:${o.color}">
+      <div class="orc-head">
+        <span class="orc-em">${o.emoji}</span>
+        <div>
+          <div class="orc-title">${o.name}${i===0?' ★':''}</div>
+          <div class="orc-score-wrap">
+            <div class="orc-score-bar"><div class="orc-score-fill" style="width:${sc}%;background:${o.color}"></div></div>
+            <span class="orc-score-pct">${sc}점</span>
+          </div>
+        </div>
+      </div>
+      <div class="orc-desc">${o.desc}</div>
+      <div class="orc-values">${o.values.map(v=>`<span class="orc-val-tag">${VALUES.find(x=>x.id===v).emoji} ${v}</span>`).join('')}</div>
+    </div>`;
+  }).join('');
+
+  // ── 12가지 가치 프로파일 바
+  document.getElementById('valueBarList').innerHTML=sortedVals.map((v,i)=>{
+    const sc=scores[v.id];
+    const rankColors=['#f44336','#ff9800','#ffc107','#8bc34a'];
+    const rk=i<4?rankColors[i]:null;
+    return `<div class="vbl-row">
+      <div class="rank-badge" style="background:${rk||'#cbd5e1'}">${i+1}</div>
+      <div class="vbl-label" style="color:${v.color}">${v.emoji} ${v.id}</div>
+      <div class="vbl-track"><div class="vbl-fill" style="width:${sc}%;background:${v.color}"></div></div>
+      <div class="vbl-num" style="color:${v.color}">${sc}%</div>
+    </div>`;
+  }).join('');
+
+  // ── 추천 직업
+  const topJobs=top2Vals.flatMap(v=>v.jobs.split(', '));
+  document.getElementById('jobsRecCard').innerHTML=`
+    <div class="card-title">✨ 추천 직업 (상위 2개 가치 기반)</div>
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:12px">
+      ${top2Vals[0].emoji} <strong>${top2Vals[0].id}</strong> + ${top2Vals[1].emoji} <strong>${top2Vals[1].id}</strong> 가치가 충족되는 직업들
+    </div>
+    <div class="jobs-grid">${topJobs.map(j=>`<div class="job-chip">${j}</div>`).join('')}</div>`;
+
+  // ── 진로 조언
+  document.getElementById('adviceCard').innerHTML=`
+    <div class="card-title">💡 진로 탐색 조언</div>
+    <div class="advice-box" style="background:${topOrient.bg};color:${topOrient.color}">
+      <div class="advice-title">${topOrient.emoji} ${topOrient.name}을 위한 조언</div>
+      <div class="advice-text">${topOrient.advice}</div>
+    </div>
+    <div class="advice-box" style="background:var(--gray-50);color:var(--gray-700)">
+      <div class="advice-title">⚠️ 주의사항</div>
+      <div class="advice-text">직업가치관 검사 결과는 참고 자료입니다. 직업 선택 시 가치관뿐만 아니라 흥미, 적성, 학력 수준, 직업 전망 등도 함께 고려해야 합니다. 흥미검사·적성검사와 함께 활용하면 더욱 효과적입니다.</div>
+    </div>`;
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function retryExam(){
+  document.getElementById('resultScreen').style.display='none';
+  document.getElementById('introScreen').style.display='flex';
+  document.getElementById('userName').value='';
+}
+</script>
+</body>
+</html>

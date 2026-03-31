@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>진로심리검사 종합 결과 - 직업군 추천</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@500&display=swap');
+:root {
+  /* ── Light Theme Variables ── */
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface2: #f0f3fa;
+  --surface3: #e8ecf6;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --border3: rgba(0,0,0,0.20);
+  --text: #1a1d2e;
+  --text-sub: #5a607a;
+  --text-muted: #9299b8;
+  --txt: #1a1d2e;
+  --sub: #5a607a;
+  --muted: #9299b8;
+  --t1: #1a1d2e;
+  --t2: #5a607a;
+  --t3: #9299b8;
+  /* sur / s 계열 */
+  --sur: #ffffff;
+  --sur2: #f0f3fa;
+  --sur3: #e8ecf6;
+  --s1: #ffffff;
+  --s2: #f0f3fa;
+  --s3: #e8ecf6;
+  /* bord 계열 */
+  --bord: rgba(0,0,0,0.07);
+  --bord2: rgba(0,0,0,0.13);
+  --bord3: rgba(0,0,0,0.20);
+  --b1: rgba(0,0,0,0.07);
+  --b2: rgba(0,0,0,0.13);
+  --b3: rgba(0,0,0,0.20);
+  /* 검사별 테마 - 라이트에 맞게 채도 유지 */
+  --c-h: #6253c8; --c-h2: #4c3db8; --c-h-glow: rgba(98,83,200,0.18);
+  --c-a: #1fa888; --c-a2: #158a6e; --c-a-glow: rgba(31,168,136,0.18);
+  --c-v: #d04880; --c-v2: #b83268; --c-v-glow: rgba(208,72,128,0.18);
+  --c-all:#d88020; --c-all2:#c06010; --c-all-glow:rgba(216,128,32,0.18);
+  /* 강조색 계열 */
+  --acc: #5048d4; --acc2: #6e64e8; --ag: rgba(80,72,212,0.15);
+  --primary: #5048d4; --primary-light: #edeaff;
+  --grn: #0da870; --grn2: #0c9060; --gg: rgba(13,168,112,0.15);
+  --ylw: #d98a00; --ylw2: #b87200;
+  --red: #d63030; --red2: #b82020;
+  --pnk: #c83870; --pnk2: #b02860;
+  --cyn: #0890b8; --cyn2: #0678a0;
+  /* 흥미 유형 색상 */
+  --R: #c83020; --I: #1860a8; --A: #7030a0;
+  --S: #1a9050; --E: #c06020; --C: #0f7868;
+  --H: #5048d4; --apt: #1a9a78; --val: #c83870;
+  --gold: #c88020; --gold2: #a86010;
+
+  --bg:#f4f6fb; --sur:#ffffff; --sur2:#e8ecf6; --bord:rgba(255,255,255,.07); --bord2:rgba(255,255,255,.13);
+  --txt:#1a1d2e; --sub:#5a607a; --muted:#9299b8;
+  --H:#7c6fe0; --I:#2980b9; --A:#8e44ad; --S:#27ae60; --E:#e67e22; --C:#16a085;
+  --apt:#3eb8a0; --val:#e06090;
+  --gold:#f0a050; --gold2:#ffd090;
+  --radius:18px; --rsm:12px; --rxs:8px;
+  --shadow:0 4px 20px rgba(0,0,0,.3);
+  --shadow-lg:0 12px 50px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;}
+
+/* ── BG ── */
+.bg-mesh{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.mesh-orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.08;}
+.o1{width:600px;height:600px;background:#7c6fe0;top:-200px;left:-150px;animation:fl 9s ease-in-out infinite;}
+.o2{width:450px;height:450px;background:#3eb8a0;bottom:-100px;right:-100px;animation:fl 11s ease-in-out infinite 3s;}
+.o3{width:380px;height:380px;background:#e06090;top:45%;left:45%;animation:fl 13s ease-in-out infinite 6s;}
+@keyframes fl{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-28px) scale(1.05);}}
+
+/* ── WRAP ── */
+.wrap{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 20px 80px;}
+
+/* ── PROGRESS STEPPER ── */
+.stepper{display:flex;align-items:center;justify-content:center;padding:32px 0 0;gap:0;margin-bottom:48px;}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;}
+.step-circle{width:40px;height:40px;border-radius:50%;border:2px solid var(--bord2);background:var(--sur);
+  display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .3s;font-weight:700;}
+.step.done .step-circle{background:var(--S);border-color:var(--S);color:#fff;}
+.step.active .step-circle{border-color:var(--H);box-shadow:0 0 0 4px rgba(124,111,224,.25);}
+.step.active.aptStep .step-circle{border-color:var(--apt);box-shadow:0 0 0 4px rgba(62,184,160,.25);}
+.step.active.valStep .step-circle{border-color:var(--val);box-shadow:0 0 0 4px rgba(224,96,144,.25);}
+.step.active.resStep .step-circle{border-color:var(--gold);box-shadow:0 0 0 4px rgba(240,160,80,.25);}
+.step-label{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;}
+.step.active .step-label{color:var(--txt);}
+.step.done .step-label{color:var(--sub);}
+.step-line{width:60px;height:2px;background:var(--bord2);margin-bottom:22px;transition:background .5s;}
+.step-line.done{background:var(--S);}
+@media(max-width:500px){.step-line{width:30px;}.step-label{font-size:9px;}}
+
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── INTRO ── */
+.intro-hero{text-align:center;padding:20px 0 48px;}
+.intro-eyebrow{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;border-radius:30px;
+  background:rgba(124,111,224,.15);border:1px solid rgba(124,111,224,.3);
+  font-size:12px;font-weight:700;color:#b8b0ff;margin-bottom:22px;letter-spacing:.4px;}
+.intro-title{font-size:clamp(30px,6vw,52px);font-weight:900;line-height:1.18;margin-bottom:16px;
+  background:linear-gradient(135deg,#fff 0%,#b8b0ff 45%,#ffaad0 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.intro-sub{font-size:15px;color:var(--sub);line-height:1.8;max-width:520px;margin:0 auto 36px;}
+.intro-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px;}
+.i-card{background:var(--sur);border:1px solid var(--bord2);border-radius:var(--rsm);padding:20px 16px;text-align:center;}
+.i-card-em{font-size:28px;margin-bottom:8px;}
+.i-card-title{font-size:13px;font-weight:800;margin-bottom:4px;}
+.i-card-meta{font-size:11px;color:var(--sub);}
+.name-row{display:flex;gap:12px;max-width:400px;margin:0 auto;}
+.name-inp{flex:1;padding:13px 16px;background:var(--sur);border:1.5px solid var(--bord2);
+  border-radius:var(--rsm);color:var(--txt);font-size:15px;font-family:inherit;outline:none;transition:border-color .2s;}
+.name-inp:focus{border-color:var(--H);}
+.name-inp::placeholder{color:var(--muted);}
+.btn-go{padding:13px 28px;background:linear-gradient(135deg,var(--H),#b06af0);color:#fff;
+  border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;font-family:inherit;
+  cursor:pointer;white-space:nowrap;transition:all .2s;box-shadow:0 4px 16px rgba(124,111,224,.35);}
+.btn-go:hover{transform:translateY(-2px);filter:brightness(1.1);}
+
+/* ── EXAM HEADER ── */
+.exam-hd{background:var(--sur);border:1px solid var(--bord);border-radius:var(--radius);
+  padding:18px 24px;margin-bottom:16px;display:flex;align-items:center;gap:16px;}
+.exam-hd-left{flex:1;}
+.exam-hd-title{font-size:15px;font-weight:800;}
+.exam-hd-sub{font-size:12px;color:var(--sub);margin-top:3px;}
+.prog-bg{height:7px;background:var(--bord2);border-radius:4px;overflow:hidden;margin-top:10px;}
+.prog-fill{height:100%;border-radius:4px;transition:width .4s;}
+.prog-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;}
+
+/* ── DOTS ── */
+.dots{display:flex;gap:5px;justify-content:center;margin:12px 0;flex-wrap:wrap;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--bord2);transition:all .2s;}
+.dot.done{background:rgba(255,255,255,.4);}
+.dot.cur{width:18px;border-radius:3px;}
+
+/* ── SECTION DIVIDER ── */
+.sec-div{border-radius:var(--rsm);padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;border:1.5px solid;}
+.sec-div-icon{font-size:26px;flex-shrink:0;}
+.sec-div-title{font-size:15px;font-weight:800;}
+.sec-div-desc{font-size:12px;margin-top:2px;opacity:.8;}
+
+/* ── Q CARD ── */
+.q-card{background:var(--sur);border:1px solid var(--bord);border-radius:var(--radius);
+  margin-bottom:10px;overflow:hidden;animation:fadeUp .2s ease;}
+.q-hd{padding:14px 20px 10px;border-bottom:1px solid var(--bord);display:flex;align-items:flex-start;gap:10px;}
+.q-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;flex-shrink:0;margin-top:2px;}
+.q-txt{font-size:14px;font-weight:600;line-height:1.6;flex:1;}
+.q-tag{padding:3px 9px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.likert{padding:12px 20px;display:flex;align-items:center;gap:8px;}
+.lbl{font-size:11px;color:var(--muted);white-space:nowrap;}
+.opts{display:flex;gap:7px;flex:1;justify-content:center;}
+.opt{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
+.lk-radio{display:none;}
+.lk-ball{width:34px;height:34px;border-radius:50%;border:2px solid var(--bord2);display:flex;
+  align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sub);
+  transition:all .15s;cursor:pointer;background:var(--sur2);}
+.lk-radio:checked+.lk-ball{border-color:var(--H);background:var(--H);color:#fff;transform:scale(1.12);
+  box-shadow:0 2px 8px rgba(124,111,224,.4);}
+.lk-ball.apt-active{border-color:var(--apt)!important;background:var(--apt)!important;box-shadow:0 2px 8px rgba(62,184,160,.4)!important;}
+.lk-ball.val-active{border-color:var(--val)!important;background:var(--val)!important;box-shadow:0 2px 8px rgba(224,96,144,.4)!important;}
+.lk-sc{font-size:9px;color:var(--muted);text-align:center;}
+
+/* ── NAV ── */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;}
+.btn-prev{padding:10px 20px;background:var(--sur);border:1px solid var(--bord2);border-radius:var(--rsm);
+  color:var(--sub);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;}
+.btn-prev:hover{background:var(--sur2);color:var(--txt);}
+.ans-st{font-size:12px;color:var(--muted);}
+.btn-next{padding:10px 26px;border:none;border-radius:var(--rsm);color:#fff;font-size:13px;
+  font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(0,0,0,.3);}
+.btn-next:disabled{background:var(--bord2)!important;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
+
+/* ── RESULT ── */
+.res-hero{background:linear-gradient(135deg,#f0eeff,#f5f0ff);border:1px solid var(--bord2);
+  border-radius:var(--radius);padding:40px 36px;text-align:center;margin-bottom:22px;
+  position:relative;overflow:hidden;}
+.res-hero::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(circle at 20% 20%,rgba(124,111,224,.2) 0%,transparent 50%),
+  radial-gradient(circle at 80% 80%,rgba(224,96,144,.2) 0%,transparent 50%);pointer-events:none;}
+.rh-label{font-size:13px;color:var(--sub);margin-bottom:6px;position:relative;}
+.rh-name{font-size:24px;font-weight:900;margin-bottom:20px;position:relative;}
+.rh-badges{display:flex;justify-content:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;position:relative;}
+.rh-badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:700;border:1.5px solid;}
+.rh-sub{font-size:13px;color:var(--sub);line-height:1.7;position:relative;}
+
+/* 직업군 추천 카드 */
+.job-rec-section{margin-bottom:22px;}
+.sec-title{font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.job-rec-grid{display:flex;flex-direction:column;gap:14px;}
+.job-rec-card{background:var(--sur);border:1px solid var(--bord);border-radius:var(--radius);
+  padding:24px 26px;transition:all .25s;position:relative;overflow:hidden;}
+.job-rec-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:var(--radius) 0 0 var(--radius);}
+.job-rec-card:hover{border-color:var(--bord2);transform:translateX(4px);}
+.jrc-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:14px;}
+.jrc-rank{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:900;flex-shrink:0;color:#fff;}
+.jrc-info{flex:1;}
+.jrc-title{font-size:18px;font-weight:900;margin-bottom:4px;}
+.jrc-eng{font-size:11px;color:var(--sub);font-family:'JetBrains Mono',monospace;}
+.jrc-score{font-size:13px;font-weight:700;margin-left:auto;flex-shrink:0;padding:4px 12px;
+  border-radius:20px;border:1.5px solid;}
+.jrc-desc{font-size:13px;color:var(--sub);line-height:1.75;margin-bottom:14px;}
+.jrc-match{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.match-tag{padding:4px 11px;border-radius:8px;font-size:11px;font-weight:700;}
+.match-h{background:rgba(124,111,224,.15);color:#b8b0ff;}
+.match-a{background:rgba(62,184,160,.15);color:#7fe8d0;}
+.match-v{background:rgba(224,96,144,.15);color:#ffaad0;}
+.jrc-jobs-title{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px;}
+.jrc-jobs-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.jrc-job{padding:5px 11px;border-radius:var(--rxs);font-size:12px;font-weight:600;
+  background:var(--sur2);color:var(--sub);border:1px solid var(--bord);}
+
+/* 3종 요약 */
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px;}
+.sum-card{background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);padding:18px 16px;}
+.sum-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.sum-em{font-size:20px;}
+.sum-title{font-size:12px;font-weight:800;color:var(--sub);}
+.sum-top{font-size:15px;font-weight:900;margin-bottom:6px;}
+.sum-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.sum-tag{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;background:var(--sur2);color:var(--sub);}
+
+/* 분석 방법 */
+.algo-card{background:var(--sur);border:1px solid var(--bord);border-radius:var(--rsm);
+  padding:20px 24px;margin-bottom:22px;}
+.algo-title{font-size:13px;font-weight:800;color:var(--sub);margin-bottom:12px;}
+.algo-steps{display:flex;flex-direction:column;gap:8px;}
+.algo-step{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--sub);line-height:1.6;}
+.algo-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+
+.btn-retry{display:block;margin:0 auto;padding:14px 36px;background:linear-gradient(135deg,var(--H),var(--val));
+  color:#fff;border:none;border-radius:var(--rsm);font-size:15px;font-weight:700;font-family:inherit;
+  cursor:pointer;box-shadow:0 4px 16px rgba(124,111,224,.35);transition:all .2s;}
+.btn-retry:hover{transform:translateY(-2px);filter:brightness(1.1);}
+
+@media(max-width:600px){
+  .intro-cards{grid-template-columns:1fr;}
+  .name-row{flex-direction:column;}
+  .summary-grid{grid-template-columns:1fr;}
+  .rh-badges{flex-direction:column;align-items:center;}
+  .jrc-top{flex-wrap:wrap;}
+}
+
+/* ════ LIGHT THEME OVERRIDE ════ */
+body { background: var(--bg) !important; color: var(--t1) !important; }
+
+/* 배경 오브 / 그리드 투명도 조절 */
+.orb, .glow, .mesh-orb { opacity: 0.07 !important; }
+.bg-grid, .grid-pat {
+  background-image: linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px) !important;
+}
+
+/* 카드 / 서피스 */
+.exam-card, .q-card, .q-card, .plan-card, .adv-card,
+.form-card, .result-hero, .res-hero, .rh-top,
+.sum-card, .algo-card, .jobs-rec-card, .advice-card,
+.job-rec-card, .compare-table, .faq-item, .all-banner,
+.type-card, .apt-detail-card, .orient-result-card,
+.value-profile-card, .radar-card, .profile-card,
+.adv-header, .job-sel-card, .i-card, .modal {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.10) !important;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.07) !important;
+}
+.exam-card:hover, .plan-card:hover, .job-sel-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12) !important;
+}
+
+/* 서피스2 요소 */
+.meta-chip, .type-tag, .card-types .type-tag,
+.sum-tag, .adv-tag, .modal-info-chip,
+.jrc-job, .all-tag, .td-file,
+.all-tag, .nav-chip, .hd-btn, .api-status,
+.sms-preview, .question-card,
+.score-bar-track, .vbl-track, .prog-bg,
+.prog-bar-bg, .profile-track, .salary-bg,
+.likert-wrap, .q-hd, .q-head,
+.faq-a, .adc-tag, .orc-val-tag, .adv-tag,
+.gauge-item, .action-item, .chk-item,
+.priority-box, .info-box, .tl-step,
+.intro-stats, .hero-stats, .modal-info-row,
+.sender-info, .selected-bar,
+.lk-ball, .likert-ball, .likert-dot {
+  background: #f0f3fa !important;
+  border-color: rgba(0,0,0,0.10) !important;
+}
+
+/* 입력 필드 */
+input, select, textarea,
+.finput, .fselect, .ftextarea,
+.modal-name-input, .modal-select-input,
+.minput, .m-input,
+.name-inp, .name-input,
+.search-input, .custom-inp,
+.form-input, .form-select, .form-textarea {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #1a1d2e !important;
+}
+input::placeholder, textarea::placeholder { color: #9299b8 !important; }
+select option { background: #ffffff !important; color: #1a1d2e !important; }
+
+/* 텍스트 */
+.text-sub, .card-sub, .hero-sub, .intro-sub,
+p, .t2, .sub, .text-muted, .muted,
+.q-text, .q-txt, .lk-sc, .likert-scale,
+.exam-hd-sub, .pc-sub, .adv-hd-sub,
+.jrc-desc, .jrc-eng, .adc-desc,
+.orc-desc, .adv-card-title, .faq-a,
+.algo-step, .ai-out p, .ai-out li,
+.loading-msg, .ans-st, .ans-status {
+  color: #5a607a !important;
+}
+
+/* 헤더 / 탭 */
+.site-header, .site-hd, .hd, .exam-hd, .exam-top, .tabs,
+.header-nav, .stepper {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.09) !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06) !important;
+}
+.tab-btn { color: #5a607a !important; }
+.tab-btn.active { background: #e8ecf6 !important; color: #1a1d2e !important; }
+.tab-btn:hover { background: #f0f3fa !important; }
+
+/* 모달 오버레이 */
+.modal-overlay.active, .moverlay.open { background: rgba(0,0,0,0.35) !important; }
+.modal, .modal-overlay .modal { background: #ffffff !important; }
+.modal-header, .mhd { border-color: rgba(0,0,0,0.08) !important; }
+
+/* 비교표 */
+.compare-table th { background: #f0f3fa !important; color: #5a607a !important; }
+.compare-table td { color: #5a607a !important; }
+.compare-table tr:hover td { background: #f8faff !important; }
+
+/* 섹션 레이블 */
+.section-label, .sec-label, .sec-lbl, .sec-div {
+  color: #9299b8 !important;
+}
+.section-label::after, .sec-label::after, .sec-lbl::after { background: rgba(0,0,0,0.08) !important; }
+
+/* 구분선 */
+.divider { background: rgba(0,0,0,0.07) !important; }
+
+/* 진행 도트 */
+.dot { background: rgba(0,0,0,0.15) !important; }
+.dot.done { background: var(--acc) !important; }
+
+/* 적성/가치 프로파일 트랙 */
+.profile-track, .vbl-track, .prog-bg, .prog-bar-bg,
+.orc-score-bar, .salary-bg {
+  background: #e8ecf6 !important;
+}
+
+/* 결과 히어로 - 라이트 그라디언트 */
+.result-hero, .res-hero, .rh-top, .result-hero-wrap {
+  background: linear-gradient(135deg, #ede9ff 0%, #fce4f4 100%) !important;
+  border-color: rgba(80,72,212,0.15) !important;
+}
+.result-hero::before, .res-hero::before { opacity: 0.4 !important; }
+
+/* 인트로/히어로 배경 그라디언트 (어두운 섹션) */
+#introScreen, .intro-card {
+  background: #ffffff !important;
+}
+
+/* 어드바이스 패널 header */
+.adv-header { background: #f8f9ff !important; }
+
+/* 토스트 */
+.toast { background: #1a1d2e !important; color: #ffffff !important; }
+
+/* 링크 */
+.footer-link, .nav-chip { color: #5a607a !important; }
+.footer-link:hover, .nav-chip:hover { color: #1a1d2e !important; }
+
+/* 라디오 버튼 체크 상태 */
+.lk-radio:checked + .lk-ball,
+.likert-radio:checked + .likert-dot,
+.likert-radio:checked + .likert-ball {
+  color: #ffffff !important;
+}
+
+/* 스텝 완료 상태 */
+.step.done .step-circle { color: #ffffff !important; }
+
+/* 스크롤바 */
+::-webkit-scrollbar-track { background: #e8ecf6 !important; }
+::-webkit-scrollbar-thumb { background: #c0c8e0 !important; }
+
+
+/* ── 인트로/히어로 섹션 라이트 배경 ── */
+#introScreen {
+  background: linear-gradient(135deg, #f0eeff 0%, #fff0f8 100%) !important;
+  min-height: 100vh;
+}
+.intro-card {
+  background: #ffffff !important;
+  box-shadow: 0 8px 40px rgba(80,72,212,0.12) !important;
+  border: 1px solid rgba(80,72,212,0.10) !important;
+}
+/* 히어로 배경 (검사 화면 아닌 포털) */
+.hero { background: transparent !important; }
+
+/* 통합검사 인트로 */
+#introScreen .name-inp {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #1a1d2e !important;
+}
+
+/* 어두운 내용 카드들 */
+.apt-section-header {
+  background: rgba(255,255,255,0.9) !important;
+}
+.sec-div {
+  background: rgba(255,255,255,0.9) !important;
+}
+
+/* 검사 헤더 */
+.exam-hd, .exam-top {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.10) !important;
+}
+
+/* 결과 히어로 텍스트 */
+.result-hero, .res-hero {
+  color: #1a1d2e !important;
+}
+.result-hero .rh-name, .res-hero .rh-name { color: #1a1d2e !important; }
+.result-hero .rh-sub, .res-hero .rh-sub { color: #5a607a !important; }
+.result-code-sub, .result-code-title { color: #1a1d2e !important; }
+
+/* 배지 텍스트 */
+.rh-badge { color: inherit !important; }
+
+/* 히어로 타이틀 그라디언트 유지 (텍스트는 그라디언트로) */
+.hero-title, .intro-title {
+  background: linear-gradient(135deg, #3028c0 0%, #6040e0 45%, #c02878 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* 버튼들 텍스트 가시성 */
+.btn-start, .btn-go, .btn-analyze, .btn-all,
+.btn-next, .btn-retry, .btn-print, .btn-all,
+.btn-modal-go, .mbtn-s, .btn-custom {
+  color: #ffffff !important;
+}
+
+/* 통합검사 배너 버튼 */
+.btn-all { color: #ffffff !important; }
+
+/* 배경 오브 색상 - 라이트에서 파스텔 */
+.orb1, .g1 { background: #a090e8 !important; }
+.orb2, .g2 { background: #e080b0 !important; }
+.orb3, .g3 { background: #70d0b8 !important; }
+
+/* 사이트 푸터 */
+.site-footer {
+  border-color: rgba(0,0,0,0.08) !important;
+  color: #9299b8 !important;
+}
+
+/* 결과 코드 배지 (흰 배경용) */
+.result-code-badge {
+  background: rgba(80,72,212,0.10) !important;
+  border-color: rgba(80,72,212,0.20) !important;
+  color: #3028c0 !important;
+}
+.result-code-badge.rank1 {
+  background: rgba(80,72,212,0.18) !important;
+  border-color: rgba(80,72,212,0.35) !important;
+}
+
+/* 점수 막대 트랙 */
+.score-bar-track { background: #e8ecf6 !important; }
+
+/* Holland 레이더 캔버스 배경 투명 유지 */
+canvas { background: transparent !important; }
+
+/* 가치관 intro-orient chip */
+.orient-chip {
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* 검사 타입 카드 */
+.apt-detail-card, .type-card, .orient-result-card {
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+.apt-detail-card .adc-tag { background: rgba(255,255,255,0.6) !important; }
+
+/* 모달 배경 input */
+.modal-body input, .modal-body select {
+  background: #f0f3fa !important;
+  color: #1a1d2e !important;
+}
+
+/* 어드바이저 직업 카드 active */
+.job-sel-card.active {
+  background: #f0eeff !important;
+}
+
+/* AI 출력 텍스트 */
+.ai-output, .ai-out {
+  color: #1a1d2e !important;
+}
+.ai-output h3, .ai-out h4 { color: #3028c0 !important; }
+.ai-output strong, .ai-out strong { color: #1a1d2e !important; }
+.info-box, .priority-box { color: #1a1d2e !important; }
+.ib-title, .pb-lbl { color: #5048d4 !important; }
+.pb-high .pb-lbl { color: #c83030 !important; }
+.pb-mid .pb-lbl { color: #c88020 !important; }
+.pb-low .pb-lbl { color: #0da870 !important; }
+
+/* cert/dept/job 태그 라이트 */
+.cert-tag, .etag.cert-t { color: #3028c0 !important; }
+.dept-tag, .etag.dept-t { color: #0a8060 !important; }
+.job-tag, .etag.act-t  { color: #b02868 !important; }
+.salary-tag, .etag.skill-t { color: #b07010 !important; }
+
+/* 로딩 텍스트 */
+.loading-text, .loading-msg { color: #5a607a !important; }
+
+/* 체크리스트 박스 */
+.chk-box { border-color: rgba(0,0,0,0.20) !important; }
+
+/* 태그 선택 */
+.tag-sel { background: #f0f3fa !important; border-color: rgba(0,0,0,0.12) !important; color: #5a607a !important; }
+.tag-sel:hover { border-color: rgba(0,0,0,0.20) !important; color: #1a1d2e !important; }
+.tag-sel.on { border-color: var(--acc) !important; background: #edeaff !important; color: #3028c0 !important; }
+
+</style>
+</head>
+<body>
+<div class="bg-mesh"><div class="mesh-orb o1"></div><div class="mesh-orb o2"></div><div class="mesh-orb o3"></div></div>
+
+<div class="wrap">
+
+  <!-- ── STEPPER ── -->
+  <div class="stepper" id="stepper">
+    <div class="step active" id="st0"><div class="step-circle">🏠</div><div class="step-label">시작</div></div>
+    <div class="step-line" id="sl0"></div>
+    <div class="step" id="st1"><div class="step-circle">🎨</div><div class="step-label">흥미검사</div></div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step aptStep" id="st2"><div class="step-circle">🎯</div><div class="step-label">적성검사</div></div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step valStep" id="st3"><div class="step-circle">⚖️</div><div class="step-label">가치관검사</div></div>
+    <div class="step-line" id="sl3"></div>
+    <div class="step resStep" id="st4"><div class="step-circle">✨</div><div class="step-label">직업군 추천</div></div>
+  </div>
+
+  <!-- ════════ INTRO ════════ -->
+  <div class="screen active" id="introScreen">
+    <div class="intro-hero">
+      <div class="intro-eyebrow">🧭 3종 통합 진로심리검사 · 직업군 종합 추천</div>
+      <h1 class="intro-title">흥미 × 적성 × 가치관<br>나만의 직업군을 찾아보세요</h1>
+      <p class="intro-sub">3가지 검사를 순서대로 완료하면, 검사 결과를 교차 분석하여 나에게 최적화된 직업군 3~5개를 추천해 드립니다.</p>
+      <div class="intro-cards">
+        <div class="i-card"><div class="i-card-em">🎨</div><div class="i-card-title">직업흥미검사</div><div class="i-card-meta">72문항 · ~15분</div></div>
+        <div class="i-card"><div class="i-card-em">🎯</div><div class="i-card-title">직업적성검사</div><div class="i-card-meta">66문항 · ~20분</div></div>
+        <div class="i-card"><div class="i-card-em">⚖️</div><div class="i-card-title">직업가치관검사</div><div class="i-card-meta">60문항 · ~15분</div></div>
+      </div>
+      <div class="name-row">
+        <input class="name-inp" id="userNameInp" type="text" placeholder="이름 입력 (선택)" maxlength="10"
+          onkeydown="if(event.key==='Enter')startAll()">
+        <button class="btn-go" onclick="startAll()">검사 시작 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ 흥미검사 ════════ -->
+  <div class="screen" id="hollandScreen">
+    <div class="exam-hd" id="hdH">
+      <div class="exam-hd-left">
+        <div class="exam-hd-title" id="hdHTit">🎨 직업흥미검사 (H형)</div>
+        <div class="exam-hd-sub" id="hdHSub"></div>
+        <div class="prog-lbl"><span id="hProgLbl"></span><span id="hProgPct"></span></div>
+        <div class="prog-bg"><div class="prog-fill" id="hProgFill" style="width:0%;background:linear-gradient(90deg,var(--H),#b06af0)"></div></div>
+      </div>
+    </div>
+    <div class="dots" id="hDots"></div>
+    <div id="hSecDiv"></div>
+    <div id="hQArea"></div>
+    <div class="nav">
+      <button class="btn-prev" id="hBtnPrev" onclick="hGoPage(-1)">← 이전</button>
+      <span class="ans-st" id="hAnsSt"></span>
+      <button class="btn-next" id="hBtnNext" onclick="hGoPage(1)" style="background:linear-gradient(135deg,var(--H),#b06af0)">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ════════ 적성검사 ════════ -->
+  <div class="screen" id="aptScreen">
+    <div class="exam-hd">
+      <div class="exam-hd-left">
+        <div class="exam-hd-title" id="hdATit">🎯 직업적성검사</div>
+        <div class="exam-hd-sub" id="hdASub"></div>
+        <div class="prog-lbl"><span id="aProgLbl"></span><span id="aProgPct"></span></div>
+        <div class="prog-bg"><div class="prog-fill" id="aProgFill" style="width:0%;background:linear-gradient(90deg,var(--apt),#5ecfb8)"></div></div>
+      </div>
+    </div>
+    <div class="dots" id="aDots"></div>
+    <div id="aSecDiv"></div>
+    <div id="aQArea"></div>
+    <div class="nav">
+      <button class="btn-prev" id="aBtnPrev" onclick="aGoPage(-1)">← 이전</button>
+      <span class="ans-st" id="aAnsSt"></span>
+      <button class="btn-next" id="aBtnNext" onclick="aGoPage(1)" style="background:linear-gradient(135deg,var(--apt),#5ecfb8)">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ════════ 가치관검사 ════════ -->
+  <div class="screen" id="valScreen">
+    <div class="exam-hd">
+      <div class="exam-hd-left">
+        <div class="exam-hd-title">⚖️ 직업가치관검사</div>
+        <div class="exam-hd-sub" id="hdVSub"></div>
+        <div class="prog-lbl"><span id="vProgLbl"></span><span id="vProgPct"></span></div>
+        <div class="prog-bg"><div class="prog-fill" id="vProgFill" style="width:0%;background:linear-gradient(90deg,var(--val),#f080b0)"></div></div>
+      </div>
+    </div>
+    <div class="dots" id="vDots"></div>
+    <div id="vQArea"></div>
+    <div class="nav">
+      <button class="btn-prev" id="vBtnPrev" onclick="vGoPage(-1)">← 이전</button>
+      <span class="ans-st" id="vAnsSt"></span>
+      <button class="btn-next" id="vBtnNext" onclick="vGoPage(1)" style="background:linear-gradient(135deg,var(--val),#f080b0)">다음 →</button>
+    </div>
+  </div>
+
+  <!-- ════════ 결과 ════════ -->
+  <div class="screen" id="resultScreen"></div>
+
+</div><!-- /wrap -->
+
+<script>
+// ══════════════════════════════════════════════════════════
+// 데이터: 흥미검사
+// ══════════════════════════════════════════════════════════
+const H_TYPES=['R','I','A','S','E','C'];
+const H_INFO={
+  R:{name:'현실형',emoji:'🔧',color:'#e84c3d'},
+  I:{name:'탐구형',emoji:'🔬',color:'#2980b9'},
+  A:{name:'예술형',emoji:'🎨',color:'#8e44ad'},
+  S:{name:'사회형',emoji:'🤝',color:'#27ae60'},
+  E:{name:'기업형',emoji:'📢',color:'#e67e22'},
+  C:{name:'관습형',emoji:'📋',color:'#16a085'},
+};
+const H_QS=[
+  {id:'HR1',t:'R',tx:'기계나 전자기기를 직접 만들거나 고치는 활동이 좋다.'},{id:'HR2',t:'R',tx:'야외에서 몸을 움직이며 하는 작업이 즐겁다.'},{id:'HR3',t:'R',tx:'도구나 장비를 사용하여 물건을 제작하거나 수리하는 일이 재미있다.'},{id:'HR4',t:'R',tx:'자동차, 오토바이 등 탈것을 다루는 활동에 흥미가 있다.'},{id:'HR5',t:'R',tx:'농업, 원예, 동물 돌보기 등 자연과 관련된 활동이 좋다.'},{id:'HR6',t:'R',tx:'건물이나 구조물을 짓거나 유지보수하는 일에 관심이 있다.'},
+  {id:'HI1',t:'I',tx:'과학 실험을 설계하고 수행하는 것이 흥미롭다.'},{id:'HI2',t:'I',tx:'복잡한 문제를 논리적으로 분석하고 해결하는 활동이 좋다.'},{id:'HI3',t:'I',tx:'새로운 이론이나 아이디어를 탐구하고 연구하는 것이 즐겁다.'},{id:'HI4',t:'I',tx:'수학 공식이나 통계 데이터를 다루는 활동에 흥미가 있다.'},{id:'HI5',t:'I',tx:'자연현상이나 사회 현상의 원인을 파악하려 노력한다.'},{id:'HI6',t:'I',tx:'컴퓨터 프로그래밍이나 알고리즘 설계를 즐긴다.'},
+  {id:'HA1',t:'A',tx:'그림 그리기, 조각, 사진 등 시각예술 활동이 즐겁다.'},{id:'HA2',t:'A',tx:'음악 연주, 작곡, 노래하는 것을 좋아한다.'},{id:'HA3',t:'A',tx:'소설, 시, 에세이 등 창작 글쓰기에 흥미가 있다.'},{id:'HA4',t:'A',tx:'영화, 연극, 무용 등 공연예술 활동에 관심이 있다.'},{id:'HA5',t:'A',tx:'패션, 인테리어, 제품 등을 디자인하는 것이 즐겁다.'},{id:'HA6',t:'A',tx:'애니메이션, 웹툰, 영상 제작 활동을 좋아한다.'},
+  {id:'HS1',t:'S',tx:'어려움에 처한 사람을 도와주는 활동이 보람 있다.'},{id:'HS2',t:'S',tx:'친구나 후배에게 공부나 기술을 가르쳐 주는 것이 좋다.'},{id:'HS3',t:'S',tx:'다양한 사람들과 대화하고 관계를 맺는 것을 즐긴다.'},{id:'HS4',t:'S',tx:'갈등을 중재하거나 팀 내 분위기를 조화롭게 만드는 것이 잘 맞는다.'},{id:'HS5',t:'S',tx:'봉사 활동이나 지역사회 참여에 관심이 있다.'},{id:'HS6',t:'S',tx:'상담이나 심리 지원을 제공하는 일에 흥미가 있다.'},
+  {id:'HE1',t:'E',tx:'사람들 앞에서 발표하거나 의견을 제시하는 것이 좋다.'},{id:'HE2',t:'E',tx:'모임이나 단체에서 리더 역할을 맡는 것이 자연스럽다.'},{id:'HE3',t:'E',tx:'새로운 사업 아이디어를 구상하고 추진하는 것이 흥미롭다.'},{id:'HE4',t:'E',tx:'상품이나 서비스를 판매하거나 홍보하는 활동에 관심이 있다.'},{id:'HE5',t:'E',tx:'협상이나 토론을 통해 원하는 결과를 이끌어내는 것을 즐긴다.'},{id:'HE6',t:'E',tx:'경쟁적인 환경에서 최고의 성과를 내는 것이 동기부여가 된다.'},
+  {id:'HC1',t:'C',tx:'자료를 정리하고 체계적으로 분류하는 활동이 편안하다.'},{id:'HC2',t:'C',tx:'정해진 절차와 규칙에 따라 정확하게 일을 처리하는 것을 좋아한다.'},{id:'HC3',t:'C',tx:'숫자나 데이터를 꼼꼼히 다루는 업무에 적성이 맞는다.'},{id:'HC4',t:'C',tx:'문서 작성, 보고서 정리, 기록 관리를 잘 한다.'},{id:'HC5',t:'C',tx:'반복적이고 안정적인 업무 환경을 선호한다.'},{id:'HC6',t:'C',tx:'세금, 회계, 예산 관련 활동에 흥미가 있다.'},
+  // 선호직업 (유형당 6문항 = 총 36)
+  {id:'JR1',t:'R',tx:'항공기 정비사 — 항공기의 엔진, 기체 등을 점검하고 수리하는 직업'},{id:'JR2',t:'R',tx:'건축기사 — 건물을 설계하고 시공 현장을 감독하는 직업'},{id:'JR3',t:'R',tx:'조리사(요리사) — 음식을 창의적으로 만들고 조리하는 직업'},{id:'JR4',t:'R',tx:'소방관 — 화재를 진압하고 인명을 구조하는 직업'},{id:'JR5',t:'R',tx:'운동선수 — 체력과 기술을 연마하여 경기에 참여하는 직업'},{id:'JR6',t:'R',tx:'농업인 — 농작물을 재배하고 관리하는 직업'},
+  {id:'JI1',t:'I',tx:'의사 — 환자를 진찰하고 치료하는 의료 전문 직업'},{id:'JI2',t:'I',tx:'데이터 과학자 — 빅데이터를 분석하여 인사이트를 도출하는 직업'},{id:'JI3',t:'I',tx:'약사 — 의약품을 조제하고 복약 지도를 하는 직업'},{id:'JI4',t:'I',tx:'연구원 — 특정 분야의 현상을 탐구하고 새로운 지식을 창출하는 직업'},{id:'JI5',t:'I',tx:'수학자 — 수학 이론을 연구하고 응용하는 직업'},{id:'JI6',t:'I',tx:'프로그래머 — 소프트웨어와 앱을 개발하는 직업'},
+  {id:'JA1',t:'A',tx:'그래픽 디자이너 — 시각적 콘텐츠를 창작하는 직업'},{id:'JA2',t:'A',tx:'뮤지션(음악가) — 음악을 작곡하거나 연주하는 직업'},{id:'JA3',t:'A',tx:'작가/시나리오 작가 — 창의적인 글을 쓰는 직업'},{id:'JA4',t:'A',tx:'영상 편집자/영화감독 — 영상을 기획하고 제작하는 직업'},{id:'JA5',t:'A',tx:'패션 디자이너 — 의류와 패션 아이템을 디자인하는 직업'},{id:'JA6',t:'A',tx:'건축가 — 건물의 외형과 공간을 예술적으로 설계하는 직업'},
+  {id:'JS1',t:'S',tx:'교사/교육자 — 학생들을 가르치고 성장을 돕는 직업'},{id:'JS2',t:'S',tx:'사회복지사 — 사회적 약자를 지원하고 복지를 증진하는 직업'},{id:'JS3',t:'S',tx:'간호사 — 환자를 돌보고 의료팀과 협력하는 직업'},{id:'JS4',t:'S',tx:'상담사/심리치료사 — 개인의 심리적 문제를 상담하는 직업'},{id:'JS5',t:'S',tx:'진로상담사 — 진로와 직업 선택을 도와주는 전문 직업'},{id:'JS6',t:'S',tx:'스포츠 코치 — 선수들의 훈련을 지도하고 팀을 이끄는 직업'},
+  {id:'JE1',t:'E',tx:'기업인/창업가 — 새로운 사업을 기획하고 운영하는 직업'},{id:'JE2',t:'E',tx:'마케팅 매니저 — 제품과 서비스를 홍보하고 전략을 세우는 직업'},{id:'JE3',t:'E',tx:'변호사 — 법률을 바탕으로 사람들의 권익을 대변하는 직업'},{id:'JE4',t:'E',tx:'방송인/진행자 — 방송 프로그램을 진행하고 이끄는 직업'},{id:'JE5',t:'E',tx:'부동산 중개인 — 부동산 거래를 중개하고 투자 상담을 하는 직업'},{id:'JE6',t:'E',tx:'투자 분석가 — 금융 시장을 분석하고 투자를 조언하는 직업'},
+  {id:'JC1',t:'C',tx:'회계사 — 재무 자료를 분석하고 세무를 처리하는 직업'},{id:'JC2',t:'C',tx:'공무원 — 정부 기관에서 행정 업무를 처리하는 직업'},{id:'JC3',t:'C',tx:'은행원 — 금융 업무를 처리하고 고객을 지원하는 직업'},{id:'JC4',t:'C',tx:'비서/사무 행정가 — 조직의 행정 업무를 체계적으로 관리하는 직업'},{id:'JC5',t:'C',tx:'통계 분석가 — 데이터를 수집, 분석하여 보고서를 작성하는 직업'},{id:'JC6',t:'C',tx:'감사관 — 조직의 내부 절차와 재무를 검토하고 감사하는 직업'},
+];
+
+// ── 적성검사 데이터 ──
+const A_IDS=['신체운동','손재능','공간지각','음악','창의력','언어','수리논리','자기성찰','대인관계','자연친화','예술시각'];
+const A_INFO={신체운동:{em:'🏃',c:'#e84c3d'},손재능:{em:'🤲',c:'#e67e22'},공간지각:{em:'🧩',c:'#f39c12'},음악:{em:'🎵',c:'#8e44ad'},창의력:{em:'💡',c:'#e91e96'},언어:{em:'📖',c:'#3498db'},수리논리:{em:'🔢',c:'#2980b9'},자기성찰:{em:'🪞',c:'#16a085'},대인관계:{em:'🤝',c:'#27ae60'},자연친화:{em:'🌿',c:'#2ecc71'},예술시각:{em:'🎨',c:'#9b59b6'}};
+const A_QS=[
+  {id:'A01',a:'신체운동',tx:'달리기, 수영 등 기초 체력 훈련을 꾸준히 하는 편이다.'},{id:'A02',a:'신체운동',tx:'새로운 스포츠 기술이나 동작을 빠르게 익힐 수 있다.'},{id:'A03',a:'신체운동',tx:'몸의 균형을 잡거나 정교한 동작을 하는 것이 어렵지 않다.'},{id:'A04',a:'신체운동',tx:'장시간 신체 활동을 해도 쉽게 지치지 않는 편이다.'},{id:'A05',a:'신체운동',tx:'공을 던지고 받거나 라켓을 다루는 것이 능숙하다.'},{id:'A06',a:'신체운동',tx:'체육 시간이나 운동 대회에서 두각을 나타내는 편이다.'},
+  {id:'B01',a:'손재능',tx:'손으로 작은 부품을 조립하거나 섬세하게 다루는 것을 잘한다.'},{id:'B02',a:'손재능',tx:'뜨개질, 종이접기, 공예 등 손을 이용한 만들기 활동을 즐긴다.'},{id:'B03',a:'손재능',tx:'고장난 물건을 직접 수리하거나 개조해본 경험이 있다.'},{id:'B04',a:'손재능',tx:'칼이나 가위를 이용해 정교하게 오리거나 자르는 것을 잘한다.'},{id:'B05',a:'손재능',tx:'요리할 때 재료를 다듬거나 섬세한 작업을 잘 해낸다.'},{id:'B06',a:'손재능',tx:'글씨를 예쁘게 쓰거나 그림을 세밀하게 그리는 편이다.'},
+  {id:'C01',a:'공간지각',tx:'지도를 보거나 길을 찾는 것이 어렵지 않다.'},{id:'C02',a:'공간지각',tx:'블록이나 도형 퍼즐을 맞추는 것을 잘한다.'},{id:'C03',a:'공간지각',tx:'도면이나 설계도를 보면 어떤 모양인지 머릿속에 그릴 수 있다.'},{id:'C04',a:'공간지각',tx:'가구를 배치하거나 짐을 효율적으로 싸는 것을 잘한다.'},{id:'C05',a:'공간지각',tx:'3D 물체를 2D로 펼쳤을 때의 모양을 상상할 수 있다.'},{id:'C06',a:'공간지각',tx:'방의 크기나 거리를 눈으로 어림잡아 맞히는 편이다.'},
+  {id:'D01',a:'음악',tx:'노래를 들으면 음정이 틀린 것을 바로 알아챈다.'},{id:'D02',a:'음악',tx:'리듬에 맞춰 박자를 정확하게 따라하는 것이 자연스럽다.'},{id:'D03',a:'음악',tx:'악기를 연주하거나 배우는 것이 즐겁고 익숙하다.'},{id:'D04',a:'음악',tx:'음악을 들으면 멜로디나 화음이 자연스럽게 기억된다.'},{id:'D05',a:'음악',tx:'노래를 부를 때 음정과 박자를 잘 맞추는 편이다.'},{id:'D06',a:'음악',tx:'음악을 듣거나 만들 때 감정이 풍부하게 느껴진다.'},
+  {id:'E01',a:'창의력',tx:'남들이 생각하지 못한 독창적인 아이디어를 내는 편이다.'},{id:'E02',a:'창의력',tx:'문제가 생겼을 때 다양한 해결 방법을 떠올린다.'},{id:'E03',a:'창의력',tx:'기존의 방식보다 더 나은 방법이 없을지 자주 생각한다.'},{id:'E04',a:'창의력',tx:'상상력을 활용하여 이야기나 그림을 만들어내는 것이 즐겁다.'},{id:'E05',a:'창의력',tx:'다양한 분야의 아이디어를 연결하여 새로운 것을 만들어낸다.'},{id:'E06',a:'창의력',tx:'정해진 틀을 벗어난 창의적인 사고를 즐긴다.'},
+  {id:'F01',a:'언어',tx:'책이나 글을 읽고 핵심 내용을 빠르게 파악한다.'},{id:'F02',a:'언어',tx:'자신의 생각을 글이나 말로 명확하게 표현하는 편이다.'},{id:'F03',a:'언어',tx:'새로운 단어나 표현을 쉽게 익히고 다양하게 사용한다.'},{id:'F04',a:'언어',tx:'글을 쓸 때 논리적인 구성으로 설득력 있게 표현한다.'},{id:'F05',a:'언어',tx:'외국어 단어나 문법을 빠르게 익히는 편이다.'},{id:'F06',a:'언어',tx:'다양한 장르의 책을 즐겨 읽고 독서량이 많은 편이다.'},
+  {id:'G01',a:'수리논리',tx:'수학 문제를 풀 때 단계를 논리적으로 분석하는 편이다.'},{id:'G02',a:'수리논리',tx:'복잡한 계산이나 수식을 빠르고 정확하게 처리한다.'},{id:'G03',a:'수리논리',tx:'통계나 그래프를 보면 데이터의 의미를 쉽게 파악한다.'},{id:'G04',a:'수리논리',tx:'논리적으로 틀린 부분이 있으면 금방 알아챈다.'},{id:'G05',a:'수리논리',tx:'암호 해독이나 패턴 찾기 같은 퍼즐을 잘 풀어낸다.'},{id:'G06',a:'수리논리',tx:'복잡한 문제를 체계적으로 분해하여 해결한다.'},
+  {id:'H01',a:'자기성찰',tx:'내 감정이 왜 생겼는지 이유를 분석해보는 편이다.'},{id:'H02',a:'자기성찰',tx:'실수를 했을 때 원인을 스스로 파악하고 개선하려 한다.'},{id:'H03',a:'자기성찰',tx:'내가 무엇을 좋아하고 싫어하는지 명확히 알고 있다.'},{id:'H04',a:'자기성찰',tx:'감정이 격해질 때 스스로 조절하는 편이다.'},{id:'H05',a:'자기성찰',tx:'일기나 메모를 통해 자신의 생각을 정리하는 것을 즐긴다.'},{id:'H06',a:'자기성찰',tx:'나의 강점과 약점을 객관적으로 파악하고 있다.'},
+  {id:'I01',a:'대인관계',tx:'처음 만나는 사람과도 자연스럽게 대화를 시작한다.'},{id:'I02',a:'대인관계',tx:'친구들의 고민을 잘 들어주고 적절한 조언을 해준다.'},{id:'I03',a:'대인관계',tx:'팀 작업을 할 때 갈등을 원만하게 중재하는 편이다.'},{id:'I04',a:'대인관계',tx:'다양한 사람들의 감정과 입장을 잘 이해한다.'},{id:'I05',a:'대인관계',tx:'모임에서 분위기를 밝게 이끄는 역할을 자주 맡는다.'},{id:'I06',a:'대인관계',tx:'상대방의 의도나 감정을 표정이나 말투로 빨리 파악한다.'},
+  {id:'J01',a:'자연친화',tx:'동물이나 식물을 관찰하고 돌보는 것에 관심이 많다.'},{id:'J02',a:'자연친화',tx:'날씨, 계절, 자연현상에 대해 민감하게 느끼는 편이다.'},{id:'J03',a:'자연친화',tx:'자연환경 보호와 생태계에 대한 관심이 높다.'},{id:'J04',a:'자연친화',tx:'식물 이름이나 동물의 종류를 쉽게 구별하고 기억한다.'},{id:'J05',a:'자연친화',tx:'숲, 산, 바다 등 자연 속에서 활동하는 것을 즐긴다.'},{id:'J06',a:'자연친화',tx:'자연을 배경으로 한 다큐멘터리나 책에 흥미가 있다.'},
+  {id:'K01',a:'예술시각',tx:'색깔의 조화와 배합이 아름다운지 금방 알아챈다.'},{id:'K02',a:'예술시각',tx:'사진이나 그림에서 구도와 구성의 미적 특성을 잘 인식한다.'},{id:'K03',a:'예술시각',tx:'디자인이 잘된 것과 그렇지 않은 것을 직관적으로 구분한다.'},{id:'K04',a:'예술시각',tx:'그림을 그리거나 시각 작품을 만드는 것을 즐긴다.'},{id:'K05',a:'예술시각',tx:'인테리어나 옷차림 등 공간과 외형 꾸미기에 관심이 있다.'},{id:'K06',a:'예술시각',tx:'미술 전시나 디자인 작품을 볼 때 감동을 잘 받는다.'},
+];
+
+// ── 가치관 데이터 ──
+const V_IDS=['안정성','보수','일과삶의균형','능력발휘','사회적인정','성취감','사회봉사','대인관계','소속감','자율성','자기계발','창의성'];
+const V_ORIENTS={안전:['안정성','보수','일과삶의균형'],성취:['능력발휘','사회적인정','성취감'],관계:['사회봉사','대인관계','소속감'],자기표현:['자율성','자기계발','창의성']};
+const V_QS=[
+  {id:'V01',v:'안정성',tx:'직업을 선택할 때 고용이 보장되는지가 가장 중요하다.'},{id:'V02',v:'안정성',tx:'해고나 실직의 걱정 없이 오래 일할 수 있는 직장을 원한다.'},{id:'V03',v:'안정성',tx:'수입이 일정하고 예측 가능한 직업이 좋다.'},{id:'V04',v:'안정성',tx:'경기 변동에 크게 영향받지 않는 안정적인 직종을 선호한다.'},{id:'V05',v:'안정성',tx:'정년이 보장되고 오랫동안 근무할 수 있는 직업이 좋다.'},
+  {id:'V06',v:'보수',tx:'높은 연봉을 받을 수 있는 직업이 더 매력적이다.'},{id:'V07',v:'보수',tx:'일한 만큼 충분히 보상받는 것이 직업 선택에서 중요하다.'},{id:'V08',v:'보수',tx:'재정적 여유를 통해 원하는 삶을 살 수 있는 것이 중요하다.'},{id:'V09',v:'보수',tx:'성과에 따라 인센티브가 주어지는 직장을 선호한다.'},{id:'V10',v:'보수',tx:'경제적으로 풍족한 생활을 할 수 있는 직업을 갖고 싶다.'},
+  {id:'V11',v:'일과삶의균형',tx:'퇴근 후에는 개인적인 시간을 충분히 누릴 수 있어야 한다.'},{id:'V12',v:'일과삶의균형',tx:'야근이나 주말 근무가 없는 직업을 선호한다.'},{id:'V13',v:'일과삶의균형',tx:'취미 생활과 가족을 위한 시간을 충분히 가질 수 있는 직업이 좋다.'},{id:'V14',v:'일과삶의균형',tx:'충분한 휴가와 자유 시간이 보장되는 직장이 중요하다.'},{id:'V15',v:'일과삶의균형',tx:'일과 삶의 균형을 유지하는 것이 높은 연봉보다 더 중요하다.'},
+  {id:'V16',v:'능력발휘',tx:'내가 가진 재능과 능력을 최대한 발휘할 수 있는 직업이 좋다.'},{id:'V17',v:'능력발휘',tx:'내 전문 지식과 기술을 활용할 수 있는 일을 하고 싶다.'},{id:'V18',v:'능력발휘',tx:'나의 강점이 잘 드러나는 분야에서 일하는 것이 중요하다.'},{id:'V19',v:'능력발휘',tx:'도전적인 과제를 통해 내 능력을 시험해 보고 싶다.'},{id:'V20',v:'능력발휘',tx:'일을 통해 내 잠재력을 발견하고 발전시키고 싶다.'},
+  {id:'V21',v:'사회적인정',tx:'사회에서 인정받고 존경받는 직업을 갖고 싶다.'},{id:'V22',v:'사회적인정',tx:'다른 사람들이 부러워할 만한 직업을 갖는 것이 중요하다.'},{id:'V23',v:'사회적인정',tx:'직업을 통해 사회적 지위와 명예를 얻고 싶다.'},{id:'V24',v:'사회적인정',tx:'나의 직업과 성취가 타인에게 인정받기를 바란다.'},{id:'V25',v:'사회적인정',tx:'유명하거나 사회적으로 영향력 있는 직업이 매력적이다.'},
+  {id:'V26',v:'성취감',tx:'어려운 목표를 달성했을 때 큰 뿌듯함과 보람을 느낀다.'},{id:'V27',v:'성취감',tx:'도전적인 과제를 스스로 해결하는 것이 즐겁다.'},{id:'V28',v:'성취감',tx:'성과를 이루어나가는 과정 자체에서 만족감을 느낀다.'},{id:'V29',v:'성취감',tx:'목표를 세우고 이를 달성하는 것이 직업 활동의 핵심이라고 생각한다.'},{id:'V30',v:'성취감',tx:'남들이 어렵다고 하는 일을 해냈을 때 특히 보람을 느낀다.'},
+  {id:'V31',v:'사회봉사',tx:'내 직업이 사회와 타인에게 도움이 되어야 한다.'},{id:'V32',v:'사회봉사',tx:'어려운 사람들을 돕는 일을 직업으로 삼고 싶다.'},{id:'V33',v:'사회봉사',tx:'세상을 더 나은 곳으로 만드는 데 기여하는 것이 중요하다.'},{id:'V34',v:'사회봉사',tx:'봉사 정신과 공공의 이익을 중시하는 직업을 선호한다.'},{id:'V35',v:'사회봉사',tx:'내 일이 사회 문제 해결에 기여할 수 있다면 큰 보람이 될 것 같다.'},
+  {id:'V36',v:'대인관계',tx:'다양한 사람들을 만나고 교류할 수 있는 직업이 좋다.'},{id:'V37',v:'대인관계',tx:'팀원들과 협력하며 함께 일하는 것이 즐겁다.'},{id:'V38',v:'대인관계',tx:'동료나 고객과 좋은 관계를 맺는 것이 일의 큰 즐거움이다.'},{id:'V39',v:'대인관계',tx:'사람들과 소통하며 긍정적인 영향을 주는 일을 하고 싶다.'},{id:'V40',v:'대인관계',tx:'혼자 일하기보다 다양한 사람들과 함께하는 일이 더 맞는다.'},
+  {id:'V41',v:'소속감',tx:'좋은 팀이나 조직에 속해 있다는 느낌이 중요하다.'},{id:'V42',v:'소속감',tx:'회사나 조직과 일체감을 느낄 수 있는 직장을 원한다.'},{id:'V43',v:'소속감',tx:'동료들과 끈끈한 유대감을 형성할 수 있는 직장이 좋다.'},{id:'V44',v:'소속감',tx:'조직의 가치와 문화에 공감하고 함께 성장하는 것이 중요하다.'},{id:'V45',v:'소속감',tx:'공동의 목표를 향해 함께 나아가는 팀에 속하고 싶다.'},
+  {id:'V46',v:'자율성',tx:'일하는 방식과 순서를 스스로 결정할 수 있어야 한다.'},{id:'V47',v:'자율성',tx:'상사의 지시보다는 내 판단으로 업무를 처리하는 것을 선호한다.'},{id:'V48',v:'자율성',tx:'정해진 규칙보다 자유롭게 일할 수 있는 환경을 원한다.'},{id:'V49',v:'자율성',tx:'근무 시간이나 장소를 자유롭게 선택할 수 있는 직업이 좋다.'},{id:'V50',v:'자율성',tx:'내 방식대로 창의적으로 업무를 수행하는 것이 중요하다.'},
+  {id:'V51',v:'자기계발',tx:'직업을 통해 새로운 지식과 기술을 꾸준히 배울 수 있어야 한다.'},{id:'V52',v:'자기계발',tx:'일을 하면서 내 역량이 성장하는 것을 느끼는 것이 중요하다.'},{id:'V53',v:'자기계발',tx:'교육, 연수, 자격증 취득 등 성장 기회가 많은 직장을 선호한다.'},{id:'V54',v:'자기계발',tx:'스스로를 발전시키고 전문가로 성장하는 것이 삶의 목표 중 하나다.'},{id:'V55',v:'자기계발',tx:'다양한 경험을 쌓고 넓은 시야를 갖출 수 있는 직업이 좋다.'},
+  {id:'V56',v:'창의성',tx:'새로운 아이디어를 내고 독창적인 방법으로 문제를 해결하는 것이 즐겁다.'},{id:'V57',v:'창의성',tx:'틀에 박힌 방식보다 창의적이고 혁신적인 일을 하고 싶다.'},{id:'V58',v:'창의성',tx:'직업에서 나만의 개성과 독창성을 발휘하는 것이 중요하다.'},{id:'V59',v:'창의성',tx:'기존과는 다른 새로운 것을 만들어내는 과정이 즐겁다.'},{id:'V60',v:'창의성',tx:'예술, 디자인, 발명 등 창의적인 분야에 관심이 있다.'},
+];
+
+// ══════════════════════════════════════════════════════════
+// 직업군 DB (흥미코드 × 적성 × 가치지향으로 매핑)
+// ══════════════════════════════════════════════════════════
+const JOB_GROUPS = [
+  {id:'IT_DEV',name:'IT·소프트웨어 개발',eng:'Software & IT',emoji:'💻',color:'#3b82f6',
+   h:['I','R','C'], a:['수리논리','공간지각','창의력'], v:['성취','자기표현'],
+   desc:'논리적 사고와 창의력을 결합해 소프트웨어, 앱, AI 시스템을 개발합니다. 끊임없이 배우고 성장하는 환경에서 기술 전문가로 활약합니다.',
+   jobs:['소프트웨어 개발자','AI/ML 엔지니어','데이터 과학자','게임 개발자','사이버보안 전문가','클라우드 엔지니어','UI/UX 개발자']},
+  {id:'SCIENCE',name:'과학·연구',eng:'Science & Research',emoji:'🔬',color:'#6366f1',
+   h:['I','R'], a:['수리논리','자연친화','창의력'], v:['성취','자기표현'],
+   desc:'자연과 사회의 원리를 탐구하고 새로운 지식을 창출합니다. 호기심과 분석력을 발휘하며 세상을 이해하는 일을 합니다.',
+   jobs:['생명과학자','화학자','물리학자','환경과학자','의학연구원','천문학자','식품과학자']},
+  {id:'ARTS_DESIGN',name:'예술·디자인',eng:'Arts & Design',emoji:'🎨',color:'#a855f7',
+   h:['A','E'], a:['예술시각','창의력','손재능'], v:['자기표현'],
+   desc:'시각적 감각과 창의성으로 아름다움과 의미를 만들어냅니다. 그래픽, 패션, 영상, 인테리어 등 다양한 분야에서 활약합니다.',
+   jobs:['그래픽 디자이너','영상 감독/편집자','패션 디자이너','UI/UX 디자이너','일러스트레이터','인테리어 디자이너','사진작가']},
+  {id:'MEDIA_CONTENT',name:'미디어·콘텐츠',eng:'Media & Content',emoji:'📺',color:'#ec4899',
+   h:['A','E','S'], a:['언어','창의력','대인관계'], v:['자기표현','성취'],
+   desc:'글, 영상, 방송 등 다양한 채널을 통해 정보와 감동을 전달합니다. 스토리텔링 능력과 소통 역량이 핵심입니다.',
+   jobs:['PD/방송작가','저널리스트/기자','유튜버/크리에이터','작가/웹툰작가','광고 기획자','SNS 마케터','번역가']},
+  {id:'EDUCATION',name:'교육·상담',eng:'Education & Counseling',emoji:'📚',color:'#22c55e',
+   h:['S','A'], a:['언어','대인관계','자기성찰'], v:['관계'],
+   desc:'사람의 성장을 돕고 지식과 가치를 전달합니다. 교육자, 상담사, 코치로서 타인의 잠재력을 이끌어내는 일을 합니다.',
+   jobs:['교사/교수','진로상담사','심리치료사','코치/멘토','사회복지사','특수교사','유아교육교사']},
+  {id:'MEDICAL',name:'의료·보건',eng:'Medical & Healthcare',emoji:'🏥',color:'#14b8a6',
+   h:['I','S'], a:['수리논리','대인관계','손재능'], v:['관계','성취'],
+   desc:'사람의 건강을 지키고 질병을 치료합니다. 과학적 지식과 인간에 대한 따뜻한 마음이 모두 필요한 분야입니다.',
+   jobs:['의사','간호사','약사','물리치료사','임상심리사','치과의사','의공학자']},
+  {id:'BUSINESS',name:'경영·비즈니스',eng:'Business & Management',emoji:'📊',color:'#f97316',
+   h:['E','C'], a:['수리논리','대인관계','언어'], v:['성취','안전'],
+   desc:'조직을 이끌고 사업 전략을 수립하여 성과를 만듭니다. 리더십, 분석력, 커뮤니케이션 능력이 핵심입니다.',
+   jobs:['경영컨설턴트','마케팅 매니저','인사(HR)전문가','창업가/기업가','경영분석가','투자분석가','프로젝트 매니저']},
+  {id:'LAW_PUBLIC',name:'법률·공공행정',eng:'Law & Public Service',emoji:'⚖️',color:'#64748b',
+   h:['E','C','S'], a:['언어','수리논리','자기성찰'], v:['안전','성취'],
+   desc:'법과 제도를 통해 사회 질서를 유지하고 공공의 이익을 실현합니다. 논리적 사고와 책임감이 요구됩니다.',
+   jobs:['변호사','검사/판사','공무원','사회복지행정가','외교관','법무사','경찰관']},
+  {id:'ENGINEERING',name:'공학·건축',eng:'Engineering & Architecture',emoji:'🏗️',color:'#84cc16',
+   h:['R','I'], a:['공간지각','수리논리','손재능'], v:['성취','안전'],
+   desc:'기술로 세상을 설계하고 건설합니다. 공학적 사고력과 실용성을 바탕으로 다양한 시설과 제품을 만들어냅니다.',
+   jobs:['건축가','기계공학자','전기전자공학자','토목엔지니어','항공우주공학자','환경공학자','도시계획가']},
+  {id:'FINANCE',name:'금융·경제',eng:'Finance & Economics',emoji:'💰',color:'#eab308',
+   h:['C','E','I'], a:['수리논리','언어','자기성찰'], v:['안전','성취'],
+   desc:'돈과 경제의 흐름을 분석하고 관리합니다. 정확한 수치 분석과 신중한 판단이 필요한 전문 분야입니다.',
+   jobs:['회계사/세무사','금융분석가','보험계리사','펀드매니저','은행원','경제학자','재무기획가']},
+  {id:'SPORTS_HEALTH',name:'스포츠·건강',eng:'Sports & Wellness',emoji:'🏅',color:'#ef4444',
+   h:['R','S','E'], a:['신체운동','대인관계','손재능'], v:['성취','자기표현'],
+   desc:'신체 활동과 건강을 전문으로 다룹니다. 운동선수, 코치, 트레이너로서 사람들의 건강한 삶을 지원합니다.',
+   jobs:['프로 운동선수','스포츠 코치','퍼스널 트레이너','스포츠 마케터','스포츠 의학전문가','피트니스 전문가','운동치료사']},
+  {id:'NATURE_ENV',name:'자연·환경',eng:'Nature & Environment',emoji:'🌿',color:'#10b981',
+   h:['R','I'], a:['자연친화','공간지각','수리논리'], v:['관계','자기표현'],
+   desc:'자연 생태계를 연구하고 보전합니다. 환경 문제 해결과 지속 가능한 미래를 만드는 데 기여합니다.',
+   jobs:['환경공학자','생태학자','수의사','산림공무원','해양과학자','기상학자','환경컨설턴트']},
+  {id:'MUSIC_PERF',name:'음악·공연',eng:'Music & Performing Arts',emoji:'🎵',color:'#8b5cf6',
+   h:['A'], a:['음악','예술시각','창의력'], v:['자기표현'],
+   desc:'음악, 연극, 무용 등 공연예술로 감동과 즐거움을 선사합니다. 끊임없는 연습과 열정이 필요한 예술 분야입니다.',
+   jobs:['음악가/작곡가','가수/뮤지션','배우','무용가','뮤지컬배우','음향엔지니어','음악치료사']},
+  {id:'CRAFT_FOOD',name:'요리·공예',eng:'Culinary & Crafts',emoji:'🍳',color:'#f59e0b',
+   h:['R','A'], a:['손재능','예술시각','창의력'], v:['자기표현','성취'],
+   desc:'손으로 만드는 창의적인 작업을 즐깁니다. 요리, 제빵, 도예, 목공예 등 다양한 분야에서 장인 정신을 발휘합니다.',
+   jobs:['셰프/조리사','제과제빵사','도예가','목공예가','플로리스트','주얼리디자이너','칵테일리스트']},
+];
+
+// ══════════════════════════════════════════════════════════
+// 상태 변수
+// ══════════════════════════════════════════════════════════
+let uName='';
+let hAnswers={}, aAnswers={}, vAnswers={};
+let hPages=[], hCurPage=0;
+let aPages=[], aCurPage=0;
+let vPages=[], vCurPage=0;
+const PAGE_SIZE=6;
+
+// ── 헬퍼 ──
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function setStep(n){
+  for(let i=0;i<=4;i++){
+    const st=document.getElementById('st'+i);
+    st.classList.remove('active','done');
+    if(i<n) st.classList.add('done');
+    else if(i===n) st.classList.add('active');
+    if(i<4){const sl=document.getElementById('sl'+i);sl.classList.toggle('done',i<n);}
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// 1. 인트로 → 흥미검사 시작
+// ══════════════════════════════════════════════════════════
+function startAll(){
+  uName=document.getElementById('userNameInp').value.trim()||'학생';
+  // 흥미검사 페이지 구성
+  const all=[];
+  for(let i=0;i<6;i++) H_TYPES.forEach(t=>{const qs=H_QS.filter(q=>q.t===t);if(qs[i])all.push({...qs[i],sec:'gen'});});
+  const jobs=[];
+  for(let i=0;i<6;i++) H_TYPES.forEach(t=>{const qs=H_QS.filter(q=>q.t===t&&q.id.startsWith('J'));if(qs[i])jobs.push({...qs[i],sec:'job'});});
+  const fullH=[...all,...jobs];
+  hPages=[];
+  for(let i=0;i<fullH.length;i+=PAGE_SIZE) hPages.push(fullH.slice(i,i+PAGE_SIZE));
+  hCurPage=0; hAnswers={};
+  setStep(1);
+  showScreen('hollandScreen');
+  hRenderPage();
+}
+
+// ── 흥미검사 렌더 ──
+function hRenderPage(){
+  const pg=hPages[hCurPage], total=hPages.length;
+  const pct=Math.round((hCurPage/total)*100);
+  document.getElementById('hdHTit').textContent='🎨 직업흥미검사 (H형) — 1단계';
+  document.getElementById('hdHSub').textContent=`${hCurPage+1} / ${total} 페이지`;
+  document.getElementById('hProgFill').style.width=pct+'%';
+  document.getElementById('hProgLbl').textContent=`${hCurPage+1}/${total}`;
+  document.getElementById('hProgPct').textContent=pct+'%';
+  document.getElementById('hDots').innerHTML=hPages.map((_,i)=>{let c='dot';if(i<hCurPage)c+=' done';else if(i===hCurPage)c+=' cur';return`<div class="${c}" style="${i===hCurPage?'background:var(--H)':''}"></div>`;}).join('');
+  // 섹션 구분
+  const isJob=pg[0].sec==='job';
+  document.getElementById('hSecDiv').innerHTML=`<div class="sec-div" style="background:rgba(124,111,224,.08);border-color:rgba(124,111,224,.25);color:#b8b0ff">
+    <span class="sec-div-icon">${isJob?'💼':'🎯'}</span>
+    <div><div class="sec-div-title">${isJob?'파트 2 — 선호직업':'파트 1 — 일반흥미'}</div>
+    <div class="sec-div-desc">${isJob?'다음 직업들에 얼마나 관심이 있는지 응답해 주세요':'평소 활동에 얼마나 흥미를 느끼는지 응답해 주세요'}</div></div></div>`;
+  const scaleLbls=['전혀\n아니다','아니다','보통','그렇다','매우\n그렇다'];
+  const startIdx=hCurPage*PAGE_SIZE;
+  document.getElementById('hQArea').innerHTML=pg.map((q,i)=>{
+    const gIdx=startIdx+i+1;const info=H_INFO[q.t];const saved=hAnswers[q.id];
+    return`<div class="q-card"><div class="q-hd">
+      <div class="q-num" style="background:${info.color}">${gIdx}</div>
+      <div class="q-txt">${q.tx}</div>
+      <div class="q-tag" style="background:${info.color}22;color:${info.color}">${info.emoji}${info.name}형</div>
+    </div><div class="likert">
+      <span class="lbl">전혀 아니다</span>
+      <div class="opts">${[1,2,3,4,5].map((v,vi)=>`<div class="opt"><label>
+        <input type="radio" class="lk-radio" name="hq_${q.id}" value="${v}" ${saved===v?'checked':''} onchange="hSave('${q.id}',${v})">
+        <div class="lk-ball">${v}</div></label>
+        <div class="lk-sc">${scaleLbls[vi]}</div></div>`).join('')}</div>
+      <span class="lbl">매우 그렇다</span>
+    </div></div>`;
+  }).join('');
+  hUpdateNav();
+}
+function hSave(id,v){hAnswers[id]=v;hUpdateNav();}
+function hUpdateNav(){
+  const pg=hPages[hCurPage];
+  const done=pg.filter(q=>hAnswers[q.id]!==undefined).length;
+  document.getElementById('hAnsSt').textContent=`${done}/${pg.length} 응답`;
+  document.getElementById('hBtnPrev').style.visibility=hCurPage===0?'hidden':'visible';
+  const isLast=hCurPage===hPages.length-1;
+  document.getElementById('hBtnNext').textContent=isLast?'적성검사로 →':'다음 →';
+  document.getElementById('hBtnNext').disabled=done<pg.length;
+}
+function hGoPage(d){
+  const np=hCurPage+d;
+  if(np<0)return;
+  if(np>=hPages.length){startApt();return;}
+  hCurPage=np;hRenderPage();
+}
+
+// ══════════════════════════════════════════════════════════
+// 2. 적성검사
+// ══════════════════════════════════════════════════════════
+function startApt(){
+  aPages=[]; aAnswers={};
+  A_IDS.forEach(id=>aPages.push(A_QS.filter(q=>q.a===id)));
+  aCurPage=0;
+  setStep(2);
+  showScreen('aptScreen');
+  aRenderPage();
+}
+function aRenderPage(){
+  const pg=aPages[aCurPage]; const total=aPages.length;
+  const aptId=A_IDS[aCurPage]; const info=A_INFO[aptId];
+  const pct=Math.round((aCurPage/total)*100);
+  document.getElementById('hdATit').textContent=`🎯 직업적성검사 — 2단계`;
+  document.getElementById('hdASub').textContent=`${aCurPage+1} / ${total} 영역 — ${info.em} ${aptId}`;
+  document.getElementById('aProgFill').style.width=pct+'%';
+  document.getElementById('aProgLbl').textContent=`${aCurPage+1}/${total}`;
+  document.getElementById('aProgPct').textContent=pct+'%';
+  document.getElementById('aDots').innerHTML=A_IDS.map((_,i)=>{let c='dot';if(i<aCurPage)c+=' done';else if(i===aCurPage)c+=' cur';return`<div class="${c}" style="${i===aCurPage?'background:var(--apt)':''}"></div>`;}).join('');
+  document.getElementById('aSecDiv').innerHTML=`<div class="sec-div" style="background:rgba(62,184,160,.08);border-color:rgba(62,184,160,.25);color:#7fe8d0">
+    <span class="sec-div-icon">${info.em}</span>
+    <div><div class="sec-div-title">${aptId}</div></div></div>`;
+  const scaleLbls=['전혀\n아니다','아니다','보통','그렇다','매우\n그렇다'];
+  const startIdx=aCurPage*6;
+  document.getElementById('aQArea').innerHTML=pg.map((q,i)=>{
+    const saved=aAnswers[q.id];
+    return`<div class="q-card"><div class="q-hd">
+      <div class="q-num" style="background:${info.c}">${startIdx+i+1}</div>
+      <div class="q-txt">${q.tx}</div>
+      <div class="q-tag" style="background:${info.c}22;color:${info.c}">${info.em} ${aptId}</div>
+    </div><div class="likert">
+      <span class="lbl">전혀 아니다</span>
+      <div class="opts">${[1,2,3,4,5].map((v,vi)=>`<div class="opt"><label>
+        <input type="radio" class="lk-radio" name="aq_${q.id}" value="${v}" ${saved===v?'checked':''} onchange="aSave('${q.id}',${v})">
+        <div class="lk-ball">${v}</div></label>
+        <div class="lk-sc">${scaleLbls[vi]}</div></div>`).join('')}</div>
+      <span class="lbl">매우 그렇다</span>
+    </div></div>`;
+  }).join('');
+  aUpdateNav();
+}
+function aSave(id,v){aAnswers[id]=v;aUpdateNav();}
+function aUpdateNav(){
+  const pg=aPages[aCurPage];
+  const done=pg.filter(q=>aAnswers[q.id]!==undefined).length;
+  document.getElementById('aAnsSt').textContent=`${done}/${pg.length} 응답`;
+  document.getElementById('aBtnPrev').style.visibility=aCurPage===0?'hidden':'visible';
+  const isLast=aCurPage===aPages.length-1;
+  document.getElementById('aBtnNext').textContent=isLast?'가치관검사로 →':'다음 →';
+  document.getElementById('aBtnNext').disabled=done<pg.length;
+}
+function aGoPage(d){
+  const np=aCurPage+d;
+  if(np<0)return;
+  if(np>=aPages.length){startVal();return;}
+  aCurPage=np;aRenderPage();
+}
+
+// ══════════════════════════════════════════════════════════
+// 3. 가치관검사
+// ══════════════════════════════════════════════════════════
+function startVal(){
+  vPages=[]; vAnswers={};
+  const shuffled=[];
+  for(let i=0;i<5;i++) V_IDS.forEach(id=>{const qs=V_QS.filter(q=>q.v===id);if(qs[i])shuffled.push(qs[i]);});
+  for(let i=0;i<shuffled.length;i+=PAGE_SIZE) vPages.push(shuffled.slice(i,i+PAGE_SIZE));
+  vCurPage=0;
+  setStep(3);
+  showScreen('valScreen');
+  vRenderPage();
+}
+function vRenderPage(){
+  const pg=vPages[vCurPage]; const total=vPages.length;
+  const pct=Math.round((vCurPage/total)*100);
+  document.getElementById('hdVSub').textContent=`${vCurPage+1} / ${total} 페이지`;
+  document.getElementById('vProgFill').style.width=pct+'%';
+  document.getElementById('vProgLbl').textContent=`${vCurPage+1}/${total}`;
+  document.getElementById('vProgPct').textContent=pct+'%';
+  document.getElementById('vDots').innerHTML=vPages.map((_,i)=>{let c='dot';if(i<vCurPage)c+=' done';else if(i===vCurPage)c+=' cur';return`<div class="${c}" style="${i===vCurPage?'background:var(--val)':''}"></div>`;}).join('');
+  const scaleLbls=['전혀\n아니다','아니다','보통','그렇다','매우\n그렇다'];
+  const startIdx=vCurPage*PAGE_SIZE;
+  const VCOL={안정성:'#1e88e5',보수:'#0288d1',일과삶의균형:'#00897b',능력발휘:'#ef6c00',사회적인정:'#e53935',성취감:'#8e24aa',사회봉사:'#43a047',대인관계:'#fb8c00',소속감:'#d81b60',자율성:'#6d4c41',자기계발:'#546e7a',창의성:'#00acc1'};
+  const VEMOJI={안정성:'🛡️',보수:'💰',일과삶의균형:'⚖️',능력발휘:'⚡',사회적인정:'🏅',성취감:'🎯',사회봉사:'❤️',대인관계:'👥',소속감:'🏘️',자율성:'🕊️',자기계발:'📈',창의성:'✨'};
+  document.getElementById('vQArea').innerHTML=pg.map((q,i)=>{
+    const c=VCOL[q.v]||'#888'; const em=VEMOJI[q.v]||'●'; const saved=vAnswers[q.id];
+    return`<div class="q-card"><div class="q-hd">
+      <div class="q-num" style="background:${c}">${startIdx+i+1}</div>
+      <div class="q-txt">${q.tx}</div>
+      <div class="q-tag" style="background:${c}22;color:${c}">${em} ${q.v}</div>
+    </div><div class="likert">
+      <span class="lbl">전혀 아니다</span>
+      <div class="opts">${[1,2,3,4,5].map((v,vi)=>`<div class="opt"><label>
+        <input type="radio" class="lk-radio" name="vq_${q.id}" value="${v}" ${saved===v?'checked':''} onchange="vSave('${q.id}',${v})">
+        <div class="lk-ball">${v}</div></label>
+        <div class="lk-sc">${scaleLbls[vi]}</div></div>`).join('')}</div>
+      <span class="lbl">매우 그렇다</span>
+    </div></div>`;
+  }).join('');
+  vUpdateNav();
+}
+function vSave(id,v){vAnswers[id]=v;vUpdateNav();}
+function vUpdateNav(){
+  const pg=vPages[vCurPage];
+  const done=pg.filter(q=>vAnswers[q.id]!==undefined).length;
+  document.getElementById('vAnsSt').textContent=`${done}/${pg.length} 응답`;
+  document.getElementById('vBtnPrev').style.visibility=vCurPage===0?'hidden':'visible';
+  const isLast=vCurPage===vPages.length-1;
+  document.getElementById('vBtnNext').textContent=isLast?'결과 보기 ✨':'다음 →';
+  document.getElementById('vBtnNext').disabled=done<pg.length;
+}
+function vGoPage(d){
+  const np=vCurPage+d;
+  if(np<0)return;
+  if(np>=vPages.length){showFinalResult();return;}
+  vCurPage=np;vRenderPage();
+}
+
+// ══════════════════════════════════════════════════════════
+// 4. 종합 결과 + 직업군 추천
+// ══════════════════════════════════════════════════════════
+function showFinalResult(){
+  setStep(4);
+
+  // ── 흥미 점수 ──
+  const hPct={};
+  H_TYPES.forEach(t=>{
+    const qs=H_QS.filter(q=>q.t===t);
+    const sum=qs.reduce((s,q)=>s+(hAnswers[q.id]||0),0);
+    hPct[t]=Math.round((sum/(qs.length*5))*100);
+  });
+  const hSorted=H_TYPES.slice().sort((a,b)=>hPct[b]-hPct[a]);
+  const hTop2=[hSorted[0],hSorted[1]];
+
+  // ── 적성 점수 ──
+  const aPct={};
+  A_IDS.forEach(id=>{
+    const qs=A_QS.filter(q=>q.a===id);
+    const sum=qs.reduce((s,q)=>s+(aAnswers[q.id]||0),0);
+    aPct[id]=Math.round((sum/(qs.length*5))*100);
+  });
+  const aSorted=A_IDS.slice().sort((a,b)=>aPct[b]-aPct[a]);
+  const aTop3=aSorted.slice(0,3);
+
+  // ── 가치관 점수 ──
+  const vPct={};
+  V_IDS.forEach(id=>{
+    const qs=V_QS.filter(q=>q.v===id);
+    const sum=qs.reduce((s,q)=>s+(vAnswers[q.id]||0),0);
+    vPct[id]=Math.round((sum/(qs.length*5))*100);
+  });
+  const vOrientPct={};
+  Object.keys(V_ORIENTS).forEach(ok=>{
+    const avg=Math.round(V_ORIENTS[ok].reduce((s,v)=>s+vPct[v],0)/V_ORIENTS[ok].length);
+    vOrientPct[ok]=avg;
+  });
+  const vTopOrient=Object.keys(vOrientPct).sort((a,b)=>vOrientPct[b]-vOrientPct[a])[0];
+  const vTop2Orients=Object.keys(vOrientPct).sort((a,b)=>vOrientPct[b]-vOrientPct[a]).slice(0,2);
+
+  // ══════════════════════════════════
+  // 직업군 점수 계산 (교차 매핑)
+  // ══════════════════════════════════
+  const jobScores=JOB_GROUPS.map(jg=>{
+    let score=0;
+    // 흥미 (40%)
+    const hMatch=hTop2.filter(t=>jg.h.includes(t)).length;
+    score += (hMatch/2)*40;
+    if(hMatch===0){
+      // 2순위 흥미 체크
+      const h3=hSorted[2];
+      if(jg.h.includes(h3)) score+=10;
+    }
+    // 적성 (35%)
+    const aMatch=aTop3.filter(a=>jg.a.includes(a)).length;
+    score += (aMatch/Math.min(3,jg.a.length))*35;
+    // 가치관 (25%)
+    const vMatch=vTop2Orients.filter(o=>jg.v.includes(o)).length;
+    score += (vMatch/2)*25;
+    // 보너스: 흥미·적성 동시 높은 경우
+    if(hMatch>=2 && aMatch>=2) score+=8;
+    if(hMatch>=1 && aMatch>=2 && vMatch>=1) score+=5;
+    return{...jg, score:Math.min(100,Math.round(score)),
+      hMatch, aMatch, vMatch,
+      matchH: hTop2.filter(t=>jg.h.includes(t)),
+      matchA: aTop3.filter(a=>jg.a.includes(a)),
+      matchV: vTop2Orients.filter(o=>jg.v.includes(o))
+    };
+  }).sort((a,b)=>b.score-a.score);
+
+  // 상위 3~5개 추출 (점수 0 제외, 최소 3개 보장)
+  let topJobs=jobScores.filter(j=>j.score>0).slice(0,5);
+  if(topJobs.length<3) topJobs=jobScores.slice(0,3);
+
+  // ── 결과 렌더링 ──
+  const rankColors=['#f0a050','#94a3b8','#cd7f32','#64748b','#475569'];
+  const rankLabels=['🥇 1위','🥈 2위','🥉 3위','4위','5위'];
+
+  const html=`
+    <div class="res-hero">
+      <div class="rh-label">3종 통합 검사 결과</div>
+      <div class="rh-name">${uName} 님의 맞춤 직업군 추천</div>
+      <div class="rh-badges">
+        <div class="rh-badge" style="background:rgba(124,111,224,.2);border-color:rgba(124,111,224,.4);color:#b8b0ff">
+          🎨 흥미코드 ${hTop2.join('')}형
+        </div>
+        <div class="rh-badge" style="background:rgba(62,184,160,.2);border-color:rgba(62,184,160,.4);color:#7fe8d0">
+          🎯 상위적성 ${aTop3.slice(0,2).join(' · ')}
+        </div>
+        <div class="rh-badge" style="background:rgba(224,96,144,.2);border-color:rgba(224,96,144,.4);color:#ffaad0">
+          ⚖️ ${vTopOrient}지향
+        </div>
+      </div>
+      <div class="rh-sub">세 검사 결과를 교차 분석하여 아래 ${topJobs.length}개 직업군을 추천합니다</div>
+    </div>
+
+    <!-- 3종 요약 -->
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="sum-head"><span class="sum-em">🎨</span><div class="sum-title">직업흥미 코드</div></div>
+        <div class="sum-top">${hTop2.map(t=>H_INFO[t].emoji+H_INFO[t].name+'형').join(' + ')}</div>
+        <div class="sum-tags">${hSorted.slice(0,3).map(t=>`<span class="sum-tag">${H_INFO[t].emoji}${t}(${hPct[t]}%)</span>`).join('')}</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-head"><span class="sum-em">🎯</span><div class="sum-title">상위 적성 영역</div></div>
+        <div class="sum-top">${A_INFO[aTop3[0]].em} ${aTop3[0]}</div>
+        <div class="sum-tags">${aTop3.map(a=>`<span class="sum-tag">${A_INFO[a].em}${a}(${aPct[a]}%)</span>`).join('')}</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-head"><span class="sum-em">⚖️</span><div class="sum-title">가치지향 유형</div></div>
+        <div class="sum-top">${{안전:'🛡️',성취:'🏆',관계:'🤝',자기표현:'🌈'}[vTopOrient]} ${vTopOrient}지향</div>
+        <div class="sum-tags">${Object.keys(vOrientPct).sort((a,b)=>vOrientPct[b]-vOrientPct[a]).slice(0,3).map(o=>`<span class="sum-tag">${o}(${vOrientPct[o]}%)</span>`).join('')}</div>
+      </div>
+    </div>
+
+    <!-- 직업군 추천 -->
+    <div class="job-rec-section">
+      <div class="sec-title">✨ 추천 직업군 (${topJobs.length}개)</div>
+      <div class="job-rec-grid">
+        ${topJobs.map((jg,i)=>`
+        <div class="job-rec-card" style="border-color:${jg.color}30">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${jg.color};border-radius:18px 0 0 18px"></div>
+          <div class="jrc-top">
+            <div class="jrc-rank" style="background:${rankColors[i]}">${i+1}</div>
+            <div class="jrc-info">
+              <div class="jrc-title" style="color:${jg.color}">${jg.emoji} ${jg.name}</div>
+              <div class="jrc-eng">${jg.eng}</div>
+            </div>
+            <div class="jrc-score" style="color:${jg.color};border-color:${jg.color}40;background:${jg.color}12">
+              ${rankLabels[i]} · ${jg.score}점
+            </div>
+          </div>
+          <div class="jrc-desc">${jg.desc}</div>
+          <div class="jrc-match">
+            ${jg.matchH.length?`<span class="match-tag match-h">🎨 흥미: ${jg.matchH.map(t=>H_INFO[t].name+'형').join('·')}</span>`:''}
+            ${jg.matchA.length?`<span class="match-tag match-a">🎯 적성: ${jg.matchA.join('·')}</span>`:''}
+            ${jg.matchV.length?`<span class="match-tag match-v">⚖️ 가치: ${jg.matchV.join('·')}지향</span>`:''}
+          </div>
+          <div class="jrc-jobs-title">🏢 대표 직업</div>
+          <div class="jrc-jobs-grid">${jg.jobs.map(j=>`<div class="jrc-job">${j}</div>`).join('')}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- 분석 방법 -->
+    <div class="algo-card">
+      <div class="algo-title">🔍 직업군 추천 분석 방법</div>
+      <div class="algo-steps">
+        <div class="algo-step"><div class="algo-dot"></div>흥미(40%) — Holland 상위 2개 유형이 직업군 흥미 요소와 일치하는 정도</div>
+        <div class="algo-step"><div class="algo-dot"></div>적성(35%) — 상위 3개 적성 영역이 직업군 핵심 능력과 일치하는 정도</div>
+        <div class="algo-step"><div class="algo-dot"></div>가치관(25%) — 상위 2개 가치지향이 직업군 특성과 맞는 정도</div>
+        <div class="algo-step"><div class="algo-dot"></div>흥미·적성이 동시에 높게 일치하면 보너스 점수 부여</div>
+      </div>
+    </div>
+
+    <button class="btn-retry" onclick="retryAll()">🔄 처음부터 다시 검사하기</button>
+  `;
+
+  document.getElementById('resultScreen').innerHTML=html;
+  showScreen('resultScreen');
+}
+
+function retryAll(){
+  hAnswers={}; aAnswers={}; vAnswers={};
+  setStep(0);
+  showScreen('introScreen');
+}
+</script>
+</body>
+</html>
