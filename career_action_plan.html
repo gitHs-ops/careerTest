@@ -23,6 +23,21 @@ html{scroll-behavior:smooth;}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
 
 
+
+/* 카드 대화창 */
+.pc-chat{margin-top:16px;border-top:1px solid var(--b1);padding-top:14px;}
+.pc-chat-log{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:10px;}
+.chat-msg{padding:8px 12px;border-radius:10px;font-size:12px;line-height:1.6;}
+.chat-msg.user{background:var(--ag);color:var(--acc);align-self:flex-end;max-width:85%;border-radius:10px 10px 2px 10px;}
+.chat-msg.ai{background:var(--s2);color:var(--t1);align-self:flex-start;max-width:95%;border-radius:10px 10px 10px 2px;}
+.chat-msg.ai.loading{color:var(--t3);}
+.pc-chat-input{display:flex;gap:8px;}
+.pc-chat-input input{flex:1;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:8px 12px;font-size:12px;font-family:inherit;color:var(--t1);outline:none;}
+.pc-chat-input input:focus{border-color:var(--acc);}
+.pc-chat-input button{padding:8px 14px;background:var(--acc);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+.pc-chat-input button:hover{opacity:.85;}
+.pc-chat-input button:disabled{opacity:.4;cursor:not-allowed;}
+
 /* 클릭형 카드 */
 .pc-head{cursor:pointer;user-select:none;}
 .pc-head:hover{opacity:.8;}
@@ -178,7 +193,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
   <div class="hd">
     <a class="logo" href="career_portal.html">
       <div class="logo-mk">🎯</div>
-      <span>진로 준비 액션플랜 <sup style="font-size:10px;font-weight:700;background:rgba(79,82,216,.15);color:var(--acc);padding:2px 7px;border-radius:8px;vertical-align:middle;">v2.5</sup></span>
+      <span>진로 준비 액션플랜 <sup style="font-size:10px;font-weight:700;background:rgba(79,82,216,.15);color:var(--acc);padding:2px 7px;border-radius:8px;vertical-align:middle;">v2.6</sup></span>
     </a>
     <div class="api-btn" style="cursor:default;">
       <div class="api-dot on" id="apiDot"></div>
@@ -511,7 +526,15 @@ async function loadCard(cardDef, profile) {
       .replace(/^```\s*/i, '')
       .replace(/```\s*$/i, '')
       .trim();
-    bodyEl.innerHTML = cleanText || '<span style="color:#9aa0be">내용을 불러오지 못했습니다.</span>';
+    bodyEl.innerHTML = (cleanText || '<span style="color:#9aa0be">내용을 불러오지 못했습니다.</span>') + `
+      <div class="pc-chat">
+        <div class="pc-chat-log" id="chatlog_${cardDef.id}"></div>
+        <div class="pc-chat-input">
+          <input type="text" id="chatinput_${cardDef.id}" placeholder="이 내용에 대해 더 궁금한 점을 물어보세요..." 
+            onkeydown="if(event.key==='Enter') sendChat('${cardDef.id}', window._lastProfile)">
+          <button onclick="sendChat('${cardDef.id}', window._lastProfile)" id="chatbtn_${cardDef.id}">질문</button>
+        </div>
+      </div>`;
     document.getElementById('card_' + cardDef.id).classList.add('pc-loaded');
 
   } catch(e) {
@@ -531,6 +554,52 @@ async function loadCard(cardDef, profile) {
 function reloadCard(cardId) {
   const cardDef = PLAN_CARDS.find(c => c.id === cardId);
   if (cardDef && window._lastProfile) loadCard(cardDef, window._lastProfile);
+}
+
+// ─── 카드 대화 ───
+async function sendChat(cardId, profile) {
+  const input = document.getElementById('chatinput_' + cardId);
+  const log   = document.getElementById('chatlog_' + cardId);
+  const btn   = document.getElementById('chatbtn_' + cardId);
+  const q = input.value.trim();
+  if (!q) return;
+
+  // 사용자 메시지
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-msg user';
+  userMsg.textContent = q;
+  log.appendChild(userMsg);
+  input.value = '';
+  btn.disabled = true;
+
+  // AI 로딩
+  const aiMsg = document.createElement('div');
+  aiMsg.className = 'chat-msg ai loading';
+  aiMsg.textContent = '답변 생성 중...';
+  log.appendChild(aiMsg);
+  log.scrollTop = log.scrollHeight;
+
+  const card = PLAN_CARDS.find(c => c.id === cardId);
+  const info = [profile.name, profile.grade, profile.jobs.join(','), profile.holland.join(''), profile.weakness||'-'].join('|');
+  const prompt = `학생[${info}]
+카드주제:${card.title}
+질문:${q}
+간결하고 친근하게 한국어로 답변해줘`;
+
+  try {
+    const res  = await fetch(proxyUrl + '?prompt=' + encodeURIComponent(prompt), { method: 'GET' });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const clean = (data.text || '').replace(/^```html\s*/i,'').replace(/```\s*$/i,'').trim();
+    aiMsg.className = 'chat-msg ai';
+    aiMsg.innerHTML = clean || '답변을 가져오지 못했습니다.';
+  } catch(e) {
+    aiMsg.className = 'chat-msg ai';
+    aiMsg.textContent = '오류: ' + e.message;
+  }
+
+  btn.disabled = false;
+  log.scrollTop = log.scrollHeight;
 }
 
 // ─── 프롬프트 생성 (최소화) ───

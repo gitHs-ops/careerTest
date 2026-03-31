@@ -178,6 +178,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--txt)
 .ans-st{font-size:12px;color:var(--muted);}
 .btn-next{padding:10px 26px;border:none;border-radius:var(--rsm);color:#fff;font-size:13px;
   font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(0,0,0,.3);}
+
+/* 패스 버튼 */
+.btn-skip{background:none;border:1px dashed var(--bord2);border-radius:8px;color:var(--t3);font-size:11px;font-weight:600;font-family:inherit;padding:6px 14px;cursor:pointer;transition:.18s;}
+.btn-skip:hover{border-color:var(--acc);color:var(--acc);}
+
 .btn-next:disabled{background:var(--bord2)!important;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
 
 /* ── RESULT ── */
@@ -597,6 +602,7 @@ canvas { background: transparent !important; }
     <div class="nav">
       <button class="btn-prev" id="hBtnPrev" onclick="hGoPage(-1)">← 이전</button>
       <span class="ans-st" id="hAnsSt"></span>
+      <button class="btn-skip" onclick="hSkip()">이 검사 건너뛰기</button>
       <button class="btn-next" id="hBtnNext" onclick="hGoPage(1)" style="background:linear-gradient(135deg,var(--H),#b06af0)">다음 →</button>
     </div>
   </div>
@@ -617,6 +623,7 @@ canvas { background: transparent !important; }
     <div class="nav">
       <button class="btn-prev" id="aBtnPrev" onclick="aGoPage(-1)">← 이전</button>
       <span class="ans-st" id="aAnsSt"></span>
+      <button class="btn-skip" onclick="aSkip()">이 검사 건너뛰기</button>
       <button class="btn-next" id="aBtnNext" onclick="aGoPage(1)" style="background:linear-gradient(135deg,var(--apt),#5ecfb8)">다음 →</button>
     </div>
   </div>
@@ -636,6 +643,7 @@ canvas { background: transparent !important; }
     <div class="nav">
       <button class="btn-prev" id="vBtnPrev" onclick="vGoPage(-1)">← 이전</button>
       <span class="ans-st" id="vAnsSt"></span>
+      <button class="btn-skip" onclick="vSkip()">이 검사 건너뛰기</button>
       <button class="btn-next" id="vBtnNext" onclick="vGoPage(1)" style="background:linear-gradient(135deg,var(--val),#f080b0)">다음 →</button>
     </div>
   </div>
@@ -782,6 +790,26 @@ let vPages=[], vCurPage=0;
 const PAGE_SIZE=6;
 
 // ── 헬퍼 ──
+
+// ── 검사 건너뛰기 (미응답 문항 중간값 처리) ──
+function hSkip(){
+  if(!confirm('홀랜드 흥미검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  hQs.forEach(q=>{ if(hAns[q.id]===undefined) hAns[q.id]=3; });
+  showScreen('aptScreen');
+  aGoPage(0);
+}
+function aSkip(){
+  if(!confirm('적성검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  aQs.forEach(q=>{ if(aAns[q.id]===undefined) aAns[q.id]=3; });
+  showScreen('valScreen');
+  vGoPage(0);
+}
+function vSkip(){
+  if(!confirm('가치관검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  vQs.forEach(q=>{ if(vAns[q.id]===undefined) vAns[q.id]=3; });
+  showResult();
+}
+
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
