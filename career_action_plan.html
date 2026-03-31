@@ -23,10 +23,13 @@ html{scroll-behavior:smooth;}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
 
 
-/* 프로그레스바 */
-.progress-wrap{margin:16px 0 8px;background:var(--s2);border-radius:999px;height:8px;overflow:hidden;}
-.progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--acc),var(--pnk));transition:width .5s ease;width:0%;}
-.progress-txt{font-size:12px;color:var(--t2);text-align:center;margin-top:6px;font-weight:600;}
+/* 클릭형 카드 */
+.pc-head{cursor:pointer;user-select:none;}
+.pc-head:hover{opacity:.8;}
+.pc-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:8px 16px;background:var(--ag);border:1px solid rgba(99,102,241,.3);border-radius:8px;font-size:12px;font-weight:700;color:var(--acc);cursor:pointer;transition:.18s;}
+.pc-btn:hover{background:var(--acc);color:#fff;}
+.pc-loaded .pc-btn{display:none;}
+.pc-loading{display:flex;flex-direction:column;gap:8px;padding:4px 0;}
 
 /* 배경 효과 */
 .bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
@@ -175,7 +178,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
   <div class="hd">
     <a class="logo" href="career_portal.html">
       <div class="logo-mk">🎯</div>
-      <span>진로 준비 액션플랜 <sup style="font-size:10px;font-weight:700;background:rgba(79,82,216,.15);color:var(--acc);padding:2px 7px;border-radius:8px;vertical-align:middle;">v2.4</sup></span>
+      <span>진로 준비 액션플랜 <sup style="font-size:10px;font-weight:700;background:rgba(79,82,216,.15);color:var(--acc);padding:2px 7px;border-radius:8px;vertical-align:middle;">v2.5</sup></span>
     </a>
     <div class="api-btn" style="cursor:default;">
       <div class="api-dot on" id="apiDot"></div>
@@ -444,15 +447,13 @@ function showResults(profile) {
     <div class="rh-name">📋 ${profile.name}의 진로 준비 액션플랜</div>
     <div class="rh-sub">${profile.grade} · ${profile.region || '지역 미입력'}<br>
     AI가 7개 카드로 맞춤형 로드맵을 생성 중입니다...</div>
-    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-    <div class="progress-txt" id="progressTxt">0 / 7 생성 중...</div>
     <div class="rh-tags">
       ${profile.jobs.map(j=>`<span class="rh-tag acc">${j}</span>`).join('')}
       ${profile.holland.map(h=>`<span class="rh-tag grn">${h}</span>`).join('')}
       ${profile.value.map(v=>`<span class="rh-tag ylw">${v}</span>`).join('')}
     </div>`;
 
-  // 카드 골격 생성
+  // 카드 골격 생성 (클릭 시 로딩)
   const grid = document.getElementById('planGrid');
   grid.innerHTML = '';
   PLAN_CARDS.forEach(card => {
@@ -462,7 +463,7 @@ function showResults(profile) {
     div.id = 'card_' + card.id;
     if (card.fullWidth) div.style.gridColumn = '1/-1';
     div.innerHTML = `
-      <div class="pc-head">
+      <div class="pc-head" onclick="loadCard(PLAN_CARDS.find(c=>c.id==='${card.id}'), window._lastProfile)">
         <div class="pc-icon">${card.icon}</div>
         <div>
           <div class="pc-title">${card.title}</div>
@@ -470,40 +471,23 @@ function showResults(profile) {
         </div>
       </div>
       <div class="pc-body" id="body_${card.id}">
-        <div class="skeleton w90"></div>
-        <div class="skeleton w100"></div>
-        <div class="skeleton w80"></div>
-        <div class="skeleton w60" style="margin-top:10px"></div>
-        <div class="skeleton w90"></div>
-        <div class="skeleton w70"></div>
+        <div class="pc-btn" onclick="loadCard(PLAN_CARDS.find(c=>c.id==='${card.id}'), window._lastProfile)">
+          ✨ AI 분석 시작
+        </div>
       </div>`;
     grid.appendChild(div);
   });
-
-  // 순차 호출 (GAS 타임아웃 방지)
-  (async () => {
-    const total = PLAN_CARDS.length;
-    for (let i = 0; i < total; i++) {
-      const pct = Math.round(i / total * 100);
-      const bar = document.getElementById('progressBar');
-      const txt = document.getElementById('progressTxt');
-      if (bar) bar.style.width = pct + '%';
-      if (txt) txt.textContent = i + ' / ' + total + ' 생성 중... (' + pct + '%)';
-      await loadCard(PLAN_CARDS[i], profile);
-    }
-    const bar = document.getElementById('progressBar');
-    const txt = document.getElementById('progressTxt');
-    if (bar) bar.style.width = '100%';
-    if (txt) txt.textContent = '✅ 7 / 7 완료!';
-  })();
 }
 
 // ─── 카드별 AI 호출 (청크 방식 - URL 길이 제한 해결) ───
 async function loadCard(cardDef, profile) {
   const bodyEl = document.getElementById('body_' + cardDef.id);
 
+  // 이미 로딩됐으면 스킵
+  if (document.getElementById('card_' + cardDef.id).classList.contains('pc-loaded')) return;
+
   bodyEl.innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:8px;padding:4px 0;">
+    <div class="pc-loading">
       <div class="skeleton w90"></div>
       <div class="skeleton w100"></div>
       <div class="skeleton w75"></div>
@@ -528,6 +512,7 @@ async function loadCard(cardDef, profile) {
       .replace(/```\s*$/i, '')
       .trim();
     bodyEl.innerHTML = cleanText || '<span style="color:#9aa0be">내용을 불러오지 못했습니다.</span>';
+    document.getElementById('card_' + cardDef.id).classList.add('pc-loaded');
 
   } catch(e) {
     bodyEl.innerHTML = `
