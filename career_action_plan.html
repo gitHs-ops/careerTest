@@ -213,7 +213,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
     <div class="form-card">
       <div class="form-title"><span>👤</span> 기본 정보</div>
       <div class="form-row">
-        <div class="form-group">
+        <div class="form-group" id="fg_name">
           <div class="flabel">이름</div>
           <input type="text" class="finput" id="f_name" placeholder="이름을 입력하세요">
         </div>
@@ -643,7 +643,12 @@ function showToast(msg, type = '') {
 // URL 파라미터 자동 채우기 (career_combined.html 연동)
 (function autoFill() {
   const params = new URLSearchParams(location.search);
-  if (params.get('name')) document.getElementById('f_name').value = params.get('name');
+  if (params.get('name')) {
+    document.getElementById('f_name').value = params.get('name');
+    // 이름이 파라미터로 넘어왔으면 입력 필드 숨김 (이미 검사에서 입력함)
+    const fg = document.getElementById('fg_name');
+    if (fg) fg.style.display = 'none';
+  }
   if (params.get('grade')) document.getElementById('f_grade').value = params.get('grade');
   if (params.get('region')) document.getElementById('f_region').value = params.get('region');
   if (params.get('strength')) document.getElementById('f_strength').value = params.get('strength');
