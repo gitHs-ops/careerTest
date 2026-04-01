@@ -613,6 +613,8 @@ canvas { background: transparent !important; }
     <div class="result-actions">
       <button class="btn-retry" onclick="retryExam()">🔄 다시 검사</button>
       <button class="btn-print" onclick="window.print()">🖨️ 결과 인쇄</button>
+      <button class="btn-print" style="background:linear-gradient(135deg,#4f52d8,#7c3aed);" onclick="goActionPlan()">📋 액션플랜</button>
+      <button class="btn-print" style="background:linear-gradient(135deg,#0891b2,#0d9e6e);" onclick="goAdvisor()">💼 진로상담</button>
     </div>
   </div>
 </div>
@@ -797,7 +799,7 @@ const PAGE_SIZE = 6;
 let pages = [];
 let currentPage = 0;
 let answers = {};
-let userName = '학생';
+let userName = new URLSearchParams(location.search).get('name') || '학생';
 
 // 인트로 pills
 (function(){
@@ -812,8 +814,17 @@ let userName = '학생';
   });
 })();
 
+function goActionPlan(){
+  const qs = new URLSearchParams(location.search);
+  window.open('career_action_plan.html?' + qs.toString(), '_blank');
+}
+function goAdvisor(){
+  const qs = new URLSearchParams(location.search);
+  window.open('career_advisor.html?' + qs.toString(), '_blank');
+}
+
 function startExam() {
-  userName = '학생';
+  userName = new URLSearchParams(location.search).get('name') || '학생';
   // 가치별 문항을 번갈아 배치
   const shuffled = [];
   const perVal = 5;
@@ -908,7 +919,7 @@ function updateNav(){
 }
 
 function skipExam(){
-  if(!confirm('이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  if(!confirm('이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.\n\n결과 화면으로 이동합니다.')) return;
   QUESTIONS.forEach(q=>{ if(answers[q.id]===undefined) answers[q.id]=3; });
   showResult();
 }

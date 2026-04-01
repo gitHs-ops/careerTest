@@ -1184,9 +1184,18 @@ function saveAnswer(qId, val) {
 }
 
 function skipExam(){
-  if(!confirm('이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  const seq = new URLSearchParams(location.search).get('seq');
+  const msg = seq === 'all'
+    ? '이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.\n\n다음 검사(직업적성검사)로 이동합니다.'
+    : '이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.';
+  if(!confirm(msg)) return;
   allQuestions.forEach(q=>{ if(answers[q.id]===undefined) answers[q.id]=3; });
-  showResult();
+  if(seq === 'all'){
+    const qs = new URLSearchParams(location.search);
+    window.location.href = 'aptitude_career.html?' + qs.toString();
+  } else {
+    showResult();
+  }
 }
 
 function goPage(dir) {
@@ -1223,6 +1232,14 @@ function calcScores() {
 // ═══════════════════════════════════════════════
 // 결과 표시
 // ═══════════════════════════════════════════════
+function goNextIfSeq(nextFile){
+  const seq = new URLSearchParams(location.search).get('seq');
+  if(seq === 'all'){
+    const qs = new URLSearchParams(location.search);
+    window.location.href = nextFile + '?' + qs.toString();
+  }
+}
+
 function showResult() {
   document.getElementById('examScreen').style.display = 'none';
   document.getElementById('resultScreen').style.display = 'block';
@@ -1292,6 +1309,18 @@ function showResult() {
   `;
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 통합검사 모드: 다음 검사 버튼 추가
+  const seqParam = new URLSearchParams(location.search).get('seq');
+  if(seqParam === 'all'){
+    const qs = new URLSearchParams(location.search);
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn-next';
+    nextBtn.style = 'width:100%;margin-top:24px;font-size:15px;padding:14px;';
+    nextBtn.textContent = '다음 검사: 직업적성검사 시작 →';
+    nextBtn.onclick = () => { window.location.href = 'aptitude_career.html?' + qs.toString(); };
+    document.getElementById('resultScreen').appendChild(nextBtn);
+  }
 }
 
 // ── 레이더 차트 (Canvas) ──

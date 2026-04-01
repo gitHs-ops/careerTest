@@ -147,7 +147,7 @@ body {
   margin-bottom: 24px; letter-spacing: .5px;
 }
 .hero-title {
-  font-size: clamp(36px, 6vw, 64px);
+  font-size: clamp(22px, 3.5vw, 38px);
   font-weight: 900;
   line-height: 1.15;
   margin-bottom: 20px;
@@ -827,6 +827,16 @@ canvas { background: transparent !important; }
         <div class="hero-stat-label">이용 요금</div>
       </div>
     </div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+      <a href="career_action_plan.html" target="_blank"
+         style="padding:12px 24px;background:linear-gradient(135deg,#4f52d8,#7c3aed);color:#fff;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;">
+        📋 AI 진로 액션플랜
+      </a>
+      <a href="career_advisor.html" target="_blank"
+         style="padding:12px 24px;background:linear-gradient(135deg,#0891b2,#0d9e6e);color:#fff;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;">
+        💼 AI 진로상담
+      </a>
+    </div>
   </section>
 
 
@@ -857,7 +867,6 @@ canvas { background: transparent !important; }
           <th>측정 내용</th>
           <th>문항수</th>
           <th>결과 유형</th>
-          <th>파일</th>
         </tr>
       </thead>
       <tbody>
@@ -874,7 +883,6 @@ canvas { background: transparent !important; }
           <td>하고 싶은 일 — 활동과 직업에 대한 흥미</td>
           <td>72</td>
           <td>6가지 유형 · 2자리 흥미코드</td>
-          <td><span class="td-file">holland_career.html</span></td>
         </tr>
         <tr>
           <td>
@@ -889,7 +897,6 @@ canvas { background: transparent !important; }
           <td>잘할 수 있는 일 — 잠재 능력과 재능</td>
           <td>66</td>
           <td>11개 영역 점수 · 상위 3개 적성</td>
-          <td><span class="td-file">aptitude_career.html</span></td>
         </tr>
         <tr>
           <td>
@@ -904,7 +911,6 @@ canvas { background: transparent !important; }
           <td>원하는 것 — 직업에서 중시하는 가치</td>
           <td>60</td>
           <td>4가지 가치지향 · 상위 2개 가치</td>
-          <td><span class="td-file">value_career.html</span></td>
         </tr>
       </tbody>
     </table>
@@ -1175,11 +1181,11 @@ function goExam() {
   const qs = '?' + params.toString();
 
   if (key === 'all') {
-    const msg = `${name}님의 3종 통합 검사를 시작합니다.\n\n순서: ①직업흥미검사 → ②직업적성검사 → ③직업가치관검사\n\n지금 각 검사 파일을 순서대로 열겠습니다. 각 검사가 완료된 후 다음 검사를 진행해 주세요.`;
+    const msg = `${name}님의 3종 통합 검사를 시작합니다.\n\n순서: ①직업흥미검사 → ②직업적성검사 → ③직업가치관검사\n\n각 검사가 완료되면 자동으로 다음 검사로 이동합니다.`;
     if (confirm(msg)) {
-      ['holland_career.html', 'aptitude_career.html', 'value_career.html'].forEach((f, i) => {
-        setTimeout(() => window.open(f + qs, '_blank'), i * 500);
-      });
+      params.set('seq', 'all');
+      const qsAll = '?' + params.toString();
+      window.open('holland_career.html' + qsAll, '_blank');
     }
     closeModal();
     return;
