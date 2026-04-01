@@ -884,7 +884,7 @@ function updateNav() {
 
 function skipExam(){
   if(!confirm('이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
-  questions.forEach(q=>{ if(answers[q.id]===undefined) answers[q.id]=3; });
+  QUESTIONS.forEach(q=>{ if(answers[q.id]===undefined) answers[q.id]=3; });
   showResult();
 }
 
