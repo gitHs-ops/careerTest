@@ -543,7 +543,7 @@ canvas { background: transparent !important; }
       <div class="stat-item"><div class="stat-num">5등급</div><div class="stat-label">결과 판정</div></div>
     </div>
 
-    <input type="text" class="name-input" id="userName" placeholder="이름을 입력하세요" maxlength="10">
+    
     <button class="btn-start" onclick="startExam()">검사 시작하기 →</button>
   </div>
 </div>
@@ -761,7 +761,7 @@ const QUESTIONS = [
 let pages = [];
 let currentPage = 0;
 let answers = {};
-let userName = '';
+let userName = '학생';
 
 // 인트로 그리드 렌더
 (function renderIntroGrid(){
@@ -777,8 +777,7 @@ let userName = '';
 })();
 
 function startExam() {
-  const n = document.getElementById('userName').value.trim();
-  userName = n || '학생';
+  userName = '학생';
 
   // 영역별로 페이지 구성
   pages = APTS.map(a => QUESTIONS.filter(q => q.apt === a.id));
@@ -1044,7 +1043,7 @@ function drawRadar(scores) {
 function retryExam(){
   document.getElementById('resultScreen').style.display='none';
   document.getElementById('introScreen').style.display='flex';
-  document.getElementById('userName').value='';
+  
 }
 </script>
 </body>

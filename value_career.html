@@ -567,7 +567,7 @@ canvas { background: transparent !important; }
       <div class="stat-item"><div class="stat-num">15분</div><div class="stat-label">예상시간</div></div>
     </div>
 
-    <input type="text" class="name-input" id="userName" placeholder="이름을 입력하세요" maxlength="10">
+    
     <button class="btn-start" onclick="startExam()">검사 시작하기 →</button>
   </div>
 </div>
@@ -791,7 +791,7 @@ const PAGE_SIZE = 6;
 let pages = [];
 let currentPage = 0;
 let answers = {};
-let userName = '';
+let userName = '학생';
 
 // 인트로 pills
 (function(){
@@ -807,7 +807,7 @@ let userName = '';
 })();
 
 function startExam() {
-  userName = document.getElementById('userName').value.trim() || '학생';
+  userName = '학생';
   // 가치별 문항을 번갈아 배치
   const shuffled = [];
   const perVal = 5;
@@ -1016,7 +1016,7 @@ function showResult(){
 function retryExam(){
   document.getElementById('resultScreen').style.display='none';
   document.getElementById('introScreen').style.display='flex';
-  document.getElementById('userName').value='';
+  
 }
 </script>
 </body>

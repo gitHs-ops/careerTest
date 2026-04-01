@@ -819,9 +819,7 @@ canvas { background: transparent !important; }
       </div>
     </div>
 
-    <div class="name-input-wrap">
-      <input type="text" class="name-input" id="userName" placeholder="이름을 입력하세요" maxlength="10">
-    </div>
+    
     <button class="btn-start" onclick="startExam()">검사 시작하기 →</button>
   </div>
 </div>
@@ -1028,14 +1026,13 @@ let allQuestions = [];
 let pages = [];
 let currentPage = 0;
 let answers = {};
-let userName = '';
+let userName = '학생';
 
 // ═══════════════════════════════════════════════
 // 검사 시작
 // ═══════════════════════════════════════════════
 function startExam() {
-  const nameEl = document.getElementById('userName');
-  userName = nameEl.value.trim() || '학생';
+  userName = '학생';
   // 유형별로 번갈아 섞기 (R I A S E C 순서로 배치)
   allQuestions = [];
   for (let i = 0; i < 6; i++) {
@@ -1381,7 +1378,7 @@ function getRawColor(t) { return getColor(t); }
 function retryExam() {
   document.getElementById('resultScreen').style.display = 'none';
   document.getElementById('introScreen').style.display = 'flex';
-  document.getElementById('userName').value = '';
+  
 }
 </script>
 </body>
