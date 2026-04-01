@@ -829,80 +829,6 @@ canvas { background: transparent !important; }
     </div>
   </section>
 
-  <!-- ── 개별 검사 카드 ── -->
-  <div id="exams">
-    <div class="section-label">개별 검사 선택</div>
-  </div>
-
-  <div class="cards-grid">
-
-    <!-- 직업흥미검사 -->
-    <div class="exam-card card-h" onclick="openModal('holland')">
-      <div class="card-badge">🔍 Holland RIASEC 이론</div>
-      <span class="card-icon">🎨</span>
-      <div class="card-title">직업흥미검사 (H형)</div>
-      <div class="card-sub">어떤 활동과 직업에 흥미를 느끼는지 알아보세요. Holland의 6가지 유형으로 나의 흥미 코드를 찾습니다.</div>
-      <div class="card-meta">
-        <div class="meta-chip">📝 72문항</div>
-        <div class="meta-chip">⏱ 약 15분</div>
-        <div class="meta-chip">🎯 중·고등학생</div>
-      </div>
-      <div class="card-types">
-        <span class="type-tag">🔧 현실형(R)</span>
-        <span class="type-tag">🔬 탐구형(I)</span>
-        <span class="type-tag">🎨 예술형(A)</span>
-        <span class="type-tag">🤝 사회형(S)</span>
-        <span class="type-tag">📢 기업형(E)</span>
-        <span class="type-tag">📋 관습형(C)</span>
-      </div>
-      <button class="btn-start-card">검사 시작하기 →</button>
-    </div>
-
-    <!-- 직업적성검사 -->
-    <div class="exam-card card-a" onclick="openModal('aptitude')">
-      <div class="card-badge">💪 11가지 적성 영역</div>
-      <span class="card-icon">🎯</span>
-      <div class="card-title">직업적성검사</div>
-      <div class="card-sub">어떤 분야에서 잠재 능력을 발휘할 수 있는지 알아보세요. 11가지 적성 영역을 자기평가 방식으로 측정합니다.</div>
-      <div class="card-meta">
-        <div class="meta-chip">📝 66문항</div>
-        <div class="meta-chip">⏱ 약 20분</div>
-        <div class="meta-chip">🎯 중·고등학생</div>
-      </div>
-      <div class="card-types">
-        <span class="type-tag">🏃 신체운동</span>
-        <span class="type-tag">🤲 손재능</span>
-        <span class="type-tag">🧩 공간지각</span>
-        <span class="type-tag">🎵 음악</span>
-        <span class="type-tag">💡 창의력</span>
-        <span class="type-tag">📖 언어</span>
-        <span class="type-tag">🔢 수리논리</span>
-        <span class="type-tag">+ 4개</span>
-      </div>
-      <button class="btn-start-card">검사 시작하기 →</button>
-    </div>
-
-    <!-- 직업가치관검사 -->
-    <div class="exam-card card-v" onclick="openModal('value')">
-      <div class="card-badge">💎 12가지 직업가치</div>
-      <span class="card-icon">⚖️</span>
-      <div class="card-title">직업가치관검사</div>
-      <div class="card-sub">직업을 통해 무엇을 얻고 싶은지 알아보세요. 12가지 가치와 4가지 가치지향 유형으로 나의 직업 가치관을 탐색합니다.</div>
-      <div class="card-meta">
-        <div class="meta-chip">📝 60문항</div>
-        <div class="meta-chip">⏱ 약 15분</div>
-        <div class="meta-chip">🎯 중·고등학생</div>
-      </div>
-      <div class="card-types">
-        <span class="type-tag">🛡️ 안전지향</span>
-        <span class="type-tag">🏆 성취지향</span>
-        <span class="type-tag">🤝 관계지향</span>
-        <span class="type-tag">🌈 자기표현지향</span>
-      </div>
-      <button class="btn-start-card">검사 시작하기 →</button>
-    </div>
-
-  </div>
 
   <!-- ── 통합 검사 배너 ── -->
   <div class="all-banner" onclick="openModal('all')">
@@ -983,6 +909,82 @@ canvas { background: transparent !important; }
       </tbody>
     </table>
   </section>
+
+  <!-- ── 개별 검사 카드 ── -->
+  <div id="exams">
+    <div class="section-label">개별 검사 선택</div>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- 직업흥미검사 -->
+    <div class="exam-card card-h" onclick="openModal('holland')">
+      <div class="card-badge">🔍 Holland RIASEC 이론</div>
+      <span class="card-icon">🎨</span>
+      <div class="card-title">직업흥미검사 (H형)</div>
+      <div class="card-sub">어떤 활동과 직업에 흥미를 느끼는지 알아보세요. Holland의 6가지 유형으로 나의 흥미 코드를 찾습니다.</div>
+      <div class="card-meta">
+        <div class="meta-chip">📝 72문항</div>
+        <div class="meta-chip">⏱ 약 15분</div>
+        <div class="meta-chip">🎯 중·고등학생</div>
+      </div>
+      <div class="card-types">
+        <span class="type-tag">🔧 현실형(R)</span>
+        <span class="type-tag">🔬 탐구형(I)</span>
+        <span class="type-tag">🎨 예술형(A)</span>
+        <span class="type-tag">🤝 사회형(S)</span>
+        <span class="type-tag">📢 기업형(E)</span>
+        <span class="type-tag">📋 관습형(C)</span>
+      </div>
+      <button class="btn-start-card">검사 시작하기 →</button>
+    </div>
+
+    <!-- 직업적성검사 -->
+    <div class="exam-card card-a" onclick="openModal('aptitude')">
+      <div class="card-badge">💪 11가지 적성 영역</div>
+      <span class="card-icon">🎯</span>
+      <div class="card-title">직업적성검사</div>
+      <div class="card-sub">어떤 분야에서 잠재 능력을 발휘할 수 있는지 알아보세요. 11가지 적성 영역을 자기평가 방식으로 측정합니다.</div>
+      <div class="card-meta">
+        <div class="meta-chip">📝 66문항</div>
+        <div class="meta-chip">⏱ 약 20분</div>
+        <div class="meta-chip">🎯 중·고등학생</div>
+      </div>
+      <div class="card-types">
+        <span class="type-tag">🏃 신체운동</span>
+        <span class="type-tag">🤲 손재능</span>
+        <span class="type-tag">🧩 공간지각</span>
+        <span class="type-tag">🎵 음악</span>
+        <span class="type-tag">💡 창의력</span>
+        <span class="type-tag">📖 언어</span>
+        <span class="type-tag">🔢 수리논리</span>
+        <span class="type-tag">+ 4개</span>
+      </div>
+      <button class="btn-start-card">검사 시작하기 →</button>
+    </div>
+
+    <!-- 직업가치관검사 -->
+    <div class="exam-card card-v" onclick="openModal('value')">
+      <div class="card-badge">💎 12가지 직업가치</div>
+      <span class="card-icon">⚖️</span>
+      <div class="card-title">직업가치관검사</div>
+      <div class="card-sub">직업을 통해 무엇을 얻고 싶은지 알아보세요. 12가지 가치와 4가지 가치지향 유형으로 나의 직업 가치관을 탐색합니다.</div>
+      <div class="card-meta">
+        <div class="meta-chip">📝 60문항</div>
+        <div class="meta-chip">⏱ 약 15분</div>
+        <div class="meta-chip">🎯 중·고등학생</div>
+      </div>
+      <div class="card-types">
+        <span class="type-tag">🛡️ 안전지향</span>
+        <span class="type-tag">🏆 성취지향</span>
+        <span class="type-tag">🤝 관계지향</span>
+        <span class="type-tag">🌈 자기표현지향</span>
+      </div>
+      <button class="btn-start-card">검사 시작하기 →</button>
+    </div>
+
+  </div>
+
 
   <!-- ── FAQ ── -->
   <section class="faq-section" id="faq">
