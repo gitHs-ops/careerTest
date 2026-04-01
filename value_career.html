@@ -161,6 +161,11 @@ body{font-family:'Noto Sans KR',sans-serif;background: var(--bg);color:var(--gra
   color:#fff;border:none;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;
   box-shadow:0 3px 10px rgba(92,53,197,.28);transition:all .2s;}
 .btn-next:hover{transform:translateY(-1px);}
+
+/* 건너뛰기 버튼 */
+.btn-skip{background:none;border:1px dashed #ccc;border-radius:8px;color:#9aa0be;font-size:11px;font-weight:600;font-family:inherit;padding:6px 14px;cursor:pointer;transition:.18s;margin-right:8px;}
+.btn-skip:hover{border-color:#7c3aed;color:#7c3aed;}
+
 .btn-next:disabled{background:var(--gray-300);cursor:not-allowed;transform:none;box-shadow:none;}
 
 /* ══ RESULT ══ */
@@ -589,6 +594,7 @@ canvas { background: transparent !important; }
   <div class="nav-row">
     <button class="btn-prev" id="btnPrev" onclick="goPage(-1)">← 이전</button>
     <span class="ans-status" id="ansStatus"></span>
+    <button class="btn-skip" onclick="skipExam()">이 검사 건너뛰기</button>
     <button class="btn-next" id="btnNext" onclick="goPage(1)">다음 →</button>
   </div>
 </div>
@@ -899,6 +905,12 @@ function updateNav(){
   const btn=document.getElementById('btnNext');
   btn.textContent=isLast?'결과 보기 ✓':'다음 →';
   btn.disabled=done<page.length;
+}
+
+function skipExam(){
+  if(!confirm('이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  questions.forEach(q=>{ if(answers[q.id]===undefined) answers[q.id]=3; });
+  showResult();
 }
 
 function goPage(dir){

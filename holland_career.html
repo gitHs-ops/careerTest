@@ -312,6 +312,11 @@ body {
   box-shadow: 0 4px 12px rgba(102,126,234,0.3);
 }
 .btn-next:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(102,126,234,0.4); }
+
+/* 건너뛰기 버튼 */
+.btn-skip{background:none;border:1px dashed #ccc;border-radius:8px;color:#9aa0be;font-size:11px;font-weight:600;font-family:inherit;padding:6px 14px;cursor:pointer;transition:.18s;margin-right:8px;}
+.btn-skip:hover{border-color:#7c3aed;color:#7c3aed;}
+
 .btn-next:disabled { background: var(--gray-300); cursor: not-allowed; transform: none; box-shadow: none; }
 .answer-status { font-size: 13px; color: var(--gray-500); }
 
@@ -850,6 +855,7 @@ canvas { background: transparent !important; }
   <div class="nav-bar">
     <button class="btn-nav btn-prev" id="btnPrev" onclick="goPage(-1)">← 이전</button>
     <span class="answer-status" id="answerStatus"></span>
+    <button class="btn-skip" onclick="skipExam()">이 검사 건너뛰기</button>
     <button class="btn-nav btn-next" id="btnNext" onclick="goPage(1)">다음 →</button>
   </div>
 </div>
@@ -1175,6 +1181,12 @@ function saveAnswer(qId, val) {
   const answeredOnPage = page.filter(q => answers[q.id] !== undefined).length;
   document.getElementById('answerStatus').textContent = `${answeredOnPage} / ${page.length} 응답`;
   document.getElementById('btnNext').disabled = answeredOnPage < page.length;
+}
+
+function skipExam(){
+  if(!confirm('이 검사를 건너뛸까요?\n미응답 문항은 중간값(3점)으로 처리됩니다.')) return;
+  questions.forEach(q=>{ if(answers[q.id]===undefined) answers[q.id]=3; });
+  showResult();
 }
 
 function goPage(dir) {
