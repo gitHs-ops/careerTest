@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>로그인 — 진로심리검사 포털</title>
+  <link rel="icon" href="data:,">
+  <title>로그인 — 진로심리검사</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background: #F4F6FB;
+      background: linear-gradient(to bottom, #086266, #9adcda); min-height: 100vh;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -24,15 +24,16 @@
       background: #fff;
       border-radius: 22px;
       box-shadow: 0 8px 48px rgba(80,72,212,0.11);
-      padding: 48px 40px 40px;
+      padding: 32px 40px 36px;
       width: 100%;
       max-width: 440px;
       text-align: center;
     }
 
-    .logo { font-size: 2.2rem; margin-bottom: 8px; }
-    .title { font-size: 1.3rem; font-weight: 900; color: #1a1d2e; margin-bottom: 6px; }
-    .subtitle { font-size: 0.875rem; color: #5a607a; margin-bottom: 32px; line-height: 1.65; }
+    .logo-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
+    .logo { font-size: 1.9rem; line-height: 1; }
+    .title { font-size: 1.3rem; font-weight: 900; color: #1a1d2e; }
+    .subtitle { font-size: 0.875rem; color: #5a607a; margin-bottom: 24px; white-space: nowrap; }
 
     /* ── 탭 ── */
     .tab-row {
@@ -204,9 +205,11 @@
 <body>
 
 <div class="card">
-  <div class="logo">🧭</div>
-  <div class="title">진로심리검사 포털</div>
-  <div class="subtitle">이메일 또는 전화번호로<br/>서비스를 시작하세요</div>
+  <div class="logo-row">
+    <span class="logo">🧭</span>
+    <span class="title">진로심리검사</span>
+  </div>
+  <div class="subtitle">이메일 또는 전화번호로 서비스를 시작하세요</div>
 
   <!-- 탭: 이메일 / 전화번호 -->
   <div class="tab-row">
@@ -293,32 +296,17 @@
 const ADMIN_EMAIL    = 'khsq2011@gmail.com';
 const ADMIN_PHONE    = '01026989056';          // 관리자 전화번호 (숫자만)
 const ADMIN_PASSWORD = '1dl34';
-const TARGET_PAGE    = 'career_index.html';    // 이동할 대상 페이지
+const TARGET_PAGE    = 'career_index.html'; // 이동할 대상 페이지
 
-// EmailJS (reserved_view.html 에서 복사)
-const EJS_PUBLIC_KEY = 'ZtCJZtJkeMhYsZSeN';
-const EJS_SERVICE_ID = 'service_92ic4gd';
-const EJS_TEMPLATE   = 'template_fbg83fx';    // 신청 안내용 템플릿 (기존 confirm 템플릿 재활용)
+// 솔라피 SMS GAS 프록시
+const SOLAPI_SMS_PROXY_URL = 'https://script.google.com/macros/s/AKfycbzOmKHKIIQGCUFinZxvOZw0hGAWLZlP54PNefQTRSkrm5ShRpgEYo2XO7oHy8zbZIrvOw/exec';
 
-// GAS 이메일 프록시 (reserved_view.html 에서 복사)
-const GAS_EMAIL_URL  = 'https://script.google.com/macros/s/AKfycbzpKlWexxoz_qOjFK_NYRmqi-Sa28V9vtOl48joj6b1FhM35e6MY0WBinTVFCUoyO9C1g/exec';
-
-// Aligo SMS 프록시 (reserved_view.html 에서 복사)
-const SMS_PROXY_URL  = 'https://script.google.com/macros/s/AKfycbwWXySJZi-EnBwi4JTqsgNyIbsp-VxxScAYYLCjc7kHbNyfr0EcCg1B3dQ0ooy8OIho/exec';
+// 구글 시트 프록시 (회원 조회/등록/이메일 발송)
+const SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwpAo91DiNXDl8oc1IqF-FFkyUwliwEsA4CdwSnhhNt71-fJRGIwuvUy9xsqYxmvskKyQ/exec';
 
 // 관리자 수신 정보
 const ADMIN_RECEIVER_EMAIL = 'khsq2011@gmail.com';
 const ADMIN_RECEIVER_PHONE = '01026989056';
-
-// 일반 사용자 등록 목록
-const REGISTERED_EMAILS = [
-  // 예: 'student01@school.kr'
-];
-const REGISTERED_PHONES = [
-  // 예: '01012345678'
-];
-
-emailjs.init({ publicKey: EJS_PUBLIC_KEY });
 
 // ══════════════════════════════════════════════
 // ② 탭 전환
@@ -379,38 +367,43 @@ function moveTo(page, identifier, identifierType, role) {
 }
 
 // ══════════════════════════════════════════════
-// ④ 시작하기
+// ④ 시작하기 (구글 시트 회원 조회)
 // ══════════════════════════════════════════════
-function handleStart() {
+async function handleStart() {
   clearStatus();
   document.getElementById('newUserMsgBox').classList.remove('active');
   document.getElementById('sendResults').classList.remove('active');
 
-  if (currentTab === 'email') {
-    const email = getEmail();
-    if (!email) { showStatus('⚠️ 이메일 주소를 입력해 주세요.', 'error'); return; }
-    if (!isValidEmail(email)) { showStatus('⚠️ 올바른 이메일 형식이 아닙니다.', 'error'); return; }
-    if (email === ADMIN_EMAIL) {
-      showStatus('🔧 관리자 계정은 <b>관리자 버튼</b>으로 접속해 주세요.', 'warning'); return;
-    }
-    if (REGISTERED_EMAILS.map(e => e.toLowerCase()).includes(email)) {
-      moveTo(TARGET_PAGE, email, 'email', 'user');
-    } else {
-      showStatus('❌ 등록되지 않은 이메일입니다.<br>👋 <b>처음 이용자</b> 버튼으로 이용 신청을 해 주세요.', 'error');
-    }
+  const id = currentTab === 'email' ? getEmail() : getPhone();
 
-  } else {
-    const phone = getPhone();
-    if (!phone) { showStatus('⚠️ 전화번호를 입력해 주세요.', 'error'); return; }
-    if (!isValidPhone(phone)) { showStatus('⚠️ 올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)', 'error'); return; }
-    if (phone === ADMIN_PHONE) {
+  if (currentTab === 'email') {
+    if (!id) { showStatus('⚠️ 이메일 주소를 입력해 주세요.', 'error'); return; }
+    if (!isValidEmail(id)) { showStatus('⚠️ 올바른 이메일 형식이 아닙니다.', 'error'); return; }
+    if (id === ADMIN_EMAIL) {
       showStatus('🔧 관리자 계정은 <b>관리자 버튼</b>으로 접속해 주세요.', 'warning'); return;
     }
-    if (REGISTERED_PHONES.includes(phone)) {
-      moveTo(TARGET_PAGE, phone, 'phone', 'user');
-    } else {
-      showStatus('❌ 등록되지 않은 전화번호입니다.<br>👋 <b>처음 이용자</b> 버튼으로 이용 신청을 해 주세요.', 'error');
+  } else {
+    if (!id) { showStatus('⚠️ 전화번호를 입력해 주세요.', 'error'); return; }
+    if (!isValidPhone(id)) { showStatus('⚠️ 올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)', 'error'); return; }
+    if (id === ADMIN_PHONE) {
+      showStatus('🔧 관리자 계정은 <b>관리자 버튼</b>으로 접속해 주세요.', 'warning'); return;
     }
+  }
+
+  // 구글 시트에서 회원 조회
+  showStatus('🔍 확인 중...', 'info');
+  try {
+    const qs  = new URLSearchParams({ action: 'check', id: id });
+    const res = await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+    const data = await res.json();
+    if (data.success) {
+      clearStatus();
+      moveTo(TARGET_PAGE, id, currentTab === 'email' ? 'email' : 'phone', 'user');
+    } else {
+      showStatus('❌ 등록되지 않은 계정입니다.<br>👋 <b>처음 이용자</b> 버튼으로 이용 신청을 해 주세요.', 'error');
+    }
+  } catch(e) {
+    showStatus('⚠️ 서버 연결 오류입니다. 잠시 후 다시 시도해 주세요.', 'error');
   }
 }
 
@@ -448,7 +441,7 @@ function openAdminModal() {
 
 function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
 
-function confirmAdmin() {
+async function confirmAdmin() {
   const pw    = document.getElementById('adminPwInput').value;
   const email = getEmail();
   const phone = getPhone();
@@ -462,32 +455,38 @@ function confirmAdmin() {
     if (email === ADMIN_EMAIL) {
       moveTo(TARGET_PAGE, email, 'email', 'admin');
     } else {
-      const list = REGISTERED_EMAILS.map(e => e.toLowerCase());
-      if (!list.includes(email)) {
-        REGISTERED_EMAILS.push(email);
+      // 구글 시트에 등록
+      showStatus('⏳ 등록 중...', 'info');
+      try {
+        const qs  = new URLSearchParams({ action: 'register', id: email });
+        const res = await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+        const data = await res.json();
         showStatus(`✅ '${email}' 이(가) 신규 이메일로 등록되었습니다.`, 'success');
-      } else {
-        showStatus(`ℹ️ '${email}' 은(는) 이미 등록된 이메일입니다.`, 'info');
+      } catch(e) {
+        showStatus('⚠️ 등록 중 오류가 발생했습니다.', 'error');
       }
     }
   } else {
     if (phone === ADMIN_PHONE) {
       moveTo(TARGET_PAGE, phone, 'phone', 'admin');
     } else {
-      if (!REGISTERED_PHONES.includes(phone)) {
-        REGISTERED_PHONES.push(phone);
+      // 구글 시트에 등록
+      showStatus('⏳ 등록 중...', 'info');
+      try {
         const fmt = `010-${phone.slice(3,7)}-${phone.slice(7)}`;
+        const qs  = new URLSearchParams({ action: 'register', id: phone });
+        const res = await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+        const data = await res.json();
         showStatus(`✅ '${fmt}' 이(가) 신규 전화번호로 등록되었습니다.`, 'success');
-      } else {
-        const fmt = `010-${phone.slice(3,7)}-${phone.slice(7)}`;
-        showStatus(`ℹ️ '${fmt}' 은(는) 이미 등록된 전화번호입니다.`, 'info');
+      } catch(e) {
+        showStatus('⚠️ 등록 중 오류가 발생했습니다.', 'error');
       }
     }
   }
 }
 
 // ══════════════════════════════════════════════
-// ⑥ 처음 이용자 — EmailJS + GAS + Aligo SMS
+// ⑥ 처음 이용자 — GAS MailApp(이메일) / 솔라피(SMS)
 // ══════════════════════════════════════════════
 async function handleNewUser() {
   clearStatus();
@@ -504,36 +503,54 @@ async function handleNewUser() {
   if (currentTab === 'email') {
     if (!isValidEmail(email)) { showStatus('⚠️ 올바른 이메일 형식이 아닙니다.', 'error'); return; }
     if (email === ADMIN_EMAIL) { showStatus('🔧 관리자 계정은 관리자 버튼으로 접속해 주세요.', 'warning'); return; }
-    if (REGISTERED_EMAILS.map(e => e.toLowerCase()).includes(email)) {
-      showStatus('✅ 이미 등록된 이메일입니다. 시작하기 버튼을 눌러주세요.', 'info'); return;
-    }
   } else {
     if (!isValidPhone(phone)) { showStatus('⚠️ 올바른 전화번호 형식이 아닙니다.', 'error'); return; }
     if (phone === ADMIN_PHONE) { showStatus('🔧 관리자 계정은 관리자 버튼으로 접속해 주세요.', 'warning'); return; }
-    if (REGISTERED_PHONES.includes(phone)) {
-      showStatus('✅ 이미 등록된 전화번호입니다. 시작하기 버튼을 눌러주세요.', 'info'); return;
-    }
   }
+
+  // 이미 등록된 회원인지 확인
+  try {
+    const qs  = new URLSearchParams({ action: 'check', id: id });
+    const res = await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+    const data = await res.json();
+    if (data.success) {
+      showStatus('✅ 이미 등록된 계정입니다. 시작하기 버튼을 눌러주세요.', 'info'); return;
+    }
+  } catch(e) { /* 조회 실패해도 신청 진행 */ }
 
   // 신청 메시지 구성
   const applicantLabel = currentTab === 'email' ? email
     : `010-${phone.slice(3,7)}-${phone.slice(7)}`;
-  const applyMsg = `[진로심리검사 포털 이용 신청]\n신청자: ${applicantLabel}\n\n승인 후 이용 가능하오니 검토 부탁드립니다.`;
 
-  // 발송 결과 UI 표시
+  // 발송 결과 UI 표시 (탭에 따라 항목 표시/숨김)
   document.getElementById('sendResults').classList.add('active');
-  setResult('Sms',   'loading', 'SMS 발송 중...');
-  setResult('Email', 'loading', '이메일 발송 중...');
+  document.getElementById('resultSms').style.display   = currentTab === 'phone' ? '' : 'none';
+  document.getElementById('resultEmail').style.display = currentTab === 'email' ? '' : 'none';
 
-  // 병렬 발송
-  const [smsOk, emailOk] = await Promise.all([
-    sendSmsToAdmin(ADMIN_RECEIVER_PHONE, applyMsg),
-    sendEmailToAdmin(ADMIN_RECEIVER_EMAIL, applicantLabel, applyMsg)
-  ]);
-
-  // 결과 표시
-  setResult('Sms',   smsOk   ? 'ok' : 'err', smsOk   ? '📱 SMS 발송 완료' : '📱 SMS 발송 실패 (수동 확인 필요)');
-  setResult('Email', emailOk ? 'ok' : 'err', emailOk ? '✉️ 이메일 발송 완료' : '✉️ 이메일 발송 실패 (수동 확인 필요)');
+  if (currentTab === 'email') {
+    // 이메일 탭: GAS MailApp으로 관리자에게 이메일 발송
+    setResult('Email', 'loading', '이메일 발송 중...');
+    try {
+      const qs  = new URLSearchParams({ action: 'notify', id: applicantLabel });
+      const res = await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+      const data = await res.json();
+      setResult('Email', data.success ? 'ok' : 'err',
+        data.success ? '✉️ 이메일 발송 완료' : '✉️ 이메일 발송 실패');
+    } catch(e) {
+      setResult('Email', 'err', '✉️ 이메일 발송 실패');
+    }
+  } else {
+    // 전화번호 탭: 관리자에게 SMS 발송 + 대기목록 저장
+    setResult('Sms', 'loading', 'SMS 발송 중...');
+    const applyMsg = `[진로심리검사 이용 신청]\n신청자: ${applicantLabel}\n\n승인 후 이용 가능하오니 검토 부탁드립니다.`;
+    const smsOk = await sendSmsToAdmin(ADMIN_RECEIVER_PHONE, applyMsg);
+    setResult('Sms', smsOk ? 'ok' : 'err', smsOk ? '📱 SMS 발송 완료' : '📱 SMS 발송 실패');
+    // 대기목록 저장 (GAS notify - 이메일 발송 없이 저장만)
+    try {
+      const qs = new URLSearchParams({ action: 'notify', id: phone, smsOnly: '1' });
+      await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+    } catch(e) { console.warn('대기목록 저장 실패:', e.message); }
+  }
 
   // 완료 메시지
   document.getElementById('newUserMsgBox').classList.add('active');
@@ -546,50 +563,15 @@ function setResult(which, status, text) {
   txt.textContent = text;
 }
 
-// ── Aligo SMS → GAS 프록시 (reserved_view.html 동일 패턴) ──
+// ── 솔라피 SMS → GAS 프록시 GET 방식 (CORS 우회) ──
 async function sendSmsToAdmin(receiverPhone, msg) {
   try {
-    const qs  = new URLSearchParams({ action: 'sms', receiver: receiverPhone, msg: msg });
-    const res = await fetch(`${SMS_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
+    const qs  = new URLSearchParams({ receiver: receiverPhone, msg: msg });
+    const res = await fetch(`${SOLAPI_SMS_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
     const data = await res.json();
     return !!data.success;
   } catch (e) {
     console.error('SMS 발송 오류:', e);
-    return false;
-  }
-}
-
-// ── EmailJS (reserved_view.html 동일 패턴) ──
-async function sendEmailToAdmin(toEmail, applicantLabel, msg) {
-  // 1차: EmailJS 시도
-  try {
-    await emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE, {
-      to_email: toEmail,
-      to_name:  '관리자',
-      name:     '진로심리검사 포털',
-      subject:  '[진로심리검사 포털] 이용 신청이 들어왔습니다',
-      message:  msg,
-    });
-    return true;
-  } catch (ejsErr) {
-    console.warn('EmailJS 실패, GAS 재시도:', ejsErr);
-  }
-
-  // 2차: GAS 프록시 재시도 (reserved_view.html의 sendEmailGAS 동일 패턴)
-  try {
-    const res  = await fetch(GAS_EMAIL_URL, {
-      method: 'POST',
-      body:   JSON.stringify({
-        to_email: toEmail,
-        to_name:  '관리자',
-        subject:  '[진로심리검사 포털] 이용 신청이 들어왔습니다',
-        message:  msg,
-      }),
-    });
-    const data = await res.json();
-    return !!data.success;
-  } catch (e) {
-    console.error('GAS 이메일도 실패:', e);
     return false;
   }
 }
@@ -601,5 +583,8 @@ document.getElementById('adminModal').addEventListener('click', function(e) {
   if (e.target === this) closeAdminModal();
 });
 </script>
+<div style="position:fixed;bottom:6px;right:10px;font-size:0.7rem;color:#aaa;pointer-events:none;">
+  v2026-04-04 16:00 (중학교)
+</div>
 </body>
 </html>
