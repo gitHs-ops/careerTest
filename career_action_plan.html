@@ -123,6 +123,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
 .pc-sub{font-size:11px;color:var(--t2);margin-top:2px;}
 .pc-body{padding:16px 20px;flex:1;font-size:13px;color:var(--t2);line-height:1.75;min-height:120px;}
 .pc-body strong{color:#1a1d2e;font-weight:600;}
+.pc-token-badge{display:inline-flex;align-items:center;gap:4px;margin-top:10px;
+  padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;
+  background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);
+  color:var(--acc);letter-spacing:.02em;}
 .pc-body ul{padding-left:18px;margin:6px 0;}
 .pc-body li{margin-bottom:4px;}
 .pc-body h4{color:#1a1d2e;font-size:12px;font-weight:700;margin:10px 0 5px;letter-spacing:.04em;}
@@ -450,11 +454,23 @@ let proxyUrl = localStorage.getItem('proxyUrl') || DEFAULT_PROXY_URL;
 
 // ── 토큰 로그 → 구글 시트 ──
 const SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwpAo91DiNXDl8oc1IqF-FFkyUwliwEsA4CdwSnhhNt71-fJRGIwuvUy9xsqYxmvskKyQ/exec';
-function sendTokenLog(cardTitle, usage) {
+let _clientIp = '';
+async function getClientIp() {
+  if (_clientIp) return _clientIp;
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const d = await r.json();
+    _clientIp = d.ip || '';
+  } catch(e) { _clientIp = ''; }
+  return _clientIp;
+}
+
+async function sendTokenLog(cardTitle, usage) {
   if (!usage) return;
   const user = localStorage.getItem('ct_id') || '(미로그인)';
   const inp  = usage.input_tokens  || 0;
   const out  = usage.output_tokens || 0;
+  const ip   = await getClientIp();
   const qs   = new URLSearchParams({
     name:   user,
     email:  user,
@@ -462,7 +478,7 @@ function sendTokenLog(cardTitle, usage) {
     input:  inp,
     output: out,
     tokens: inp + out,
-    ip:     ''
+    ip:     ip
   });
   fetch(SHEET_PROXY_URL + '?' + qs.toString(), { method: 'GET' })
     .catch(e => console.warn('토큰 로그 전송 실패:', e.message));
@@ -580,7 +596,7 @@ function showResults(profile) {
     div.innerHTML = `
       <div class="pc-head" onclick="loadCard(PLAN_CARDS.find(c=>c.id==='${card.id}'), window._lastProfile)">
         <div class="pc-icon">${card.icon}</div>
-        <div>
+        <div style="flex:1;">
           <div class="pc-title">${card.title}</div>
           <div class="pc-sub">${card.sub}</div>
         </div>
@@ -589,7 +605,10 @@ function showResults(profile) {
         <div class="pc-btn" onclick="loadCard(PLAN_CARDS.find(c=>c.id==='${card.id}'), window._lastProfile)">
           ✨ AI 분석 시작
         </div>
-      </div>`;
+      </div>
+      <div id="tkbadge_wrap_${card.id}" style="display:none;padding:6px 16px 10px;">
+        <span class="pc-token-badge" id="tkbadge_${card.id}">-</span>
+      </div>\`;
     grid.appendChild(div);
   });
 }
@@ -620,7 +639,19 @@ async function loadCard(cardDef, profile) {
     const data = await res.json();
 
     if (data.error) throw new Error(data.error);
-    if (data.usage) { updateTokenTracker(data.usage); sendTokenLog(cardDef.title, data.usage); }
+    if (data.usage) {
+      updateTokenTracker(data.usage);
+      sendTokenLog(cardDef.title, data.usage);
+      // 카드별 토큰 뱃지
+      const inp = data.usage.input_tokens || 0;
+      const out = data.usage.output_tokens || 0;
+      const badge = document.getElementById('tkbadge_' + cardDef.id);
+      const badgeWrap = document.getElementById('tkbadge_wrap_' + cardDef.id);
+      if (badge && badgeWrap) {
+        badgeWrap.style.display = 'block';
+        badge.innerHTML = `🪙 입력 ${inp.toLocaleString()} + 출력 ${out.toLocaleString()} = ${(inp+out).toLocaleString()} 토큰`;
+      }
+    }
 
     const cleanText = (data.text || '')
       .replace(/^```html\s*/i, '')

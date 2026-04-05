@@ -697,11 +697,23 @@ const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNRgaE-O9wiS0amF1F1A
 
 // ── 토큰 로그 → 구글 시트 ──
 const SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwpAo91DiNXDl8oc1IqF-FFkyUwliwEsA4CdwSnhhNt71-fJRGIwuvUy9xsqYxmvskKyQ/exec';
-function sendTokenLog(tabTitle, usage) {
+let _clientIp = '';
+async function getClientIp() {
+  if (_clientIp) return _clientIp;
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const d = await r.json();
+    _clientIp = d.ip || '';
+  } catch(e) { _clientIp = ''; }
+  return _clientIp;
+}
+
+async function sendTokenLog(tabTitle, usage) {
   if (!usage) return;
   const user = localStorage.getItem('ct_id') || '(미로그인)';
   const inp  = usage.input_tokens  || 0;
   const out  = usage.output_tokens || 0;
+  const ip   = await getClientIp();
   const qs   = new URLSearchParams({
     name:   user,
     email:  user,
@@ -709,7 +721,7 @@ function sendTokenLog(tabTitle, usage) {
     input:  inp,
     output: out,
     tokens: inp + out,
-    ip:     ''
+    ip:     ip
   });
   fetch(SHEET_PROXY_URL + '?' + qs.toString(), { method: 'GET' })
     .catch(e => console.warn('토큰 로그 전송 실패:', e.message));

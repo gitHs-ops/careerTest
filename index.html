@@ -197,6 +197,34 @@
     }
     .toast.show { opacity: 1; }
 
+    /* ── 로딩 오버레이 ── */
+    .loading-overlay {
+      display: none; position: fixed; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,98,102,0.82), rgba(20,60,62,0.9));
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      z-index: 200; align-items: center; justify-content: center;
+      flex-direction: column; gap: 20px;
+      animation: fadeInOverlay .25s ease;
+    }
+    @keyframes fadeInOverlay { from { opacity:0; } to { opacity:1; } }
+    .loading-overlay.active { display: flex; }
+    .loading-spinner {
+      width: 56px; height: 56px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top-color: #9adcda;
+      border-right-color: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+      box-shadow: 0 0 20px rgba(154,220,218,0.3);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      color: #fff; font-size: 0.95rem; font-weight: 700;
+      letter-spacing: 1px;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+
     @media (max-width: 480px) {
       .card { padding: 36px 20px 30px; }
     }
@@ -289,6 +317,12 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- ── 로딩 오버레이 ── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">회원 확인 중...</div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════
 // ① 설정값 — 필요시 수정
@@ -341,6 +375,25 @@ function fmtPhone(input) {
   else input.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
 }
 
+let _loadingStart = 0;
+const MIN_LOADING_MS = 1200; // 최소 표시 시간
+
+function showLoading(on) {
+  const overlay = document.getElementById('loadingOverlay');
+  const btn     = document.querySelector('.btn-primary');
+  if (on) {
+    _loadingStart = Date.now();
+    overlay.classList.add('active');
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+  } else {
+    const elapsed = Date.now() - _loadingStart;
+    const remain  = Math.max(0, MIN_LOADING_MS - elapsed);
+    setTimeout(() => {
+      overlay.classList.remove('active');
+      if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+    }, remain);
+  }
+}
 function showStatus(msg, type) {
   const el = document.getElementById('statusMsg');
   el.innerHTML = msg; el.className = 'status-msg ' + type;
@@ -360,11 +413,15 @@ function showToast(msg) {
 }
 
 function moveTo(page, identifier, identifierType, role) {
-  // URL 노출 방지 — sessionStorage 사용 (탭 닫으면 자동 소멸)
   localStorage.setItem('ct_id',   identifier);
   localStorage.setItem('ct_type', identifierType);
   localStorage.setItem('ct_role', role || 'user');
-  window.location.href = page;
+  // 이동 전 로딩 텍스트 변경
+  const txt = document.querySelector('.loading-text');
+  if (txt) txt.textContent = '입장 중...';
+  const elapsed = Date.now() - _loadingStart;
+  const remain  = Math.max(0, MIN_LOADING_MS - elapsed);
+  setTimeout(() => { window.location.href = page; }, remain);
 }
 
 // ══════════════════════════════════════════════
@@ -392,7 +449,7 @@ async function handleStart() {
   }
 
   // 구글 시트에서 회원 조회
-  showStatus('🔍 확인 중...', 'info');
+  showLoading(true);
   try {
     const qs  = new URLSearchParams({ action: 'check', id: id });
     const res = await fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' });
@@ -401,9 +458,11 @@ async function handleStart() {
       clearStatus();
       moveTo(TARGET_PAGE, id, currentTab === 'email' ? 'email' : 'phone', 'user');
     } else {
+      showLoading(false);
       showStatus('❌ 등록되지 않은 계정입니다.<br>👋 <b>처음 이용자</b> 버튼으로 이용 신청을 해 주세요.', 'error');
     }
   } catch(e) {
+    showLoading(false);
     showStatus('⚠️ 서버 연결 오류입니다. 잠시 후 다시 시도해 주세요.', 'error');
   }
 }
