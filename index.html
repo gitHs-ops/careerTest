@@ -361,9 +361,9 @@ function showToast(msg) {
 
 function moveTo(page, identifier, identifierType, role) {
   // URL 노출 방지 — sessionStorage 사용 (탭 닫으면 자동 소멸)
-  sessionStorage.setItem('ct_id',   identifier);
-  sessionStorage.setItem('ct_type', identifierType);
-  sessionStorage.setItem('ct_role', role || 'user');
+  localStorage.setItem('ct_id',   identifier);
+  localStorage.setItem('ct_type', identifierType);
+  localStorage.setItem('ct_role', role || 'user');
   window.location.href = page;
 }
 
