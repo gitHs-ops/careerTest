@@ -694,6 +694,26 @@ const JOB_LIST = [
 // 상태
 // ══════════════════════════════════════════
 const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNRgaE-O9wiS0amF1F1AEJBlqDJhEdDlIS0fNnfmSIbelvdmCDHc4q7pRgc4Xp_AuHag/exec';
+
+// ── 토큰 로그 → 구글 시트 ──
+const SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwpAo91DiNXDl8oc1IqF-FFkyUwliwEsA4CdwSnhhNt71-fJRGIwuvUy9xsqYxmvskKyQ/exec';
+function sendTokenLog(tabTitle, usage) {
+  if (!usage) return;
+  const user = localStorage.getItem('ct_id') || '(미로그인)';
+  const inp  = usage.input_tokens  || 0;
+  const out  = usage.output_tokens || 0;
+  const qs   = new URLSearchParams({
+    name:   user,
+    email:  user,
+    type:   '진로상담:' + tabTitle,
+    input:  inp,
+    output: out,
+    tokens: inp + out,
+    ip:     ''
+  });
+  fetch(SHEET_PROXY_URL + '?' + qs.toString(), { method: 'GET' })
+    .catch(e => console.warn('토큰 로그 전송 실패:', e.message));
+}
 let currentJob = null;
 let tabCache = {};
 
@@ -1077,7 +1097,7 @@ async function callClaude(prompt, tabId){
     stopLoadingAnim(tabId);
     container.innerHTML=`<div class="adv-card"><div class="adv-card-body"><div class="ai-output">${data.text||''}</div></div></div>`;
     tabCache[tabId]=container.innerHTML;
-    if(data.usage) updateTokenTracker(data.usage);
+    if(data.usage) { updateTokenTracker(data.usage); sendTokenLog(tabId, data.usage); }
   } catch(e){
     stopLoadingAnim(tabId);
     container.innerHTML=`<div class="adv-card"><div class="adv-card-body" style="text-align:center;padding:30px">

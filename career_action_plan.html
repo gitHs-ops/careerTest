@@ -446,7 +446,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
 <script>
 // ─── 상태 ───
 const DEFAULT_PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNRgaE-O9wiS0amF1F1AEJBlqDJhEdDlIS0fNnfmSIbelvdmCDHc4q7pRgc4Xp_AuHag/exec';
-let proxyUrl = sessionStorage.getItem('proxyUrl') || DEFAULT_PROXY_URL;
+let proxyUrl = localStorage.getItem('proxyUrl') || DEFAULT_PROXY_URL;
 
 // ── 토큰 로그 → 구글 시트 ──
 const SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwpAo91DiNXDl8oc1IqF-FFkyUwliwEsA4CdwSnhhNt71-fJRGIwuvUy9xsqYxmvskKyQ/exec';
