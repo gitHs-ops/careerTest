@@ -360,10 +360,11 @@ function showToast(msg) {
 }
 
 function moveTo(page, identifier, identifierType, role) {
-  const p = new URLSearchParams();
-  p.set(identifierType, identifier); // 'email' or 'phone'
-  if (role) p.set('role', role);
-  window.location.href = page + '?' + p.toString();
+  // URL 노출 방지 — sessionStorage 사용 (탭 닫으면 자동 소멸)
+  sessionStorage.setItem('ct_id',   identifier);
+  sessionStorage.setItem('ct_type', identifierType);
+  sessionStorage.setItem('ct_role', role || 'user');
+  window.location.href = page;
 }
 
 // ══════════════════════════════════════════════
@@ -583,8 +584,24 @@ document.getElementById('adminModal').addEventListener('click', function(e) {
   if (e.target === this) closeAdminModal();
 });
 </script>
-<div style="position:fixed;bottom:6px;right:10px;font-size:0.7rem;color:#aaa;pointer-events:none;">
-  v2026-04-04 16:00 (중학교)
-</div>
+<div id="versionClock" style="position:fixed;bottom:6px;right:10px;font-size:0.7rem;color:#aaa;pointer-events:none;"></div>
+<script>
+(function() {
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    const now = new Date();
+    const str = 'v' + now.getFullYear() + '-'
+      + pad(now.getMonth()+1) + '-'
+      + pad(now.getDate()) + ' '
+      + pad(now.getHours()) + ':'
+      + pad(now.getMinutes()) + ':'
+      + pad(now.getSeconds())
+      + ' (진로심리검사)';
+    document.getElementById('versionClock').textContent = str;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
 </body>
 </html>
