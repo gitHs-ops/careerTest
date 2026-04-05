@@ -193,8 +193,38 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
 .token-warn.yellow{background:rgba(240,160,48,.12);color:#b87800;border:1px solid rgba(240,160,48,.3);display:block;}
 .token-warn.red{background:rgba(220,38,38,.1);color:#b91c1c;border:1px solid rgba(220,38,38,.25);display:block;}
 </style>
+<script>
+// ── 세션 체크 (URL 노출 방지) ──
+(function() {
+  const id   = sessionStorage.getItem('ct_id');
+  const role = sessionStorage.getItem('ct_role');
+  if (!id) {
+    alert('로그인이 필요합니다.');
+    window.location.replace('index.html');
+  }
+})();
+</script>
 </head>
 <body>
+<a href="index.html" title="처음으로" style="
+  position:fixed;top:14px;left:14px;z-index:9999;
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px 7px 10px;
+  background:rgba(255,255,255,0.18);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.35);
+  border-radius:30px;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:0.78rem;font-weight:700;
+  color:#fff;text-decoration:none;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  transition:background .2s,transform .15s;
+" onmouseover="this.style.background='rgba(255,255,255,0.32)';this.style.transform='translateY(-1px)'"
+   onmouseout="this.style.background='rgba(255,255,255,0.18)';this.style.transform='translateY(0)'">
+  🏠 처음으로
+</a>
+
+
 <div class="bg-fx">
   <div class="glow g1"></div>
   <div class="glow g2"></div>
@@ -418,6 +448,26 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);
 const DEFAULT_PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNRgaE-O9wiS0amF1F1AEJBlqDJhEdDlIS0fNnfmSIbelvdmCDHc4q7pRgc4Xp_AuHag/exec';
 let proxyUrl = sessionStorage.getItem('proxyUrl') || DEFAULT_PROXY_URL;
 
+// ── 토큰 로그 → 구글 시트 ──
+const SHEET_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwpAo91DiNXDl8oc1IqF-FFkyUwliwEsA4CdwSnhhNt71-fJRGIwuvUy9xsqYxmvskKyQ/exec';
+function sendTokenLog(cardTitle, usage) {
+  if (!usage) return;
+  const user = sessionStorage.getItem('ct_id') || '(미로그인)';
+  const inp  = usage.input_tokens  || 0;
+  const out  = usage.output_tokens || 0;
+  const qs   = new URLSearchParams({
+    name:   user,
+    email:  user,
+    type:   cardTitle,
+    input:  inp,
+    output: out,
+    tokens: inp + out,
+    ip:     ''
+  });
+  fetch(SHEET_PROXY_URL + '?' + qs.toString(), { method: 'GET' })
+    .catch(e => console.warn('토큰 로그 전송 실패:', e.message));
+}
+
 // ─── 카드 정의 ───
 const PLAN_CARDS = [
   { id:'c0', theme:'acc', icon:'🗺️', title:'종합 진로 비전',      sub:'나에게 맞는 방향 & 핵심 메시지',   fullWidth:true },
@@ -570,7 +620,7 @@ async function loadCard(cardDef, profile) {
     const data = await res.json();
 
     if (data.error) throw new Error(data.error);
-    if (data.usage) updateTokenTracker(data.usage);
+    if (data.usage) { updateTokenTracker(data.usage); sendTokenLog(cardDef.title, data.usage); }
 
     const cleanText = (data.text || '')
       .replace(/^```html\s*/i, '')
@@ -641,7 +691,7 @@ async function sendChat(cardId, profile) {
     const res  = await fetch(proxyUrl + '?prompt=' + encodeURIComponent(prompt), { method: 'GET' });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    if (data.usage) updateTokenTracker(data.usage);
+    if (data.usage) { updateTokenTracker(data.usage); sendTokenLog((PLAN_CARDS.find(c=>c.id===cardId)||{title:'채팅'}).title + ' (채팅)', data.usage); }
     const clean = (data.text || '').replace(/^```html\s*/i,'').replace(/```\s*$/i,'').trim();
     aiMsg.className = 'chat-msg ai';
     aiMsg.innerHTML = clean || '답변을 가져오지 못했습니다.';
