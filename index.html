@@ -425,7 +425,36 @@ function moveTo(page, identifier, identifierType, role) {
 }
 
 // ══════════════════════════════════════════════
-// ④ 시작하기 (구글 시트 회원 조회)
+// ④ 로그인 로그 — 관리자에게 SMS + 이메일 알림 (fire-and-forget)
+// ══════════════════════════════════════════════
+function getLoginTimeStr() {
+  const now = new Date();
+  const p = n => String(n).padStart(2, '0');
+  return `${now.getFullYear()}-${p(now.getMonth()+1)}-${p(now.getDate())} ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
+}
+
+async function sendLoginLog(identifier, identifierType) {
+  const timeStr   = getLoginTimeStr();
+  const typeLabel = identifierType === 'email' ? '이메일' : '전화번호';
+  const smsMsg    = `[진로심리검사 로그인]\n${typeLabel}: ${identifier}\n시각: ${timeStr}`;
+
+  // SMS 알림 (솔라피 프록시 — 비동기 fire-and-forget)
+  sendSmsToAdmin(ADMIN_RECEIVER_PHONE, smsMsg).catch(() => {});
+
+  // 이메일 알림 (GAS loginLog 액션 — 비동기 fire-and-forget)
+  // GAS 측에서 action==='loginLog' 처리 필요:
+  //   MailApp.sendEmail(ADMIN_EMAIL, '[로그인 로그] ' + id, body)
+  const qs = new URLSearchParams({
+    action: 'loginLog',
+    id:     identifier,
+    type:   identifierType,
+    time:   timeStr
+  });
+  fetch(`${SHEET_PROXY_URL}?${qs.toString()}`, { redirect: 'follow' }).catch(() => {});
+}
+
+// ══════════════════════════════════════════════
+// ⑤ 시작하기 (구글 시트 회원 조회)
 // ══════════════════════════════════════════════
 async function handleStart() {
   clearStatus();
@@ -456,6 +485,8 @@ async function handleStart() {
     const data = await res.json();
     if (data.success) {
       clearStatus();
+      // 로그인 성공 → 관리자에게 알림 (비동기, 로그인 흐름 차단 안 함)
+      sendLoginLog(id, currentTab);
       moveTo(TARGET_PAGE, id, currentTab === 'email' ? 'email' : 'phone', 'user');
     } else {
       showLoading(false);
@@ -468,7 +499,7 @@ async function handleStart() {
 }
 
 // ══════════════════════════════════════════════
-// ⑤ 관리자 모달
+// ⑥ 관리자 모달
 // ══════════════════════════════════════════════
 function openAdminModal() {
   const email = getEmail();
@@ -546,7 +577,7 @@ async function confirmAdmin() {
 }
 
 // ══════════════════════════════════════════════
-// ⑥ 처음 이용자 — GAS MailApp(이메일) / 솔라피(SMS)
+// ⑦ 처음 이용자 — GAS MailApp(이메일) / 솔라피(SMS)
 // ══════════════════════════════════════════════
 async function handleNewUser() {
   clearStatus();
@@ -637,7 +668,7 @@ async function sendSmsToAdmin(receiverPhone, msg) {
 }
 
 // ══════════════════════════════════════════════
-// ⑦ 모달 외부 클릭 닫기
+// ⑧ 모달 외부 클릭 닫기
 // ══════════════════════════════════════════════
 document.getElementById('adminModal').addEventListener('click', function(e) {
   if (e.target === this) closeAdminModal();
